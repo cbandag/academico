@@ -165,9 +165,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('faculty.index')
+          @can('facultades.index')
           <li class="nav-item">
-            <a href="{{url('faculty')}}" class="nav-link">
+            <a href="{{url('/facultades')}}" class="nav-link">
               <i class="nav-icon fas fa-building"></i>
               <p>
                 Facultades
@@ -176,9 +176,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('program.index')
+          @can('programas.index')
           <li class="nav-item">
-            <a href="{{url('program')}}" class="nav-link">
+            <a href="{{url('/programas')}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
               Programas

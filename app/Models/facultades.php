@@ -14,6 +14,6 @@ class facultades extends Model
         'estado',
     ];
     public function program(){
-        return $this->hasMany(Program::class);
+        return $this->hasMany(Programas::class);
     }
 }

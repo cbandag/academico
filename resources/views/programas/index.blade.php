@@ -1,0 +1,41 @@
+@extends('layouts.template')
+@section('content')
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    @if(Session::has('message'))
+    <div class="card-body">
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i>{{ Session::get('message') }}</h5>
+        </div>
+    </div>
+
+    @endif
+
+    @if(count($errors)>0)
+    <div class="card-body">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"N>&times;</button>
+        @foreach($errors->all() as $error)
+            {{$error}}<br>
+        @endforeach
+        </div>    
+    </div>
+    @endif
+
+<!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-12">
+            <h1 class="m-0">PROGRAMAS</h1>
+          </div><!-- /.col -->
+          
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content-header -->
+</div>
+@endsection
