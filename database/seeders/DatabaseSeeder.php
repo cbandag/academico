@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->truncateTables(['users']);
+        $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
+        
 
+        // \App\Models\User::factory(10)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+    }
+
+    protected function truncateTables(array $tables){
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+        foreach ($tables as $key => $table) {
+            DB::table($table)->truncate();
+        }
     }
 }

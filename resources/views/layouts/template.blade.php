@@ -131,12 +131,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
 
 
-          @can('user.index')
+          @can('periodos.index')
           <li class="nav-item">
-            <a href="{{url('user')}}" class="nav-link">
+            <a href="{{url('/periodo')}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-              Usuarios
+              periodos
               </p>
             </a>
           </li>

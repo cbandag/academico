@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\PeriodosController;
+use App\Http\Controllers\FacultadesController;
+use App\Http\Controllers\ProgramasController;
+use App\Http\Controllers\PlanesDeTrabajoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +34,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' =>  'auth'],function () {
     Route::get('/', [App\Http\Controllers\Auth\LoginController::class,'index'])->name('home');
 });
+
+
+//Route::get('/periodo/index', [PeriodosController::class,'index']);
+Route::resource('user', UsersController::class)->middleware('auth');
+Route::resource('periodo', PeriodosController::class)->middleware('auth');
+Route::resource('facultades', FacultadesController::class)->middleware('auth');
+Route::resource('programas', ProgramasController::class)->middleware('auth');
+Route::resource('planes', PlanesDeTrabajoController::class)->middleware('auth');
 
