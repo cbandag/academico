@@ -32,7 +32,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">Asignaturas</h1>
+            <h1 class="m-0">Periodos</h1>
           </div><!-- /.col -->
           
         </div><!-- /.row -->
@@ -49,7 +49,7 @@
             <!-- Agregar Curso-->
             <div class="card-body">
                 <div class="box-title">
-                    <a class="btn btn-success" href="{{ url('course/create/') }}">Crear asignatura</a>
+                    <a class="btn btn-success" href="{{ url('periodo/create/') }}">Añadir periodo</a>
                     @csrf
                 </div><br>
 
@@ -57,9 +57,7 @@
                 <table id="users" class="table table-bordered table-striped rounded">
                     <thead>
                         <tr>
-                            <th>Codigo</th>
-                            <th>Asignatura</th>
-                            <th>Profesor</th>
+                            <th>Periodo</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -68,19 +66,18 @@
                     <tbody>
                     @foreach($periodos as $periodo)
                         <tr>
-                            <td> {{$periodo->code}} </td>
-                            <td> {{$periodo->name}} </td>
-                            <td> {{$periodo->teacher->user->name}} {{$periodo->teacher->user->lastname}} </td>
-                            @if ($periodo->status=='ACTIVA')
-                                <td><span class="btn btn-block btn-success btn-sm ">{{$periodo->status}}</span> </td>
-                            @elseif ($evaluation->status=='INACTIVA')
-                            <td><span class="btn btn-block btn-secondary btn-sm">{{$periodo->status}}</span> </td>
+                            <td> {{$periodo->periodo}} </td>
+                            
+                            @if ($periodo->estado=='ACTIVO')
+                                <td><span class="btn btn-block btn-success btn-sm ">{{$periodo->estado}}</span> </td>
+                            @elseif ($periodo->estado=='INACTIVO')
+                            <td><span class="btn btn-block btn-secondary btn-sm">{{$periodo->estado}}</span> </td>
                             @endif
                             <td>
                                 <div class="row">
                                     <!-- Mostrar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/course/'. $periodo->id )}}" class="btn btn-default">
+                                        <a href="{{ url('/periodo/'. $periodo->id )}}" class="btn btn-default">
                                             @csrf
                                             <i class="fa fa-eye" style='color: black'></i>
                                             <!-- <input type="submit" name='show' value="show"> -->
@@ -88,7 +85,7 @@
                                     </div>
                                     <!-- Editar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/course/'. $periodo->id . '/edit/' ) }}" class="btn btn-info">
+                                        <a href="{{ url('/periodo/'. $periodo->id . '/edit/' ) }}" class="btn btn-info">
                                             <i class="fa fa-pencil-alt" style='color: white'></i>
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
@@ -96,7 +93,7 @@
                                     
                                     <!-- Borrar -->
                                     <div class="col-sm">
-                                        <form action="{{ url('/course/'. $periodo->id) }}" method="POST">
+                                        <form action="{{ url('/periodo/'. $periodo->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
@@ -113,9 +110,7 @@
 
                     <tfoot>
                         <tr>
-                            <th>Código</th>
-                            <th>Asignatura</th>
-                            <th>Profesor</th>
+                            <th>Periodo</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>

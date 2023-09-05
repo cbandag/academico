@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\periodos;
+use App\Models\Periodo;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class PeriodosController extends Controller
     public function index()
 
     {
-        $periodos= Periodos::all();
+        $periodos= Periodo::all();
         return view('periodo.index', compact('periodos'));
     }
 
@@ -26,7 +26,7 @@ class PeriodosController extends Controller
      */
     public function create()
     {
-        //
+        return view('periodo.create');
     }
 
     /**
@@ -34,38 +34,80 @@ class PeriodosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = Request()->validate([
+            'periodo'=>'required|string|max:7',
+            'estado'=>'required|string|max:8',
+
+        ],[
+            'periodo.required'=>'El periodo es requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+
+        DB::transaction(function() use ($data){
+            Periodo::create([
+                'periodo' => $data['periodo'],
+                'estado' => $data['estado'],
+            ]);
+
+        });
+
+        return redirect()->route('periodo.index')->with('message','Periodo creado con éxito!!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(periodos $periodos)
+    public function show($id)
     {
-        //
+        $periodo = Periodo::findOrFail($id);
+
+        return view('periodo.show', compact('periodo'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(periodos $periodos)
+    public function edit($id)
     {
-        //
+        $periodo = Periodo::findOrFail($id);
+
+        
+
+        return view('periodo.edit', compact('periodo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, periodos $periodos)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Request()->validate([
+            'periodo'=>'required|string|max:7',
+            'estado'=>'required|string|max:8',
+
+        ],[
+            'periodo.required'=>'El periodo es requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+        $periodo = Periodo::findOrFail($id);
+
+        DB::transaction(function() use ($data,$periodo){
+            $periodo->update([
+                'periodo' => $data['periodo'],
+                'estado' => $data['estado'],
+            ]);
+
+        });
+
+        return redirect()->route('periodo.index')->with('message','Periodo creado con éxito!!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(periodos $periodos)
+    public function destroy($id)
     {
-        //
+        Periodo::destroy($id);
+        return redirect()->route('periodo.index')->with('message','Periodo eliminado con éxito!!');
     }
 }

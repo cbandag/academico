@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('layouts.template')
 @section('content')
 
 <!-- Content Wrapper. Contains page content -->
@@ -32,7 +32,7 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('course.form', ['mode'=>'Editar'])
+        @include('periodo.form', ['mode'=>'Editar'])
             
     </section>
 </div>

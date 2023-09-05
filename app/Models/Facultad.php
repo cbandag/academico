@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class programas extends Model
+class Facultad extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'nombre',
-        'facultad',
+        'anio',
+        'estado',
     ];
-
-    public function facultad(){
-        return $this->hasOne(facultades::class,'id','faculty_id');
+    public function Programa(){
+        return $this->hasMany(Programa::class);
     }
 }

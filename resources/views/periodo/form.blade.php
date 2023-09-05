@@ -29,30 +29,21 @@
                             
                             
                             <div class="form-group">
-                                <label for="anio" class="col-form-label">Nombre de periodo</label>
-                                <input type="text" class="form-control" id="anio" anio="anio" value="{{isset($periodo->anio)?$periodo->anio:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                <label for="periodo" class="col-form-label">Periodo (0000-00):</label>
+                                <input type="text" class="form-control" id="periodo" name="periodo" value="{{isset($periodo->periodo)?$periodo->periodo:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
                             </div>
+                            
                             
                             <div class="form-group">
-                                <label for="code" class="col-form-label">estado</label>
-                                <input type="text" class="form-control" id="code" anio="code" value="{{isset($periodo->code)?$periodo->code:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                <label for="estado" class="col-form-label">Estado:</label>
+                                <select class="form-control" name="estado" id="estado" {{$mode == 'Mostrar'?'disabled':''}}>
+                                    
+                                    <option type="text" class="form-control" value="ACTIVO">ACTIVO</option>
+                                    <option type="text" class="form-control" value="INACTIVO">INACTIVO</option>
+                                    
+                                </select>
                             </div>
-                            
-                            
-                        
-                            <div class="form-group">
-                                <br>
 
-                                <div class="custom-control custom-switch">
-                                    @if($mode == 'Mostrar' || $mode == 'Editar')
-                                    <input type="checkbox" anio="status" class="custom-control-input" id="customSwitch1" value="1" {{ $periodo->status == 'ACTIVA'?'checked': ''}} {{$mode == 'Mostrar'?'disabled':''}}>
-                                    @else
-                                    <input type="checkbox" anio="status" class="custom-control-input" id="customSwitch1" value="1" checked {{$mode == 'Mostrar'?'disabled':''}}>
-                                    @endif
-                                    <label   class="custom-control-label" for="customSwitch1">Estado de la Asignatura</label>
-                                </div>
-
-                            </div>
                         </div>
                     </div>
 

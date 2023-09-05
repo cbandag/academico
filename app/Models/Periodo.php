@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class periodos extends Model
+class Periodo extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'anio',
+        'periodo',
         'estado',
     ];
 

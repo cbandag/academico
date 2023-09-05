@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class planes_de_trabajo extends Model
+class Plan_de_trabajo extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -23,10 +23,10 @@ class planes_de_trabajo extends Model
         'programa',
         'facultad'
     ];
-    public function program(){
-        return $this->hasOne(Program::class);
+    public function Programa(){
+        return $this->hasOne(Programa::class);
     }
-    public function facultad(){
-        return $this->hasOne(facultades::class);
+    public function Facultad(){
+        return $this->hasOne(Facultad::class);
     }
 }
