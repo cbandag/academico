@@ -12,7 +12,7 @@ class ProgramasController extends Controller
      */
     public function index()
     {
-        //
+        return view('programas.index');
     }
 
     /**

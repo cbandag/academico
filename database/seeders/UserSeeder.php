@@ -25,6 +25,16 @@ class UserSeeder extends Seeder
             'password'=> '12345678'
             
         ])->assignRole('admin');
+
+        User::Create([
+            'nombres' => 'Sixto',
+            'apellidos' => 'Figueroa',
+            'identificacion' => '123456789',
+            'estado' => 'Activo',
+            'email' => 'sixmafire@gmail.com',
+            'password'=> '123456789'
+            
+        ])->assignRole('admin');
         /*
         DB::table('users')->insert([
             'nombres' => 'Carlos',
