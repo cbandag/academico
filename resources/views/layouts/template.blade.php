@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @can('teacher.index')
 
           <li class="nav-item">
-            <a href="{{url('teacher')}}" class="nav-link">
+            <a href="{{url('/teacher')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
                 Docentes
@@ -156,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           
           @can('coordinator.index')
           <li class="nav-item">
-            <a href="{{url('coordinator')}}" class="nav-link">
+            <a href="{{url('/coordinator')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
                 Coordinadores
@@ -187,73 +187,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('course.index')
+          @can('planes.index')
           <li class="nav-item">
-            <a href="{{url('course')}}" class="nav-link">
+            <a href="{{url('/actividades')}}" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Asignaturas
+                Actividades
               </p>
             </a>
           </li>
           @endcan
 
-          @can('cohort.index')
-          <li class="nav-item">
-            <a href="{{url('cohort')}}" class="nav-link">
-              <i class="nav-icon fas fas fa-users"></i>
-              <p>
-              cohortes
-              </p>
-            </a>
-          </li>
-          @endcan
-
-          @can('student.index')
-          <li class="nav-item">
-            <a href="{{url('student')}}" class="nav-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-              Estudiantes
-              </p>
-            </a>
-          </li>
-          @endcan
-
-          @can('programming.index')
-          
-          <li class="nav-item">
-            <a href="{{url('programming')}}" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-                @hasanyrole('Director')
-                Reportes
-                @endhasanyrole
-
-                @hasanyrole('Coordinator')
-                Programaciones
-                @endhasanyrole
-
-              </p>
-            </a>
-          </li>
-
-          @endcan
-
-
-          @can('evaluation.index')
-          <li class="nav-item">
-            <a href="{{url('evaluation')}}" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-              Evaluaciones
-              </p>
-            </a>
-          </li>
-          @endcan
-
-
-          
 
         </ul>
       </nav>

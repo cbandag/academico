@@ -18,7 +18,7 @@ class PeriodosController extends Controller
 
     {
         $periodos= Periodo::all();
-        return view('periodo.index', compact('periodos'));
+        return view('periodos.index', compact('periodos'));
     }
 
     /**
@@ -26,7 +26,7 @@ class PeriodosController extends Controller
      */
     public function create()
     {
-        return view('periodo.create');
+        return view('periodos.create');
     }
 
     /**
@@ -51,7 +51,7 @@ class PeriodosController extends Controller
 
         });
 
-        return redirect()->route('periodo.index')->with('message','Periodo creado con éxito!!');
+        return redirect()->route('periodos.index')->with('message','Periodo creado con éxito!!');
     }
 
     /**
@@ -61,7 +61,7 @@ class PeriodosController extends Controller
     {
         $periodo = Periodo::findOrFail($id);
 
-        return view('periodo.show', compact('periodo'));
+        return view('periodos.show', compact('periodo'));
     }
 
     /**
@@ -73,7 +73,7 @@ class PeriodosController extends Controller
 
         
 
-        return view('periodo.edit', compact('periodo'));
+        return view('periodos.edit', compact('periodo'));
     }
 
     /**
@@ -83,7 +83,7 @@ class PeriodosController extends Controller
     {
         $data = Request()->validate([
             'periodo'=>'required|string|max:7',
-            'estado'=>'required|string|max:8',
+            'estado'=>'required|string|in:ACTIVO,INACTIVO',
 
         ],[
             'periodo.required'=>'El periodo es requerido.',
@@ -99,7 +99,7 @@ class PeriodosController extends Controller
 
         });
 
-        return redirect()->route('periodo.index')->with('message','Periodo creado con éxito!!');
+        return redirect()->route('periodos.index')->with('message','Periodo creado con éxito!!');
     }
 
     /**
@@ -108,6 +108,6 @@ class PeriodosController extends Controller
     public function destroy($id)
     {
         Periodo::destroy($id);
-        return redirect()->route('periodo.index')->with('message','Periodo eliminado con éxito!!');
+        return redirect()->route('periodos.index')->with('message','Periodo eliminado con éxito!!');
     }
 }

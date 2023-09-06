@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\planes_de_trabajo;
+use App\Models\Actividades;
 use Illuminate\Http\Request;
 
 class PlanesDeTrabajoController extends Controller
@@ -12,7 +12,8 @@ class PlanesDeTrabajoController extends Controller
      */
     public function index()
     {
-        //
+        $planes = Actividades::all();
+        return view('actividad.index', $planes);
     }
 
     /**
@@ -34,7 +35,7 @@ class PlanesDeTrabajoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(planes_de_trabajo $planes_de_trabajo)
+    public function show(actividades $actividades)
     {
         //
     }
@@ -42,7 +43,7 @@ class PlanesDeTrabajoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(planes_de_trabajo $planes_de_trabajo)
+    public function edit(actividades $actividades)
     {
         //
     }
@@ -50,7 +51,7 @@ class PlanesDeTrabajoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, planes_de_trabajo $planes_de_trabajo)
+    public function update(Request $request, actividades $actividades)
     {
         //
     }
@@ -58,7 +59,7 @@ class PlanesDeTrabajoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(planes_de_trabajo $planes_de_trabajo)
+    public function destroy(actividades $actividades)
     {
         //
     }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('planes_de_trabajos', function (Blueprint $table) {
+        Schema::create('actividades', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('periodo');
             $table->unsignedBigInteger('docente');
@@ -30,7 +30,7 @@ return new class extends Migration
             
             $table->foreign('periodo')->references('id')->on('periodos');
             $table->foreign('docente')->references('id')->on('users');
-            $table->foreign('jefe_inmediato')->references('id')->on('users');
+            $table->foreign('jefe')->references('id')->on('users');
             $table->foreign('programa')->references('id')->on('programas');
             $table->foreign('facultad')->references('id')->on('facultades');
             
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('planes_de_trabajos');
+        Schema::dropIfExists('actividades');
     }
 };

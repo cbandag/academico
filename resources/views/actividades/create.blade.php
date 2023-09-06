@@ -32,7 +32,7 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('periodo.form', ['mode'=>'Crear'])
+        @include('actividades.form', ['mode'=>'Crear'])
             
     </section>
 </div>

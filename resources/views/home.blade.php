@@ -28,22 +28,26 @@
           <h3 class="card-title">Bienvenido.</h3>
         </div> <!-- /.card-body -->
         <div class="card-body">
-          <strong>{{Auth::user()->name}} {{Auth::user()->lastname}}</strong>
+          <strong>{{Auth::user()->nombres}} {{Auth::user()->apellidos}}</strong>
           <p>
-            @hasanyrole('Director')
-            Director de postgrados
+            @hasanyrole('Admin')
+            Administrador
             @endhasanyrole
 
-            @hasanyrole('Coordinator')
-            Coordinador
+            @hasanyrole('Planeación')
+            Planeación
             @endhasanyrole
 
-            @hasanyrole('Teacher')
-            Docente
+            @hasanyrole('CoordinacionA')
+            Coordinacion Academica 
             @endhasanyrole
             
-            @hasanyrole('Student')
-            Estudiante
+            @hasanyrole('Jefe')
+            Jefe inmediato
+            @endhasanyrole
+
+            @hasanyrole('Docente')
+            Docente
             @endhasanyrole
           </p>
                     
