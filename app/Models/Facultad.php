@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Facultad extends Model
 {
     use HasFactory;
-
+    protected $table = "facultades";
     protected $fillable = [
-        'anio',
-        'estado',
+        'nombre',
     ];
     public function Programa(){
         return $this->hasMany(Programa::class);
