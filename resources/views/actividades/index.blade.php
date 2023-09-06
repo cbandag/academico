@@ -49,7 +49,7 @@
             <!-- Agregar Curso-->
             <div class="card-body">
                 <div class="box-title">
-                    <a class="btn btn-success" href="{{ url('actividades/create/') }}">Añadir actividad</a>
+                    <a class="btn btn-success" href="{{ url('/actividades/create/') }}">Añadir actividad</a>
                     @csrf
                 </div><br>
 
@@ -69,15 +69,17 @@
                     </thead>
 
                     <tbody>
-                    @foreach($periodos as $actividad)
+                    @foreach($actividades as $actividad)
                         <tr>
-                            <td> {{$actividad->actividad}} </td>
+                            <td> {{$actividad->periodos->periodo}} </td>
+                            <td> {{$actividad->docente->users->nombres}} {{$actividad->docente->users->apellido}} </td>
+                            <td> {{$actividad->docente->users->nombres}} {{$actividad->docente->users->apellido}} </td>
+                            <td> {{$actividad->tipo_docente}} </td>
+                            <td> {{$actividad->horas_actividad}} </td>
+                            <td> {{$actividad->tipo_actividad}} </td>
+                            <td> {{$actividad->programa}} </td>
+                            <td> {{$actividad->facultad}} </td>
                             
-                            @if ($actividad->estado=='ACTIVO')
-                                <td><span class="btn btn-block btn-success btn-sm ">{{$actividad->estado}}</span> </td>
-                            @elseif ($actividad->estado=='INACTIVO')
-                            <td><span class="btn btn-block btn-secondary btn-sm">{{$actividad->estado}}</span> </td>
-                            @endif
                             <td>
                                 <div class="row">
                                     <!-- Mostrar -->
@@ -122,7 +124,7 @@
                             <th>horas_actividad</th>
                             <th>tipo_actividad</th>
                             <th>programa</th>
-                            <th>facultad</th>
+                            <th>facultad</th> 
                         </tr>
                     </tfoot>
                 </table>

@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Actividades;
+use App\Models\Actividad;
+use App\Models\Periodo;
+use App\Models\User;
+use App\Models\Programa;
+use App\Models\Facultad;
+
 use Illuminate\Http\Request;
 
 class ActividadesController extends Controller
@@ -12,8 +17,13 @@ class ActividadesController extends Controller
      */
     public function index()
     {
-        $planes = Actividades::all();
-        return view('actividad.index', $planes);
+        $actividades = Actividad::all();
+        $periodos = Periodo::all();
+        $users = User::all();
+        $programa = Programa::all();
+        $facultad = Facultad::all(); 
+
+        return view('actividades.index', compact('actividades','periodos','users'));
     }
 
     /**
@@ -21,7 +31,7 @@ class ActividadesController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
