@@ -7,7 +7,7 @@
             </div>
 
             @if($mode=='Crear')
-                <form action="{{ route('periodo.store') }}"  method="POST">
+                <form action="{{ route('periodos.store') }}"  method="POST">
             @endif
 
             @if($mode=='Mostrar')
@@ -16,7 +16,7 @@
             @endif
 
             @if($mode=='Editar')
-                <form action="{{ route('periodo.update', [$periodo->id]) }}"  method="POST">
+                <form action="{{ route('periodos.update', [$periodo->id]) }}"  method="POST">
                 @method('PUT')
             @endif
                 @csrf
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <a type='button' class="btn btn-danger" href="{{url('/periodo/')}}">Cancelar</a>
+                        <a type='button' class="btn btn-danger" href="{{url('/periodos/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary ">{{$mode}}</button>
                         @endif

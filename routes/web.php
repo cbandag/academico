@@ -38,8 +38,8 @@ Route::group(['middleware' =>  'auth'],function () {
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);
 Route::resource('user', UsersController::class)->middleware('auth');
-Route::resource('periodo', PeriodosController::class)->middleware('auth');
-Route::resource('facultad', FacultadesController::class)->middleware('auth');
-Route::resource('programa', ProgramasController::class)->middleware('auth');
-Route::resource('actividad', ActividadesController::class)->middleware('auth');
+Route::resource('periodos', PeriodosController::class)->middleware('auth');
+Route::resource('facultades', FacultadesController::class)->middleware('auth');
+Route::resource('programas', ProgramasController::class)->middleware('auth');
+Route::resource('actividades', ActividadesController::class)->middleware('auth');
 

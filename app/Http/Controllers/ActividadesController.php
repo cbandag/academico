@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Actividades;
 use Illuminate\Http\Request;
 
-class PlanesDeTrabajoController extends Controller
+class ActividadesController extends Controller
 {
     /**
      * Display a listing of the resource.

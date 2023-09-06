@@ -35,8 +35,8 @@ class PeriodosController extends Controller
     public function store(Request $request)
     {
         $data = Request()->validate([
-            'periodo'=>'required|string|max:7',
-            'estado'=>'required|string|max:8',
+            'periodo'=>'required|string|unique:periodos,periodo|max:7',
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
 
         ],[
             'periodo.required'=>'El periodo es requerido.',
@@ -82,11 +82,12 @@ class PeriodosController extends Controller
     public function update(Request $request, $id)
     {
         $data = Request()->validate([
-            'periodo'=>'required|string|max:7',
+            'periodo'=>'required|string|unique:periodos,periodo|max:7',
             'estado'=>'required|string|in:ACTIVO,INACTIVO',
 
         ],[
             'periodo.required'=>'El periodo es requerido.',
+            'periodo.unique'=>'Este periodo ya existe.',
             'estado.required'=>'El estado es requerido.'
         ]);
         $periodo = Periodo::findOrFail($id);
@@ -99,7 +100,7 @@ class PeriodosController extends Controller
 
         });
 
-        return redirect()->route('periodos.index')->with('message','Periodo creado con éxito!!');
+        return redirect()->route('periodos.index')->with('message','Periodo modificado con éxito!!');
     }
 
     /**

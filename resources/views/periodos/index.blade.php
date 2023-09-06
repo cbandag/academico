@@ -49,7 +49,7 @@
             <!-- Agregar Curso-->
             <div class="card-body">
                 <div class="box-title">
-                    <a class="btn btn-success" href="{{ url('periodo/create/') }}">Añadir periodo</a>
+                    <a class="btn btn-success" href="{{ url('/periodos/create/') }}">Añadir periodo</a>
                     @csrf
                 </div><br>
 
@@ -77,7 +77,7 @@
                                 <div class="row">
                                     <!-- Mostrar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/periodo/'. $periodo->id )}}" class="btn btn-default">
+                                        <a href="{{ url('/periodos/'. $periodo->id )}}" class="btn btn-default">
                                             @csrf
                                             <i class="fa fa-eye" style='color: black'></i>
                                             <!-- <input type="submit" name='show' value="show"> -->
@@ -85,7 +85,7 @@
                                     </div>
                                     <!-- Editar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/periodo/'. $periodo->id . '/edit/' ) }}" class="btn btn-info">
+                                        <a href="{{ url('/periodos/'. $periodo->id . '/edit/' ) }}" class="btn btn-info">
                                             <i class="fa fa-pencil-alt" style='color: white'></i>
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
@@ -93,7 +93,7 @@
                                     
                                     <!-- Borrar -->
                                     <div class="col-sm">
-                                        <form action="{{ url('/periodo/'. $periodo->id) }}" method="POST">
+                                        <form action="{{ url('/periodos/'. $periodo->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">

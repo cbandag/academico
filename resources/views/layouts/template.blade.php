@@ -133,19 +133,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           @can('periodos.index')
           <li class="nav-item">
-            <a href="{{url('/periodo')}}" class="nav-link">
+            <a href="{{url('/periodos')}}" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-              periodos
+              Periodos
               </p>
             </a>
           </li>
           @endcan
 
-          @can('teacher.index')
+          @can('docentes.index')
 
           <li class="nav-item">
-            <a href="{{url('/teacher')}}" class="nav-link">
+            <a href="{{url('/docentes')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
                 Docentes
@@ -154,9 +154,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
           
-          @can('coordinator.index')
+          @can('coordinador.index')
           <li class="nav-item">
-            <a href="{{url('/coordinator')}}" class="nav-link">
+            <a href="{{url('/coordinador')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
                 Coordinadores
@@ -187,7 +187,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('planes.index')
+          @can('actividades.index')
           <li class="nav-item">
             <a href="{{url('/actividades')}}" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
