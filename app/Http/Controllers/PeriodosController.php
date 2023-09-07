@@ -71,7 +71,7 @@ class PeriodosController extends Controller
     {
         $periodo = Periodo::findOrFail($id);
 
-        
+            
 
         return view('periodos.edit', compact('periodo'));
     }
