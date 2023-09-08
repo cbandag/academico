@@ -18,13 +18,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('identificacion')->default('');
-            $table->unsignedBigInteger('jefe_inmediato')->nullable();
+            $table->unsignedBigInteger('jefe')->nullable();
             $table->string('estado')->default('Activo');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('jefe_inmediato')->references('id')->on('users');
+            $table->foreign('jefe')->references('id')->on('users');
             
             
         });

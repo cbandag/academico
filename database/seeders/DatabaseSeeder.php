@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->truncateTables(['users']);
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(FacultadSeeder::class);
+        $this->call(ProgramaSeeder::class);
+        $this->call(ActividadSeeder::class);
         
 
         // \App\Models\User::factory(10)->create();

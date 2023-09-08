@@ -21,7 +21,7 @@ class FacultadesController extends Controller
      */
     public function create()
     {
-        //
+        return view('facultades.create');
     }
 
     /**
@@ -29,7 +29,7 @@ class FacultadesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

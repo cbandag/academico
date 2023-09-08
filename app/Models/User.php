@@ -24,7 +24,7 @@ class User extends Authenticatable
         'apellidos',
         'email',
         'identificacion',
-        'jefe_inmediato',
+        'jefe',
         'estado',
         'nombre',
         'password',

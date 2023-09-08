@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'nombres' => 'Carlos',
             'apellidos' => 'Banda',
             'identificacion' => '12345678',
-            'estado' => 'Activo',
+            'estado' => 'ACTIVO',
             'email' => '28bandag@gmail.com',
             'password'=> '12345678'
             
@@ -30,17 +30,48 @@ class UserSeeder extends Seeder
             'nombres' => 'Sixto',
             'apellidos' => 'Figueroa',
             'identificacion' => '123456789',
-            'estado' => 'Activo',
+            'estado' => 'ACTIVO',
             'email' => 'sixmafire@gmail.com',
-            'password'=> '123456789'
+            'password'=> '12345678'
             
         ])->assignRole('admin');
+
+        User::Create([
+            'nombres' => 'planeación',
+            'apellidos' => 'planeacioncillo',
+            'identificacion' => '111111',
+            'estado' => 'ACTIVO',
+            'email' => 'planeacion@gmail.com',
+            'password'=> '12345678'
+            
+        ])->assignRole('planeación');
+
+        User::Create([
+            'nombres' => 'jefe',
+            'apellidos' => 'jefecito',
+            'identificacion' => '222222',
+            'estado' => 'ACTIVO',
+            'email' => 'jefe@gmail.com',
+            'password'=> '12345678'
+            
+        ])->assignRole('jefe');
+
+        User::Create([
+            'nombres' => 'Docente',
+            'apellidos' => 'Docentico',
+            'identificacion' => '333333',
+            'estado' => 'ACTIVO',
+            'email' => 'docente@gmail.com',
+            'password'=> '12345678'
+            
+        ])->assignRole('docente');
+
         /*
         DB::table('users')->insert([
             'nombres' => 'Carlos',
             'apellidos' => 'Banda',
             'identificacion' => '12345678',
-            'estado' => 'Activo',
+            'estado' => 'ACTIVO',
             'email' => '28bandag@gmail.com',
             'password'=> Hash::make('12345678')
             
@@ -51,7 +82,7 @@ class UserSeeder extends Seeder
             'nombres' => Str::random(10),
             'apellidos' => Str::random(10),
             'identificacion' =>random_int(1000000, 9999999),
-            'estado' => 'Activo',
+            'estado' => 'ACTIVO',
             'email' => Str::random(10).'@gmail.com',
             'password'=> Hash::make('password')
         ]);

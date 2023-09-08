@@ -131,19 +131,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
 
 
-          @can('periodos.index')
+          
+
+          @can('jefes.index')
+
           <li class="nav-item">
-            <a href="{{url('/periodos')}}" class="nav-link">
-              <i class="nav-icon fas fa-calendar-check"></i>
+            <a href="{{url('/jefes')}}" class="nav-link">
+              <i class="nav-icon fas fa-user" ></i>
               <p>
-              Periodos
+                Jefes inmmediatos
               </p>
             </a>
           </li>
           @endcan
 
-          @can('docentes.index')
+          @can('decanos.index')
 
+          <li class="nav-item">
+            <a href="{{url('/decanos')}}" class="nav-link">
+              <i class="nav-icon fas fa-user" ></i>
+              <p>
+                Decanos
+              </p>
+            </a>
+          </li>
+          @endcan
+          
+          @can('docentes.index')
           <li class="nav-item">
             <a href="{{url('/docentes')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
@@ -153,13 +167,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           @endcan
-          
-          @can('coordinador.index')
+
+          @can('periodos.index')
           <li class="nav-item">
-            <a href="{{url('/coordinador')}}" class="nav-link">
-              <i class="nav-icon fas fa-user" ></i>
+            <a href="{{url('/periodos')}}" class="nav-link">
+              <i class="nav-icon fas fa-calendar-check"></i>
               <p>
-                Coordinadores
+              Periodos
               </p>
             </a>
           </li>
@@ -192,7 +206,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="{{url('/actividades')}}" class="nav-link">
               <i class="nav-icon fas fa-book"></i>
               <p>
-                Actividades
+                @hasanyrole(['admin','planeación'])
+                plan de trabajo
+                @endhasanyrole
+                @hasanyrole(['jefe','decano'])
+                Programacion
+                @endhasanyrole
+                @hasanyrole('docente')
+                programacion
+                @endhasanyrole
+                
               </p>
             </a>
           </li>
