@@ -79,7 +79,7 @@ class DocentesController extends Controller
 
         });
 
-        return redirect()->route('users.index')->with('message','Docente creado con éxito!!');
+        return redirect()->route('docentes.index')->with('message','Docente creado con éxito!!');
     }
 
     /**
@@ -120,13 +120,15 @@ class DocentesController extends Controller
     public function update(Request $request,  $id)
     {
         
-        if ($request['password'] != null) {
-            $request['password'] = Hash::make($request['password']);
-            $request['password_confirmation'] = $request['password'];
+        if ($request['password'] != null && $request['password_confirmation'] != null) {
+            //$request['password'] = $request['password'];
+            //$request['password_confirmation'] = $request['password'];
         }else{
             $user=User::findOrFail($id);
             $request['password'] = $user->password;
             $request['password_confirmation'] = $user->password;
+
+            //$request['password_confirmation'] = $user->password;
         }
 
         $data = Request()->validate([
@@ -145,6 +147,8 @@ class DocentesController extends Controller
             'estado.required'=>'El estado es requerido.',
             'password.confirmed' => 'Las contraseñas no coinciden'
         ]);
+
+        $data['password'] = Hash::make($request['password']);
 
         
         
