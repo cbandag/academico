@@ -32,7 +32,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1 class="m-0">Facultades</h1>
+                    <h1 class="m-0">Programas</h1>
                 </div><!-- /.col -->
 
             </div><!-- /.row -->
@@ -49,7 +49,7 @@
                 <!-- Agregar Facultad-->
                 <div class="card-body">
                     <div class="box-title">
-                        <a class="btn btn-success" href="{{ url('/facultades/create/') }}">Añadir Facultad</a>
+                        <a class="btn btn-success" href="{{ url('/programas/create/') }}">Añadir Programa</a>
                         @csrf
                     </div><br>
 
@@ -58,18 +58,20 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Facultad</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                     <tbody>
-                    @foreach($facultades as $facultad)
+                    @foreach($programas as $programa)
                         <tr>
-                            <td> {{$facultad->nombre}} </td>
+                            <td> {{$programa->nombre}} </td>
+                            <td> {{$programa->facultad->nombre}}
                             <td>
                                 <div class="row">
                                     <!-- Mostrar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/facultades/'. $facultad->id )}}" class="btn btn-default">
+                                        <a href="{{ url('/programas/'. $programa->id )}}" class="btn btn-default">
                                             @csrf
                                             <i class="fa fa-eye" style='color: black'></i>
                                             <!-- <input type="submit" name='show' value="show"> -->
@@ -77,7 +79,7 @@
                                     </div>
                                     <!-- Editar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/facultades/'. $facultad->id . '/edit/' ) }}" class="btn btn-info">
+                                        <a href="{{ url('/programas/'. $programa->id . '/edit/' ) }}" class="btn btn-info">
                                             <i class="fa fa-pencil-alt" style='color: white'></i>
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
@@ -85,10 +87,10 @@
                                     
                                     <!-- Borrar -->
                                     <div class="col-sm">
-                                        <form action="{{ url('/facultades/'. $facultad->id) }}" method="POST">
+                                        <form action="{{ url('/programas/'. $programa->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
-                                            <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar esta facultad? Ten en cuenta que esta acción podría afectar a programas académicos asociados, ya que también serían eliminados.')">
+                                            <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
                                                 <i class="fa fa-trash" style='color: white'></i>
                                             </button>
                                         </form>
@@ -103,6 +105,7 @@
                         <tfoot>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Facultad</th>
                                 <th>Acciones</th>
                             </tr>
                         </tfoot>

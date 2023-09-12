@@ -24,10 +24,10 @@ class Actividad extends Model
         'programa',
         'facultad'
     ];
-    public function Programa(){
+    public function programa(){//'programa' en lugar de 'Programa' para seguir las convenciones de nomenclatura de Laravel.
         return $this->hasOne(Programa::class);
     }
-    public function Facultad(){
+    public function facultad(){
         return $this->hasOne(Facultad::class);
     }
 }

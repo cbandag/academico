@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('programas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->unsignedBigInteger('facultad');
+            $table->unsignedBigInteger('facultad_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('facultad')->references('id')->on('facultades');
+            $table->foreign('facultad_id')->references('id')->on('facultades');//Se agregó onDelete('cascade'), por si habian programas asociados a la facultad.
 
         });
     }
