@@ -27,7 +27,6 @@ class FacultadesController extends Controller
     public function create()
     {
         return view('facultades.create');
-        return view('facultades.create');
     }
 
     /**
