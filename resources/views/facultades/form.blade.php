@@ -29,15 +29,15 @@
                             
                             
                             <div class="form-group">
-                                <label for="periodo" class="col-form-label">Nombre de Facultad:</label>
-                                <input type="text" class="form-control" id="periodo" name="periodo" value="{{isset($periodo->periodo)?$periodo->periodo:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                <label for="nombre" class="col-form-label">Nombre de Facultad:</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="{{isset($facultad->nombre)?$facultad->nombre:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
                             </div>
 
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <a type='button' class="btn btn-danger" href="{{url('/periodos/')}}">Cancelar</a>
+                        <a type='button' class="btn btn-danger" href="{{url('facultades/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary ">{{$mode}}</button>
                         @endif

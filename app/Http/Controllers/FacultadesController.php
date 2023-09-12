@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Facultad;
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class FacultadesController extends Controller
 {
@@ -29,38 +34,56 @@ class FacultadesController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(facultades $facultades)
+    public function show($id)
     {
-        //
+        $facultad = Facultad::findOrFail($id);
+        return view('facultades.show', compact('facultad'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(facultades $facultades)
+    public function edit($id)
     {
-        //
+        $facultad = Facultad::findOrFail($id);
+        return view('facultades.edit', compact('facultad'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, facultades $facultades)
+    public function update(Request $request, $id)
     {
-        //
+        $data = Request()->validate([
+
+            'nombre'=>'required|string|unique:facultades,nombre|max:50',
+        ],[
+            
+            'nombre.required'=> 'El nombre de la facultad es requirido',
+            'nombre.unique' => 'Esta facultad ya existe'
+        ]);
+        $facultad = Facultad::findOrFail($id);
+        DB::transaction(function () use ($data, $facultad){
+            $facultad->update([
+                'nombre' => $data['nombre'],
+            ]);
+        });
+
+        return redirect()->route('facultades.index')->with('message', 'Facultad modificada con éxito!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(facultades $facultades)
+    public function destroy($id)
     {
-        //
+        Facultad::destroy($id);
+        return redirect()->route('facultades.index')->with('message',"Facultad eliminada con exito!");
     }
 }

@@ -11,10 +11,10 @@ class Programa extends Model
     protected $table = 'periodos';
     protected $fillable = [
         'nombre',
-        'facultad',
+        'facultad_id',
     ];
 
-    public function Facultad(){
-        return $this->hasOne(Facultad::class,'id','faculty_id');
+    public function facultad(){
+        return $this->hasOne(Facultad::class,'id', 'facultad_id');
     }
 }
