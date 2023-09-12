@@ -32,7 +32,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">Docentes</h1>
+            <h1 class="m-0">{{$title}}</h1>
           </div><!-- /.col -->
           
         </div><!-- /.row -->
@@ -49,7 +49,7 @@
             <!-- Agregar Curso-->
             <div class="card-body">
                 <div class="box-title">
-                    <a class="btn btn-success" href="{{ url('/docentes/create/') }}">Añadir docente</a>
+                    <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
                     @csrf
                 </div><br>
 
@@ -77,7 +77,7 @@
                                 <div class="row">
                                     <!-- Mostrar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/docentes/'. $user->id )}}" class="btn btn-default">
+                                        <a href="{{ url('/'.$route.'/'. $user->id )}}" class="btn btn-default">
                                             @csrf
                                             <i class="fa fa-eye" style='color: black'></i>
                                             <!-- <input type="submit" name='show' value="show"> -->
@@ -85,7 +85,7 @@
                                     </div>
                                     <!-- Editar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/docentes/'. $user->id . '/edit/' ) }}" class="btn btn-info">
+                                        <a href="{{ url('/'.$route.'/'. $user->id . '/edit/' ) }}" class="btn btn-info">
                                             <i class="fa fa-pencil-alt" style='color: white'></i>
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
@@ -93,7 +93,7 @@
                                     
                                     <!-- Borrar -->
                                     <div class="col-sm">
-                                        <form action="{{ url('/docentes/'. $user->id) }}" method="POST">
+                                        <form action="{{ url('/'.$route.'/'. $user->id) }}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">

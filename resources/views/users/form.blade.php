@@ -3,11 +3,11 @@
         <div class="card">
 
             <div class="card-header">
-                <h5 class="card-title">{{$mode}} docente</h5>
+                <h5 class="card-title">{{$mode}} {{$model}}</h5>
             </div>
 
             @if($mode=='Crear')
-                <form action="{{ route('docentes.store') }}"  method="POST">
+                <form action="{{ route($route.'.store') }}"  method="POST">
             @endif
 
             @if($mode=='Mostrar')
@@ -16,7 +16,7 @@
             @endif
 
             @if($mode=='Editar')
-                <form action="{{ route('docentes.update', [$user->id]) }}"  method="POST">
+                <form action="{{ route($route.'.update', [$user->id]) }}"  method="POST">
                 @method('PUT')
             @endif
                 @csrf
@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <a type='button' class="btn btn-danger" href="{{url('/docentes/')}}">Cancelar</a>
+                        <a type='button' class="btn btn-danger" href="{{url('/'.$route.'/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary ">{{$mode}}</button>
                         @endif

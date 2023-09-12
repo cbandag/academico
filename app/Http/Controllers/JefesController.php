@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
     
-class DocentesController extends Controller
+class JefesController extends Controller
 {
     
     
@@ -20,7 +20,7 @@ class DocentesController extends Controller
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','docente')
+        ->where('roles.name','like','jefe')
         ->get();
 
         $jefes = DB::table('users')
@@ -30,9 +30,9 @@ class DocentesController extends Controller
         ->where('roles.name','like','jefe')
         ->get();
 
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
         
         return view('users.index', compact('users','jefes','model','route','title'));
     }
@@ -48,9 +48,9 @@ class DocentesController extends Controller
         ->select('users.*', 'model_has_roles.model_id')
         ->where('roles.name','like','jefe')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
         return view('users.create', compact('jefes','model','route','title'));
     }
 
@@ -84,13 +84,13 @@ class DocentesController extends Controller
                 'identificacion' => $data['identificacion'],
                 'password' => Hash::make($data['password']),
                 'estado' => ($data['estado']),
-            ])->assignRole('docente');;
+            ])->assignRole('jefe');;
 
         });
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return redirect()->route('docentes.index','model','route','title')->with('message','Docente creado con éxito!!');
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
+        return redirect()->route('jefes.index','model','route','title')->with('message','Jefe creado con éxito!!');
     }
 
     /**
@@ -105,9 +105,9 @@ class DocentesController extends Controller
         ->select('users.*', 'model_has_roles.role_id')
         ->where('roles.name','like','jefe')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
         return view('users.show', compact('user','jefes','model','route','title'));
     }
 
@@ -123,9 +123,9 @@ class DocentesController extends Controller
         ->select('users.*', 'model_has_roles.role_id')
         ->where('roles.name','like','jefe')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
         return view('users.edit', compact('user','jefes','model','route','title'));
     }
 
@@ -181,10 +181,10 @@ class DocentesController extends Controller
             ]);
 
         });
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
+        $model = 'jefe';
+        $route ='jefes';
+        $title ='Jefes';
+        return redirect()->route('jefes.index')->with('message','Jefe modificado con éxito!!');
     }
 
     /**
@@ -193,6 +193,6 @@ class DocentesController extends Controller
     public function destroy( $id)
     {
         User::destroy($id);
-        return redirect()->route('docentes.index')->with('message','Periodo eliminado con éxito!!');
+        return redirect()->route('jefes.index')->with('message','Periodo eliminado con éxito!!');
     }
 }

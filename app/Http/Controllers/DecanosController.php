@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
     
-class DocentesController extends Controller
+class DecanosController extends Controller
 {
     
     
@@ -20,21 +20,21 @@ class DocentesController extends Controller
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','docente')
+        ->where('roles.name','like','decano')
         ->get();
 
-        $jefes = DB::table('users')
+        $decanos = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','jefe')
+        ->where('roles.name','like','decano')
         ->get();
 
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
         
-        return view('users.index', compact('users','jefes','model','route','title'));
+        return view('users.index', compact('users','decanos','model','route','title'));
     }
 
     /**
@@ -42,16 +42,16 @@ class DocentesController extends Controller
      */
     public function create()
     {
-        $jefes = DB::table('users')
+        $decanos = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','jefe')
+        ->where('roles.name','like','decano')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return view('users.create', compact('jefes','model','route','title'));
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
+        return view('users.create', compact('decanos','model','route','title'));
     }
 
     /**
@@ -65,7 +65,7 @@ class DocentesController extends Controller
             'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
             'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'jefe' => ['numeric'],
+            'decano' => ['numeric'],
             'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
         ],[
             'nombres.required' => 'El nombre es requerido.',
@@ -84,13 +84,13 @@ class DocentesController extends Controller
                 'identificacion' => $data['identificacion'],
                 'password' => Hash::make($data['password']),
                 'estado' => ($data['estado']),
-            ])->assignRole('docente');;
+            ])->assignRole('decano');;
 
         });
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return redirect()->route('docentes.index','model','route','title')->with('message','Docente creado con éxito!!');
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
+        return redirect()->route('decanos.index','model','route','title')->with('message','Decano creado con éxito!!');
     }
 
     /**
@@ -99,16 +99,16 @@ class DocentesController extends Controller
     public function show( $id)
     {
         $user = User::findOrFail($id);
-        $jefes = DB::table('users')
+        $decanos = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.role_id')
-        ->where('roles.name','like','jefe')
+        ->where('roles.name','like','decano')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return view('users.show', compact('user','jefes','model','route','title'));
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
+        return view('users.show', compact('user','decanos','model','route','title'));
     }
 
     /**
@@ -117,16 +117,16 @@ class DocentesController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $jefes = DB::table('users')
+        $decanos = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.role_id')
-        ->where('roles.name','like','jefe')
+        ->where('roles.name','like','decano')
         ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return view('users.edit', compact('user','jefes','model','route','title'));
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
+        return view('users.edit', compact('user','decanos','model','route','title'));
     }
 
     /**
@@ -152,7 +152,7 @@ class DocentesController extends Controller
             'email' => ['required', 'string', 'email', 'max:25', 'unique:users,email,'.$id],
             'identificacion' => ['required', 'string', 'max:25', 'unique:users,identificacion,'.$id],
             'password' => ['string', 'min:8', 'confirmed'],
-            'jefe' => ['numeric'],
+            'decano' => ['numeric'],
             'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
         ],[
             'nombres.required' => 'El nombre es requerido.',
@@ -181,10 +181,10 @@ class DocentesController extends Controller
             ]);
 
         });
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
+        $model = 'decano';
+        $route ='decanos';
+        $title ='Decanos';
+        return redirect()->route('decanos.index')->with('message','Decano modificado con éxito!!');
     }
 
     /**
@@ -193,6 +193,6 @@ class DocentesController extends Controller
     public function destroy( $id)
     {
         User::destroy($id);
-        return redirect()->route('docentes.index')->with('message','Periodo eliminado con éxito!!');
+        return redirect()->route('decanos.index')->with('message','Periodo eliminado con éxito!!');
     }
 }
