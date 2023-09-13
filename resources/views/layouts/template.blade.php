@@ -190,6 +190,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
+          
+
           @can('programas.index')
           <li class="nav-item">
             <a href="{{url('/programas')}}" class="nav-link">

@@ -17,7 +17,10 @@ class PeriodosController extends Controller
     public function index()
 
     {
-        $periodos= Periodo::all();
+        
+        $periodos = Periodo::on('pgsql')->get(); 
+
+        //$periodos= Periodo::all();
         return view('periodos.index', compact('periodos'));
     }
 

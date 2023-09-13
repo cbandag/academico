@@ -48,6 +48,7 @@ Route::resource('periodos', PeriodosController::class)->middleware('auth');
 Route::resource('facultades', FacultadesController::class)->middleware('auth');
 Route::resource('programas', ProgramasController::class)->middleware('auth');
 Route::resource('actividades', ActividadesController::class)->middleware('auth');
+Route::resource('programacion', ProgramacionController::class)->middleware('auth');
 
 /*
 Route::get('/docentes', [DocentesController::class, 'index'])->name('docentes.index');

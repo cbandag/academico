@@ -17,6 +17,7 @@ class ActividadesController extends Controller
      */
     public function index()
     {
+        
         $actividades = Actividad::all();
         $periodos = Periodo::all();
         $users = User::all();
