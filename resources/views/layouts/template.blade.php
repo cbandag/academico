@@ -224,6 +224,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
 
 
+          
+          @can('asignaciones.index')
+
+          <li class="nav-item">
+            <a href="{{url('/asignaciones')}}" class="nav-link">
+              <i class="nav-icon fas fa-user" ></i>
+              <p>
+                Asignaciones(docente)
+              </p>
+            </a>
+          </li>
+          @endcan
+
+          @can('programaciones.index')
+
+          <li class="nav-item">
+            <a href="{{url('/programaciones')}}" class="nav-link">
+              <i class="nav-icon fas fa-user" ></i>
+              <p>
+                Programaciones (SMA)
+              </p>
+            </a>
+          </li>
+          @endcan
+
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

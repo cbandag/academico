@@ -8,9 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Programacion extends Model
 {
     use HasFactory;
-    protected $table = "programacion";
+    protected $table = "programaciones";
     protected $fillable = [
-        'nombre',
+        'codigo_programa',
+        'programa',
+        'codigo_materia',
+        'materia',
+        'nombres',
+        'apellidos',
+        'identificacion',
+        'estado',
+        'email',
+        'password'
     ];
- 
 }

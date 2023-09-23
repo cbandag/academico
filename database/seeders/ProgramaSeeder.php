@@ -15,11 +15,11 @@ class ProgramaSeeder extends Seeder
     {
         DB::table('programas')->insert([
             'nombre' => 'Ingenieria de Sistemas',
-            'facultad' => '1'
+            'facultad_id' => '1'
         ]);
         DB::table('programas')->insert([
             'nombre' => 'Medicina',
-            'facultad' => '2'
+            'facultad_id' => '2'
         ]);
     }
 }

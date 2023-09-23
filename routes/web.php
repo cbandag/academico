@@ -10,6 +10,8 @@ use App\Http\Controllers\PeriodosController;
 use App\Http\Controllers\FacultadesController;
 use App\Http\Controllers\ProgramasController;
 use App\Http\Controllers\ActividadesController;
+use App\Http\Controllers\AsignacionesController;
+use App\Http\Controllers\ProgramacionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,7 @@ Route::group(['middleware' =>  'auth'],function () {
     Route::get('/', [App\Http\Controllers\Auth\LoginController::class,'index'])->name('home');
 });
 
+Route::get('/programaciones/docentes', [App\Http\Controllers\ProgramacionesController::class, 'importDocentes'])->name('programaciones.importDocentes')->middleware('auth');
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);
 //Route::resource('user', UsersController::class)->middleware('auth');
@@ -48,7 +51,12 @@ Route::resource('periodos', PeriodosController::class)->middleware('auth');
 Route::resource('facultades', FacultadesController::class)->middleware('auth');
 Route::resource('programas', ProgramasController::class)->middleware('auth');
 Route::resource('actividades', ActividadesController::class)->middleware('auth');
-Route::resource('programacion', ProgramacionController::class)->middleware('auth');
+Route::resource('programaciones', ProgramacionesController::class)->middleware('auth');
+Route::resource('asignaciones', AsignacionesController::class)->middleware('auth');
+
+
+
+
 
 /*
 Route::get('/docentes', [DocentesController::class, 'index'])->name('docentes.index');

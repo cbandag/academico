@@ -187,12 +187,82 @@ class DocentesController extends Controller
         return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
     }
 
+    public function importAll(Request $request)
+    {
+        //toca consultar en la tabla pgsql agrupando los docentes por su cedula
+        //luego crearlos si no existen
+        //en el controlador de actividades o asignaturas sql toca agregar las horas por actividad
+        // de cada docente se unen atraves de la cedula del docente
+        //toca crear otra tabla con los calculos de la suma de horas 
+
+        //cambiar programacio por asignacion
+
+        $users = DB::connection('pgsql')->table('asignaciones')
+        ->select('asignaciones.*')
+        ->groupBy('ide')
+        ->having('roles.name','like','docente')
+        ->get();
+
+        $jefes = DB::table('users')
+        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        ->select('users.*', 'model_has_roles.model_id')
+        ->where('roles.name','like','jefe')
+        ->get();
+
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        
+        return view('users.index', compact('users','jefes','model','route','title'));
+
+        
+        $data = Request()->validate([
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
+            'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'jefe' => ['numeric'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+        ],[
+            'nombres.required' => 'El nombre es requerido.',
+            'apellidos.required' => 'El apellido es requerido.',
+            'email.required' => 'El email es requerido.',
+            'identificacion.required' => 'La identificacion es requerido.',
+            'password.required' => 'La password es requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+
+        DB::transaction(function() use ($data){
+            User::create([
+                'nombres' => $data['nombres'],
+                'apellidos' => $data['apellidos'],
+                'email' => $data['email'],
+                'identificacion' => $data['identificacion'],
+                'password' => Hash::make($data['password']),
+                'estado' => ($data['estado']),
+            ])->assignRole('docente');;
+
+        });
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        return redirect()->route('docentes.index','model','route','title')->with('message','Docente creado con éxito!!');
+    }
+
+
+
+
+
+
     /**
      * Remove the specified resource from storage.
-     */
+     
     public function destroy( $id)
     {
         User::destroy($id);
         return redirect()->route('docentes.index')->with('message','Periodo eliminado con éxito!!');
     }
+    */
 }

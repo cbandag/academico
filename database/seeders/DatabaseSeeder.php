@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FacultadSeeder::class);
         $this->call(ProgramaSeeder::class);
         $this->call(ActividadSeeder::class);
+        $this->call(ProgramacionSeeder::class);
         
 
         // \App\Models\User::factory(10)->create();
