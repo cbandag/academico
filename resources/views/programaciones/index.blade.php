@@ -22,7 +22,7 @@
         @foreach($errors->all() as $error)
             {{$error}}<br>
         @endforeach
-        </div>    
+        </div>
     </div>
     @endif
 
@@ -34,7 +34,7 @@
           <div class="col-sm-12">
             <h1 class="m-0">Programaciones</h1>
           </div><!-- /.col -->
-          
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
@@ -42,7 +42,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="card"> 
+        <div class="card">
 
         <div class="card-body">
 
@@ -51,7 +51,13 @@
                 <div class="box-title">
                     <a class="btn btn-success" href="{{ url('/programaciones/docentes/') }}">Importar Docentes</a>
                     @csrf
-                </div><br>
+                </div>
+                <br>
+                <div class="box-title">
+                    <a class="btn btn-success" href="{{ url('/programaciones/asignaturas/') }}">Importar Asignaturas</a>
+                    @csrf
+                </div>
+                <br>
 
                 <!-- Listar Programacion -->
                 <table id="users" class="table table-bordered table-striped rounded">
@@ -72,7 +78,7 @@
                             <th>horas</th>
                             <th>creditos</th>
                             <th>año</th>
-                            <th>periodo</th>  
+                            <th>periodo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -130,7 +136,7 @@
                             <th>horas</th>
                             <th>creditos</th>
                             <th>año</th>
-                            <th>periodo</th>  
+                            <th>periodo</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
@@ -153,7 +159,7 @@
                     <tbody>
                     @foreach($docentes as $docente)
                         <tr>
-                            
+
                             <td>{{$docente->tipo}}</td>
                             <td>{{$docente->ide}}</td>
                             <td>{{$docente->nombres}}</td>
@@ -182,7 +188,7 @@
                             <th>ide</th>
                             <th>nombres</th>
                             <th>apellidos</th>
-                            <th>npqprf</th> 
+                            <th>npqprf</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
@@ -201,7 +207,7 @@
                             <th>Horas</th>
                             <th>Créditos</th>
                             <th>Año</th>
-                            <th>Periodo</th>  
+                            <th>Periodo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -245,7 +251,7 @@
                             <th>Horas</th>
                             <th>Creditos</th>
                             <th>Año</th>
-                            <th>Periodo</th>  
+                            <th>Periodo</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
@@ -259,7 +265,7 @@
     </section>
 </div>
 
-    
+
 
 
 

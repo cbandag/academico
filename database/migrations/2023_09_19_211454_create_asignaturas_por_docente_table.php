@@ -11,11 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('asignaturas_por_asignacion', function (Blueprint $table) {
-            $table->unsignedBigInteger('asignacion');
+        Schema::create('asignaturas_por_docente', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('identificacion');
+            $table->string('codigo_asignatura');
             $table->string('asignatura');
+            $table->string('grupo');
             $table->string('programa');
             $table->double('horas');
+            $table->double('año');
+            $table->double('periodo');
+
+
 
             $table->timestamps();
         });
@@ -26,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('asignaturas_por_asignacion');
+        Schema::dropIfExists('asignaturas_por_docente');
     }
 };

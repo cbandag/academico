@@ -17,6 +17,7 @@ class Programacion extends Model
         'nombres',
         'apellidos',
         'identificacion',
+        'npqprf',
         'estado',
         'email',
         'password'

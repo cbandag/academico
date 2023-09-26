@@ -11,11 +11,12 @@ class Funciones extends Model
     protected $table = "funciones";
     protected $fillable = [
         'funcion',
-        'porcentaje_descarga',
+        'descarga',
     ];
 
-    public function asignacion(): BelongsToMany
+    public function asignacion()
     {
-        return $this->belongsToMany(asignacion::class,'funciones_por_asignacion');
+        return $this->belongsToMany(asignacion::class);
     }
+
 }

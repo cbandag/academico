@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Asignaciones;
+use App\Models\Asignacion;
+use App\Models\User;
+use App\Models\AsignaturasPorDocente;
 use Illuminate\Http\Request;
 
 class AsignacionesController extends Controller
@@ -12,8 +14,11 @@ class AsignacionesController extends Controller
      */
     public function index()
     {
-        $asignaciones= Asignaciones::on('pgsql')->get();//all();
-        return view('asignaciones.index', compact('asignaciones'));
+        $asignaciones = Asignacion::where('año','=','2023')->where('periodo','=','2')->get();
+        $users = User::all();
+        $asignaturas = AsignaturasPorDocente::all();
+
+        return view('asignaciones.index', compact('asignaciones','users','asignaturas'));
     }
 
     /**

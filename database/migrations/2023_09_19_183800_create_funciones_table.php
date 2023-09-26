@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('funciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('funcion');
-            $table->double('porcentaje_descarga');
-            
+            $table->double('descarga');
+
             $table->timestamps();
         });
     }

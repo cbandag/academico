@@ -41,6 +41,7 @@ Route::group(['middleware' =>  'auth'],function () {
 });
 
 Route::get('/programaciones/docentes', [App\Http\Controllers\ProgramacionesController::class, 'importDocentes'])->name('programaciones.importDocentes')->middleware('auth');
+Route::get('/programaciones/asignaturas', [App\Http\Controllers\ProgramacionesController::class, 'importAsignaturasPorDocente'])->name('programaciones.importAsignaturasPorDocente')->middleware('auth');
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);
 //Route::resource('user', UsersController::class)->middleware('auth');

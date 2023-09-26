@@ -27,7 +27,7 @@ class ProgramasController extends Controller
     public function create()
     {
         $facultades = Facultad::all();
-        return view('programas.create', compact('facultades'));   
+        return view('programas.create', compact('facultades'));
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Asignaturas_por_asignacion;
+use App\Models\Asignaturas_por_Docente;
 use Illuminate\Http\Request;
 
-class AsignaturasPorAsignacionController extends Controller
+class AsignaturasPorDocenteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class AsignaturasPorAsignacionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Asignaturas_por_asignacion $asignaturas_por_asignacion)
+    public function show(Asignaturas_por_Docente $asignaturas_por_Docente)
     {
         //
     }
@@ -42,7 +42,7 @@ class AsignaturasPorAsignacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Asignaturas_por_asignacion $asignaturas_por_asignacion)
+    public function edit(Asignaturas_por_Docente $asignaturas_por_Docente)
     {
         //
     }
@@ -50,7 +50,7 @@ class AsignaturasPorAsignacionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Asignaturas_por_asignacion $asignaturas_por_asignacion)
+    public function update(Request $request, Asignaturas_por_Docente $asignaturas_por_Docente)
     {
         //
     }
@@ -58,7 +58,7 @@ class AsignaturasPorAsignacionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Asignaturas_por_asignacion $asignaturas_por_asignacion)
+    public function destroy(Asignaturas_por_Docente $asignaturas_por_Docente)
     {
         //
     }

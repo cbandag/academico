@@ -50,7 +50,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function user(){
-        return $this->hasOne(User::class);
+    public function asignacion(){
+        return $this->hasMany(Asignaciones::class,'identificacion','identificacion');
     }
 }
