@@ -25,6 +25,7 @@ class Asignacion extends Model
         'horas_preparacion',
         'horas_estudiantes',
         'observaciones',
+        'horas_docencia',
         'año',
         'periodo',
         'estado'

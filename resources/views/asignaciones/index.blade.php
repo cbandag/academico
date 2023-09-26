@@ -32,7 +32,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">Asignaciones {{$asignaciones->first()->año}} - {{$asignaciones->first()->periodo}}</h1>
+            <h1 class="m-0">Asignaciones {{isset($asignaciones->first()->año)? $asignaciones->first()->año - $asignaciones->first()->periodo:''}}</h1>
           </div><!-- /.col -->
 
         </div><!-- /.row -->
@@ -57,25 +57,33 @@
                 <table id="users" class="table table-sm table-bordered table-striped rounded">
                     <thead>
                         <tr>
+                            <th colspan='4'>INFORMACIÓN DOCENTE</th>
+                            <th colspan='7'>DESCARGAS</th>
+                            <th colspan='3'>Horas clases</th>
+                            <th rowspan='2'>Observaciones</th>
+                            <th rowspan='2'>Horas docencia</th>
+                            <th colspan='3'>Asignacion de clases</th>
+                            <th rowspan='2'>Estado</th>
+                            <th rowspan='2'>Acciones</th>
+                        </tr>
+                        <tr>
                             <th>Nombres</th>
                             <th>Dedicación</th>
                             <th>Horas Dedic.</th>
+                            <th>% Funciones</th>
+                            <th>Investigación</th>
                             <th>%</th>
-                            <th>Descarga investigación</th>
+                            <th>Extensión</th>
                             <th>%</th>
-                            <th>Descarga extensión</th>
-                            <th>%</th>
+                            <th>Total</th>
                             <th>Horas restantes</th>
                             <th>Soporte</th>
                             <th>Horas clases</th>
                             <th>Horas preparacion</th>
                             <th>Horas estudiantes</th>
-                            <th>Observaciones</th>
                             <th>Asignaturas</th>
                             <th>Programa</th>
                             <th>Horas</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
 
@@ -97,9 +105,10 @@
                             <td> {{$asignacion->horas_preparacion}} </td>
                             <td> {{$asignacion->horas_estudiantes}} </td>
                             <td> {{$asignacion->observaciones}} </td>
+                            <td>{{$asignacion->horas_docencia}}</th>
                             <td>
                                 @foreach ($asignacion->asignaturas as  $asignatura)
-                                {{$asignatura->asignatura}}<br>
+                                {{substr($asignatura->asignatura,0,10)}}<br>
                                 @endforeach
                             </th>
                             <td>
@@ -113,24 +122,15 @@
                                 @endforeach
                             </th>
 
-                            <td> {{$asignacion->estado}} </td>
 
-
-                            @if ($asignacion->estado=='ACTIVO')
+                            @if ($asignacion->estado=='LISTO')
                                 <td><span class="btn btn-block btn-success btn-sm ">{{$asignacion->estado}}</span> </td>
-                            @elseif ($asignacion->estado=='INACTIVO')
+                            @elseif ($asignacion->estado=='PENDIENTE')
                             <td><span class="btn btn-block btn-secondary btn-sm">{{$asignacion->estado}}</span> </td>
                             @endif
                             <td>
                                 <div class="row">
-                                    <!-- Mostrar -->
-                                    <div class="col-sm">
-                                        <a href="{{ url('/asignaciones/'. $asignacion->id )}}" class="btn btn-default">
-                                            @csrf
-                                            <i class="fa fa-eye" style='color: black'></i>
-                                            <!-- <input type="submit" name='show' value="show"> -->
-                                        </a>
-                                    </div>
+
                                     <!-- Editar -->
                                     <div class="col-sm">
                                         <a href="{{ url('/asignaciones/'. $asignacion->id . '/edit/' ) }}" class="btn btn-info">
@@ -157,12 +157,14 @@
                             <th>%</th>
                             <th>Descarga extensión</th>
                             <th>%</th>
+                            <th>Total</th>
                             <th>Horas restantes</th>
                             <th>Soporte</th>
                             <th>Horas clases</th>
                             <th>Horas preparacion</th>
                             <th>Horas estudiantes</th>
                             <th>Observaciones</th>
+                            <th>Horas docencia</th>
                             <th>Asignaturas</th>
                             <th>Programa</th>
                             <th>Horas</th>

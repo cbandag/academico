@@ -68,15 +68,12 @@
                             <th>Codigo materia</th>
                             <th>Materia</th>
                             <th>grupo</th>
-                            <th>semestre</th>
                             <th>tipo</th>
                             <th>ide</th>
                             <th>nombres</th>
                             <th>apellidos</th>
                             <th>npqprf</th>
-                            <th>semanas</th>
                             <th>horas</th>
-                            <th>creditos</th>
                             <th>año</th>
                             <th>periodo</th>
                             <th>Acciones</th>
@@ -91,15 +88,12 @@
                             <td>{{$programacion->codigo_materia}}</td>
                             <td>{{$programacion->materia}}</td>
                             <td>{{$programacion->grupo}}</td>
-                            <td>{{$programacion->semestre}}</td>
                             <td>{{$programacion->tipo}}</td>
                             <td>{{$programacion->ide}}</td>
                             <td>{{$programacion->nombres}}</td>
                             <td>{{$programacion->apellidos}}</td>
                             <td>{{$programacion->npqprf}}</td>
-                            <td>{{$programacion->semanas}}</td>
                             <td>{{$programacion->horas}}</td>
-                            <td>{{$programacion->creditos}}</td>
                             <td>{{$programacion->año}}</td>
                             <td>{{$programacion->periodo}}</th>
 
@@ -126,15 +120,12 @@
                             <th>Codigo materia</th>
                             <th>Materia</th>
                             <th>grupo</th>
-                            <th>semestre</th>
                             <th>tipo</th>
                             <th>ide</th>
                             <th>nombres</th>
                             <th>apellidos</th>
                             <th>npqprf</th>
-                            <th>semanas</th>
                             <th>horas</th>
-                            <th>creditos</th>
                             <th>año</th>
                             <th>periodo</th>
                             <th>Acciones</th>

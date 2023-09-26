@@ -28,6 +28,7 @@ return new class extends Migration
             $table->double('horas_preparacion')->nullable();
             $table->double('horas_estudiantes')->nullable();
             $table->double('observaciones')->nullable();
+            $table->double('horas_docencia')->nullable();
             $table->string('año');
             $table->string('periodo');
             $table->string('estado');

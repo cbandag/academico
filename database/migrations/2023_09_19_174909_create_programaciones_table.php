@@ -19,15 +19,12 @@ return new class extends Migration
             $table->string('codigo_materia');
             $table->string('materia');
             $table->string('grupo');
-            $table->string('semestre');
             $table->string('tipo');
             $table->string('ide');
             $table->string('nombres');
             $table->string('apellidos');
             $table->string('npqprf');
-            $table->string('semanas');
             $table->double('horas');
-            $table->unsignedBigInteger('creditos');
             $table->string('año');
             $table->string('periodo');
 
