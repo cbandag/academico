@@ -14,11 +14,11 @@ class Funciones_por_asignacion extends Model
         'funcion_id'
     ];
 
-//
+/*
     public function programa(){
         return $this->hasOne(Programa::class);
     }
     public function facultad(){
         return $this->hasOne(Facultad::class);
-    }
+    }*/
 }

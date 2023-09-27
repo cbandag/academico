@@ -11,9 +11,11 @@ class Asignacion extends Model
     protected $table = "asignaciones";
     protected $fillable = [
         'identificacion',
-        'dedicacion',
         'horas_dedicacion',
-        'porcentaje_total_funciones',
+        'funcion_1',
+        'funcion_2',
+        'funcion_3',
+        'funcion_4',
         'descarga_investigacion',
         'porcentaje_investigacion',
         'descarga_extension',
@@ -32,8 +34,6 @@ class Asignacion extends Model
         ];
 
 
-
-
         public function asignaturas()
         {
             return $this->hasMany(AsignaturasPorDocente::class,'identificacion','identificacion');
@@ -43,8 +43,8 @@ class Asignacion extends Model
             return $this->BelongsTo(User::class,'identificacion','identificacion');
         }
 
-    public function funcion()
-    {
-        return $this->belongsToMany(Funcion::class);
-    }
+        public function funcion()
+        {
+            return $this->belongsToMany(Funcion::class,'funciones_por_asignacion');
+        }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignacion_id');
             $table->unsignedBigInteger('funcion_id');
+
             $table->timestamps();
 
             $table->foreign('asignacion_id')->references('id')->on('asignaciones');

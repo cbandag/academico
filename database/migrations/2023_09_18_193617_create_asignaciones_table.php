@@ -14,26 +14,34 @@ return new class extends Migration
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('identificacion');
-            $table->string('dedicacion')->nullable();
             $table->string('horas_dedicacion')->nullable();
-            $table->string('porcentaje_total_funciones')->nullable();
+            /*$table->unsignedBigInteger('funcion_1')->nullable();
+            $table->unsignedBigInteger('funcion_2')->nullable();
+            $table->unsignedBigInteger('funcion_3')->nullable();
+            $table->unsignedBigInteger('funcion_4')->nullable();*/
             $table->string('descarga_investigacion')->nullable();
             $table->string('porcentaje_investigacion')->nullable();
             $table->string('descarga_extension')->nullable();
             $table->string('porcentaje_extension')->nullable();
             $table->string('total_descargas')->nullable();
             $table->double('horas_restantes')->nullable();
-            $table->double('soporte')->nullable();
+            $table->string('soporte')->nullable();
             $table->double('horas_clases')->nullable();
             $table->double('horas_preparacion')->nullable();
             $table->double('horas_estudiantes')->nullable();
-            $table->double('observaciones')->nullable();
+            $table->string('observaciones')->nullable();
             $table->double('horas_docencia')->nullable();
             $table->string('año');
             $table->string('periodo');
             $table->string('estado');
 
             $table->timestamps();
+
+            /*$table->foreign('funcion_1')->references('id')->on('funciones');
+            $table->foreign('funcion_2')->references('id')->on('funciones');
+            $table->foreign('funcion_3')->references('id')->on('funciones');
+            $table->foreign('funcion_4')->references('id')->on('funciones');*/
+
         });
     }
 

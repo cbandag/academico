@@ -7,7 +7,7 @@
     @if(count($errors)>0)
     <div class="card-body">
         <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">Editar</button>
         @foreach($errors->all() as $error)
             {{$error}}<br>
         @endforeach

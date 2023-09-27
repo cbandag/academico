@@ -70,7 +70,7 @@
                             <th>Nombres</th>
                             <th>Dedicación</th>
                             <th>Horas Dedic.</th>
-                            <th>% Funciones</th>
+                            <th>Funciones</th>
                             <th>Investigación</th>
                             <th>%</th>
                             <th>Extensión</th>
@@ -91,9 +91,13 @@
                     @foreach($asignaciones as $asignacion)
                         <tr>
                             <td> {{$asignacion->user->nombres}} {{$asignacion->user->apellidos}} </td>
-                            <td> {{$asignacion->dedicacion}} </td>
+                            <td> {{$asignacion->dedicacion=('40'?'TIEMPO COMPLETO':($asignacion->dedicacion='20'?'MEDIO TIEMPO':''))}} </td>
                             <td> {{$asignacion->horas_dedicacion}} </td>
-                            <td> {{$asignacion->porcentaje_total_funciones}} </td>
+                            <td>
+                                @foreach($asignacion->funcion as $funcion)
+                                {{$funcion->funcion}}
+                                @endforeach
+                            </td>
                             <td> {{$asignacion->descarga_investigacion}} </td>
                             <td> {{$asignacion->porcentaje_investigacion}} </td>
                             <td> {{$asignacion->descarga_extension}} </td>

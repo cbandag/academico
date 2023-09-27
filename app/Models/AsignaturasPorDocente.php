@@ -20,8 +20,8 @@ class AsignaturasPorDocente extends Model
         'periodo'
     ];
 
-    public function asignacion()
+    /*public function asignacion()
     {
         return $this->BelongsTo(Asignacion::class,'identificacion','identificacion');
-    }
+    }*/
 }
