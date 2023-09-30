@@ -142,9 +142,8 @@ class ProgramacionesController extends Controller
         $lista_horas_docencia = DB::connection('pgsql')->table('programaciones')
             ->where('npqprf','=','Planta')
             ->select('ide','año','periodo', DB::raw(' SUM(horas) as total_horas'))
-             ->groupBy('ide','año','periodo')
+            ->groupBy('ide','año','periodo')
             ->get();
-
 
         //$docentes =compact('docentes');
 

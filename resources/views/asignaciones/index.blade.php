@@ -53,50 +53,53 @@
                     @csrf
                 </div><br>
 
+
                 <!-- Listar Asignaturas -->
                 <table id="users" class="table table-sm table-bordered table-striped rounded">
                     <thead>
                         <tr>
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
                             <th colspan='7'>DESCARGAS</th>
-                            <th colspan='3'>Horas clases</th>
-                            <th rowspan='2'>Observaciones</th>
-                            <th rowspan='2'>Horas docencia</th>
+                            <th colspan='3'>Función docente (Horas)</th>
+                            <th rowspan='2'>Observ.</th>
                             <th colspan='3'>Asignacion de clases</th>
+                            <th rowspan='2'>Total</th>
+
                             <th rowspan='2'>Estado</th>
-                            <th rowspan='2'>Acciones</th>
+                            <th rowspan='2'>Editar</th>
                         </tr>
                         <tr>
                             <th>Nombres</th>
-                            <th>Dedicación</th>
-                            <th>Horas Dedic.</th>
+                            <th>Dedicac.</th>
+                            <th>Hrs</th>
                             <th>Funciones</th>
-                            <th>Investigación</th>
+                            <th>Inv.</th>
                             <th>%</th>
-                            <th>Extensión</th>
+                            <th>Ext.</th>
                             <th>%</th>
                             <th>Total</th>
-                            <th>Horas restantes</th>
+                            <th>Rest.</th>
                             <th>Soporte</th>
-                            <th>Horas clases</th>
-                            <th>Horas preparacion</th>
-                            <th>Horas estudiantes</th>
-                            <th>Asignaturas</th>
+                            <th>Clases</th>
+                            <th>Prep.</th>
+                            <th>Estud.</th>
+                            <th>Asig.</th>
                             <th>Programa</th>
-                            <th>Horas</th>
+                            <th>Hrs</th>
                         </tr>
                     </thead>
 
                     <tbody>
                     @foreach($asignaciones as $asignacion)
                         <tr>
-                            <td> {{$asignacion->user->nombres}} {{$asignacion->user->apellidos}} </td>
-                            <td> {{$asignacion->dedicacion=('40'?'TIEMPO COMPLETO':($asignacion->dedicacion='20'?'MEDIO TIEMPO':''))}} </td>
-                            <td> {{$asignacion->horas_dedicacion}} </td>
+                            <td> <small>{{$asignacion->user->nombres}} {{$asignacion->user->apellidos}}</small> </td>
+                            <td> <small>{{$asignacion->dedicacion=('40'?'TIEMPO COMPLETO':($asignacion->dedicacion='20'?'MEDIO TIEMPO':''))}} </small></td>
+                            <td> {{$asignacion->horas_dedicacion}}</td>
                             <td>
                                 @foreach($asignacion->funcion as $funcion)
-                                {{$funcion->funcion}}
+                                 <small>{{$funcion->funcion}}</br></small>
                                 @endforeach
+
                             </td>
                             <td> {{$asignacion->descarga_investigacion}} </td>
                             <td> {{$asignacion->porcentaje_investigacion}} </td>
@@ -109,28 +112,29 @@
                             <td> {{$asignacion->horas_preparacion}} </td>
                             <td> {{$asignacion->horas_estudiantes}} </td>
                             <td> {{$asignacion->observaciones}} </td>
+
+                            <td>
+                                @foreach ($asignacion->asignaturas as  $asignatura)
+                                <small>{{substr($asignatura->asignatura,0,10)}}</small><br>
+                                @endforeach
+                            </th>
+                            <td>
+                                @foreach ($asignacion->asignaturas as  $asignatura)
+                                <small>{{substr($asignatura->programa,0,12)}} </small><br>
+                                @endforeach
+                            </th>
+                            <td>
+                                @foreach ($asignacion->asignaturas as  $asignatura)
+                                <small>{{$asignatura->horas}}</small><br>
+                                @endforeach
+                            </th>
                             <td>{{$asignacion->horas_docencia}}</th>
-                            <td>
-                                @foreach ($asignacion->asignaturas as  $asignatura)
-                                {{substr($asignatura->asignatura,0,10)}}<br>
-                                @endforeach
-                            </th>
-                            <td>
-                                @foreach ($asignacion->asignaturas as  $asignatura)
-                                {{substr($asignatura->programa,0,12)}} <br>
-                                @endforeach
-                            </th>
-                            <td>
-                                @foreach ($asignacion->asignaturas as  $asignatura)
-                                {{$asignatura->horas}}<br>
-                                @endforeach
-                            </th>
 
 
                             @if ($asignacion->estado=='LISTO')
                                 <td><span class="btn btn-block btn-success btn-sm ">{{$asignacion->estado}}</span> </td>
                             @elseif ($asignacion->estado=='PENDIENTE')
-                            <td><span class="btn btn-block btn-secondary btn-sm">{{$asignacion->estado}}</span> </td>
+                            <td><span class="btn btn-block btn-secondary btn-sm">Pend.</span> </td>
                             @endif
                             <td>
                                 <div class="row">
@@ -143,7 +147,6 @@
                                         </a>
                                     </div>
 
-
                                 </div>
 
                             </td>
@@ -154,26 +157,26 @@
                     <tfoot>
                         <tr>
                             <th>Nombres</th>
-                            <th>Dedicación</th>
-                            <th>Horas Dedic.</th>
+                            <th>Dedicac.</th>
+                            <th>Hrs</th>
+                            <th>Funciones</th>
+                            <th>Inv.</th>
                             <th>%</th>
-                            <th>Descarga investigación</th>
-                            <th>%</th>
-                            <th>Descarga extensión</th>
+                            <th>Ext.</th>
                             <th>%</th>
                             <th>Total</th>
-                            <th>Horas restantes</th>
+                            <th>Rest.</th>
                             <th>Soporte</th>
-                            <th>Horas clases</th>
-                            <th>Horas preparacion</th>
-                            <th>Horas estudiantes</th>
-                            <th>Observaciones</th>
-                            <th>Horas docencia</th>
-                            <th>Asignaturas</th>
+                            <th>Clases</th>
+                            <th>Prep.</th>
+                            <th>Estud.</th>
+                            <th>Observ.</th>
+                            <th>Asig.</th>
                             <th>Programa</th>
-                            <th>Horas</th>
+                            <th>Hrs</th>
+                            <th>Total</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>Editar</th>
                         </tr>
                     </tfoot>
                 </table>
