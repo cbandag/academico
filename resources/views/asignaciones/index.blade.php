@@ -102,9 +102,9 @@
 
                             </td>
                             <td> {{$asignacion->descarga_investigacion}} </td>
-                            <td> {{$asignacion->porcentaje_investigacion}} </td>
+                            <td> {{100*$asignacion->porcentaje_investigacion}} </td>
                             <td> {{$asignacion->descarga_extension}} </td>
-                            <td> {{$asignacion->porcentaje_extension}} </td>
+                            <td> {{100*$asignacion->porcentaje_extension}} </td>
                             <td> {{$asignacion->total_descargas}} </td>
                             <td> {{$asignacion->horas_restantes}} </td>
                             <td> {{$asignacion->soporte}} </td>

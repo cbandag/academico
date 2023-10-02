@@ -69,13 +69,15 @@ class AsignacionesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $horas_dedicacion = $request['horas_dedicadas'];
         $data = Request()->validate([
+            'horas_dedicadas'=> 'numeric',
             'funcion_1'=>'numeric|nullable',
             'funcion_2'=>'numeric|nullable',
             'funcion_3'=>'numeric|nullable',
             'funcion_4'=>'numeric|nullable',
-            'descarga_investigacion'=>'numeric',
-            'descarga_extension'=>'numeric',
+            'descarga_investigacion'=>'numeric|min:0|max:'. ($horas_dedicacion/2) .'',
+            'descarga_extension'=>'numeric|digits_between:0,'. ($horas_dedicacion/2) .'',
             'soporte'=>'string|nullable|max:255',
             'observaciones'=>'string|nullable|max:255',
             'estado'=>'required|string|in:LISTO,PENDIENTE',
@@ -88,7 +90,7 @@ class AsignacionesController extends Controller
         $asignacion = Asignacion::findorFail($id);
         $funcion = Funcion::All();
 
-        $horas_dedicacion = $asignacion->horas_dedicacion;
+        //$asignacion->horas_dedicacion
         ($data['funcion_1']=='' ? $funcion_1=0 : $funcion_1 = Funcion::find($data['funcion_1'])->descarga );
         ($data['funcion_2']=='' ? $funcion_2=0 : $funcion_2 = Funcion::find($data['funcion_2'])->descarga );
         ($data['funcion_3']=='' ? $funcion_3=0 : $funcion_3 = Funcion::find($data['funcion_3'])->descarga );
@@ -96,7 +98,7 @@ class AsignacionesController extends Controller
 
         $descarga_investigacion = $data['descarga_investigacion'];
         $descarga_extension = $data['descarga_extension'];
-        $porcentaje_investigacion = $horas_dedicacion>($descarga_investigacion*0.5)?0.5:($descarga_investigacion/$horas_dedicacion);
+        $porcentaje_investigacion = $descarga_investigacion>($horas_dedicacion*0.5) ? 0.5:($descarga_investigacion/$horas_dedicacion);
         $porcentaje_extension = ($horas_dedicacion>0.5)?0.5:($descarga_extension/$horas_dedicacion);
         $total_descargas = $funcion_1+$funcion_2+$funcion_3+$funcion_4+$porcentaje_investigacion+$porcentaje_extension;
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;

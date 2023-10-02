@@ -36,7 +36,7 @@ class ProgramacionSeeder extends Seeder
                 'programa'=>'ADMINISTRACION DE EMPRESAS DIURNA',
                 'codigo_materia'=>'AF16243',
                 'materia'=>'MATEMATICAS FINANCIERAS',
-                'grupo'=>'B1',
+                'grupo'=>'C1',
                 'tipo'=>'CC',
                 'ide'=>'9113817',
                 'nombres'=>'LUIS ALFONSO',
