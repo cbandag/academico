@@ -123,7 +123,7 @@ class ProgramacionesController extends Controller
                     'periodo' => $programacion->periodo
                 ],[
                     'dedicacion' => $programacion->npqprf,
-                    'horas_dedicacion' => 40,
+                    //'horas_dedicacion' => 40,
                     'estado' => 'PENDIENTE'
                 ]);
             }

@@ -60,7 +60,7 @@
                         <tr>
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
                             <th colspan='7'>DESCARGAS</th>
-                            <th colspan='3'>Función docente (Horas)</th>
+                            <th colspan='3'>Función docente (Hrs.)</th>
                             <th rowspan='2'>Observ.</th>
                             <th colspan='3'>Asignacion de clases</th>
                             <th rowspan='2'>Total</th>
@@ -77,7 +77,7 @@
                             <th>%</th>
                             <th>Ext.</th>
                             <th>%</th>
-                            <th>Total</th>
+                            <th>% Total</th>
                             <th>Rest.</th>
                             <th>Soporte</th>
                             <th>Clases</th>
@@ -93,7 +93,13 @@
                     @foreach($asignaciones as $asignacion)
                         <tr>
                             <td> <small>{{$asignacion->user->nombres}} {{$asignacion->user->apellidos}}</small> </td>
-                            <td> <small>{{$asignacion->dedicacion=('40'?'TIEMPO COMPLETO':($asignacion->dedicacion='20'?'MEDIO TIEMPO':''))}} </small></td>
+                            <td> <small>
+                                @if($asignacion->horas_dedicacion=='20')
+                                {{'M. TIEMPO'}}
+                                @elseif($asignacion->horas_dedicacion=='40')
+                                {{'T. COMPLETO'}}
+                                @endif
+                                </small></td>
                             <td> {{$asignacion->horas_dedicacion}}</td>
                             <td>
                                 @foreach($asignacion->funcion as $funcion)
@@ -102,10 +108,10 @@
 
                             </td>
                             <td> {{$asignacion->descarga_investigacion}} </td>
-                            <td> {{100*$asignacion->porcentaje_investigacion}} </td>
+                            <td> {{$asignacion->porcentaje_investigacion*100}} </td>
                             <td> {{$asignacion->descarga_extension}} </td>
-                            <td> {{100*$asignacion->porcentaje_extension}} </td>
-                            <td> {{$asignacion->total_descargas}} </td>
+                            <td> {{$asignacion->porcentaje_extension*100}} </td>
+                            <td> {{$asignacion->total_descargas*100}} </td>
                             <td> {{$asignacion->horas_restantes}} </td>
                             <td> {{$asignacion->soporte}} </td>
                             <td> {{$asignacion->horas_clases}} </td>

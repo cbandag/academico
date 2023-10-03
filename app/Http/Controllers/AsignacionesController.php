@@ -72,12 +72,12 @@ class AsignacionesController extends Controller
         $horas_dedicacion = $request['horas_dedicadas'];
         $data = Request()->validate([
             'horas_dedicadas'=> 'numeric',
-            'funcion_1'=>'numeric|nullable',
-            'funcion_2'=>'numeric|nullable',
-            'funcion_3'=>'numeric|nullable',
-            'funcion_4'=>'numeric|nullable',
-            'descarga_investigacion'=>'numeric|min:0|max:'. ($horas_dedicacion/2) .'',
-            'descarga_extension'=>'numeric|digits_between:0,'. ($horas_dedicacion/2) .'',
+            'funcion_1'=>'numeric|integer|nullable',
+            'funcion_2'=>'numeric|integer|nullable',
+            'funcion_3'=>'numeric|integer|nullable',
+            'funcion_4'=>'numeric|integer|nullable',
+            'descarga_investigacion'=>'numeric|integer|min:0|max:'. ($horas_dedicacion) .'',
+            'descarga_extension'=>'numeric|integer|digits_between:0,'. ($horas_dedicacion) .'',
             'soporte'=>'string|nullable|max:255',
             'observaciones'=>'string|nullable|max:255',
             'estado'=>'required|string|in:LISTO,PENDIENTE',
@@ -90,7 +90,7 @@ class AsignacionesController extends Controller
         $asignacion = Asignacion::findorFail($id);
         $funcion = Funcion::All();
 
-        //$asignacion->horas_dedicacion
+
         ($data['funcion_1']=='' ? $funcion_1=0 : $funcion_1 = Funcion::find($data['funcion_1'])->descarga );
         ($data['funcion_2']=='' ? $funcion_2=0 : $funcion_2 = Funcion::find($data['funcion_2'])->descarga );
         ($data['funcion_3']=='' ? $funcion_3=0 : $funcion_3 = Funcion::find($data['funcion_3'])->descarga );
@@ -99,8 +99,9 @@ class AsignacionesController extends Controller
         $descarga_investigacion = $data['descarga_investigacion'];
         $descarga_extension = $data['descarga_extension'];
         $porcentaje_investigacion = $descarga_investigacion>($horas_dedicacion*0.5) ? 0.5:($descarga_investigacion/$horas_dedicacion);
-        $porcentaje_extension = ($horas_dedicacion>0.5)?0.5:($descarga_extension/$horas_dedicacion);
+        $porcentaje_extension = $descarga_extension>($horas_dedicacion*0.5) ? 0.5:($descarga_extension/$horas_dedicacion);
         $total_descargas = $funcion_1+$funcion_2+$funcion_3+$funcion_4+$porcentaje_investigacion+$porcentaje_extension;
+        $total_descargas>1?$total_descargas=1:$total_descargas=$total_descargas;
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;
         $horas_clases = $horas_restantes * 0.4;
         $horas_preparacion= $horas_restantes * 0.3;
@@ -111,6 +112,7 @@ class AsignacionesController extends Controller
 
         DB::transaction(function() use ($data,$asignacion, $porcentaje_investigacion,$porcentaje_extension,$total_descargas,$horas_restantes,$horas_clases,$horas_preparacion,$horas_estudiantes){
             $asignacion->update([
+                'horas_dedicacion'=>$data['horas_dedicadas'],
                 'descarga_investigacion'=>$data['descarga_investigacion'],
                 'porcentaje_investigacion'=>$porcentaje_investigacion,
                 'descarga_extension'=>$data['descarga_extension'],
