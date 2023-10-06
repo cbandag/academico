@@ -22,7 +22,7 @@
         @foreach($errors->all() as $error)
             {{$error}}<br>
         @endforeach
-        </div>    
+        </div>
     </div>
     @endif
 
@@ -34,7 +34,7 @@
           <div class="col-sm-12">
             <h1 class="m-0">Periodos</h1>
           </div><!-- /.col -->
-          
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
@@ -42,9 +42,43 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="card"> 
+        <div class="card">
 
         <div class="card-body">
+            <form action="{{ url('/periodos/import/') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <!--
+                <div class="form-group">
+                    <div class="col-md-6" >
+                        <input class="btn btn-info " type="file" name='documento'>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary" type="submit">Importar Periodos</button>
+                    </div>
+                </div>
+                -->
+
+                <div class="form-group col-md-6">
+                    <label for="exampleInputFile">Importar Periodos</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name='documento' id="exampleInputFile">
+                            <label class="custom-file-label" for="exampleInputFile">Escoger archivo</label>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="input-group-text" type="submit">Upload</button>
+                        </div>
+                    </div>
+                </div><br>
+            </form>
+
+
+
+
+            <div class="box-title">
+                <a class="btn btn-success" href="{{ url('/periodos/export/') }}">Exportar Periodos</a>
+
+            </div><br>
 
             <!-- Agregar Curso-->
             <div class="card-body">
@@ -67,7 +101,7 @@
                     @foreach($periodos as $periodo)
                         <tr>
                             <td> {{$periodo->periodo}} </td>
-                            
+
                             @if ($periodo->estado=='ACTIVO')
                                 <td><span class="btn btn-block btn-success btn-sm ">{{$periodo->estado}}</span> </td>
                             @elseif ($periodo->estado=='INACTIVO')
@@ -90,7 +124,7 @@
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
                                     </div>
-                                    
+
                                     <!-- Borrar -->
                                     <div class="col-sm">
                                         <form action="{{ url('/periodos/'. $periodo->id) }}" method="POST">
@@ -102,7 +136,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                
+
                             </td>
                         </tr>
                     @endforeach
@@ -126,7 +160,7 @@
     </section>
 </div>
 
-    
+
 
 
 

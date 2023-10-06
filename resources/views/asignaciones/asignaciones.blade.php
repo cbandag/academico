@@ -32,18 +32,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
+            <h1 class="m-0">
+                @can('asignaciones.index') Asignaciones @endcan
+                @can('planes.index') Planes de trabajo @endcan
 
-            @can('asignaciones.index')
-                <h1 class="m-0">Asignaciones {{isset($año) && isset($periodo)? $año .' - 0'. $periodo : ''}}</h1>
-            @endcan
-            @can('planes.index')
-                <h1 class="m-0">Planes de trabajo {{isset($año) && isset($periodo)? $año .' - 0'. $periodo : ''}}</h1>
-            @endcan
-
-
-
-
-        </div><!-- /.col -->
+                {{isset($año) && isset($periodo)? $año .' - '. 0$periodo : ''}}</h1>
+          </div><!-- /.col -->
 
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -106,10 +100,7 @@
                         <tr>
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
                             <th colspan='7'>DESCARGAS</th>
-                            <th colspan='3'>FUNCION DOCENTE (Hrs.)</th>
-                            @can('planes.index')
-                            <th colspan='2'>F. DOCENTE AJUSTADA</th>
-                            @endcan
+                            <th colspan='3'>Función docente (Hrs.)</th>
                             <th rowspan='2'>Observ.</th>
                             <th colspan='3'>Asignacion de clases</th>
                             <th rowspan='2'>Total</th>
@@ -131,10 +122,6 @@
                             <th>Clases</th>
                             <th>Prep.</th>
                             <th>Estud.</th>
-                            @can('planes.index')
-                            <th>Prep.</th>
-                            <th>Estud.</th>
-                            @endcan
                             <th>Asig.</th>
                             <th>Programa</th>
                             <th>Hrs</th>
@@ -169,10 +156,6 @@
                             <td> {{$asignacion->horas_clases}} </td>
                             <td> {{$asignacion->horas_preparacion}} </td>
                             <td> {{$asignacion->horas_estudiantes}} </td>
-                            @can('planes.index')
-                            <td> {{$asignacion->horas_preparacion_ajustada}} </td>
-                            <td> {{$asignacion->horas_estudiantes_ajustada}} </td>
-                            @endcan
                             <td> {{$asignacion->observaciones}} </td>
 
                             <td>
@@ -232,10 +215,6 @@
                             <th>Clases</th>
                             <th>Prep.</th>
                             <th>Estud.</th>
-                            @can('planes.index')
-                            <th>Prep.</th>
-                            <th>Estud.</th>
-                            @endcan
                             <th>Observ.</th>
                             <th>Asig.</th>
                             <th>Programa</th>

@@ -169,6 +169,7 @@ class ProgramacionesController extends Controller
                     'periodo' => $horas_docencia->periodo
                 ],[
                     'horas_docencia' => $horas_docencia->total_horas,
+                    'estado' => 'PENDIENTE',
                 ]);
             }
 

@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Excel;
+use App\Imports\PeriodosImport;
+use App\Exports\PeriodosExport;
 
 class PeriodosController extends Controller
 {
@@ -17,8 +20,8 @@ class PeriodosController extends Controller
     public function index()
 
     {
-        
-        
+
+
 
         $periodos= Periodo::all();
         return view('periodos.index', compact('periodos'));
@@ -74,7 +77,7 @@ class PeriodosController extends Controller
     {
         $periodo = Periodo::findOrFail($id);
 
-            
+
 
         return view('periodos.edit', compact('periodo'));
     }
@@ -113,5 +116,34 @@ class PeriodosController extends Controller
     {
         Periodo::destroy($id);
         return redirect()->route('periodos.index')->with('message','Periodo eliminado con éxito!!');
+    }
+
+
+    public function import(Request $request){
+        $request->validate([
+            'documento' => 'required|file|mimes:xls,xlsx'
+        ]);
+        Excel::import(new PeriodosImport, $request->file('documento'));
+        return redirect()->route('periodos.index')->with('message','Periodos importados con éxito!!');
+
+
+        /*if($request->hasFile('documento')){
+            $path = $request->file('documento')->getRealPath();
+            $datos = Excel::load($path, function($reader){})->get();
+            if (!empty($datos) && $datos->count()){
+                $datos = $datos->toArray();
+                for($i=0;$i<count($datos);$i++){
+                    $datosImportar[] = $datos[$i];
+                }
+            }
+            Periodos::insert($datosImportar);
+        }*/
+
+    }
+
+    public function export()
+    {
+        return Excel::download(new PeriodosExport,'periodos.xlsx');
+        //return Excel::download(new PeriodosExport, 'periodos.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
     }
 }

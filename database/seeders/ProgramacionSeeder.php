@@ -74,6 +74,21 @@ class ProgramacionSeeder extends Seeder
                 'npqprf'=>'Planta',
                 'horas'=>'1',
                 'año'=>'2023',
+                'periodo'=>'1'
+            ],[
+
+                'codigo_programa'=>'414',
+                'programa'=>'ADMINISTRACION DE EMPRESAS DISTANCIA - CARTAGENA',
+                'codigo_materia'=>'AF16266',
+                'materia'=>'INICIATIVA EMPRESARIAL ',
+                'grupo'=>'C1',
+                'tipo'=>'CC',
+                'ide'=>'73167380',
+                'nombres'=>'DIEGO ALONSO',
+                'apellidos'=>'CARDONA ARBELAEZ',
+                'npqprf'=>'Planta',
+                'horas'=>'1',
+                'año'=>'2022',
                 'periodo'=>'2'
             ],
 

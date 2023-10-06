@@ -42,6 +42,14 @@ Route::group(['middleware' =>  'auth'],function () {
 
 Route::get('/programaciones/docentes', [App\Http\Controllers\ProgramacionesController::class, 'importDocentes'])->name('programaciones.importDocentes')->middleware('auth');
 Route::get('/programaciones/asignaturas', [App\Http\Controllers\ProgramacionesController::class, 'importAsignaturasPorDocente'])->name('programaciones.importAsignaturasPorDocente')->middleware('auth');
+Route::get('/asignaciones/import', [App\Http\Controllers\AsignacionesController::class, 'import'])->name('programaciones.import')->middleware('auth');
+Route::get('/asignaciones/export', [App\Http\Controllers\AsignacionesController::class, 'export'])->name('programaciones.export')->middleware('auth');
+Route::post('/asignaciones/año/', [App\Http\Controllers\AsignacionesController::class, 'año'])->name('asignaciones.año')->middleware('auth');
+
+Route::post('/periodos/import',[App\Http\Controllers\PeriodosController::class, 'import'])->name('programaciones.import')->middleware('auth');
+Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, 'export'])->name('programaciones.export')->middleware('auth');
+
+
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);
 //Route::resource('user', UsersController::class)->middleware('auth');
@@ -51,9 +59,10 @@ Route::resource('decanos', DecanosController::class)->middleware('auth');
 Route::resource('periodos', PeriodosController::class)->middleware('auth');
 Route::resource('facultades', FacultadesController::class)->middleware('auth');
 Route::resource('programas', ProgramasController::class)->middleware('auth');
-Route::resource('actividades', ActividadesController::class)->middleware('auth');
 Route::resource('programaciones', ProgramacionesController::class)->middleware('auth');
 Route::resource('asignaciones', AsignacionesController::class)->middleware('auth');
+Route::resource('planes', AsignacionesController::class)->middleware('auth');
+
 
 
 

@@ -54,23 +54,23 @@ class FuncionSeeder extends Seeder
             'funcion' => 'Jefe de departamento',
             'descarga' => '0.50'
         ],[
-            'funcion' => 'Director de programa',
-            'descarga' => '0.50'
+            'funcion' => 'Director de programa de pregrado',
+            'descarga' => '0.75'
         ],[
-            'funcion' => 'Coordinador de postgrado',
+            'funcion' => 'Coordinador de programa de postgrado',
             'descarga' => '0.50'
         ],[
             'funcion' => 'Jefe de sección',
             'descarga' => '0.25'
         ],[
             'funcion' => 'Representante a consejo superior',
-            'descarga' => '0.25'
+            'descarga' => '0.3'
         ],[
             'funcion' => 'Representante a consejo académico',
-            'descarga' => '0.25'
+            'descarga' => '0.3'
         ],[
             'funcion' => 'Representante a consejo de facultad',
-            'descarga' => '0.25'
+            'descarga' => '0.3'
         ],[
             'funcion' => 'Miembro de comité de la universidad',
             'descarga' => '0.10'

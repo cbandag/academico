@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-  <link rel="stylesheet" href="{{ asset('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}"> 
+  <link rel="stylesheet" href="{{ asset('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
@@ -26,7 +26,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/datatables.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
- 
+
   <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
   <script type="text/javascript" src="{{ asset('plugins/jquery/jquery.min.js')}}"></script>
   <script type="text/javascript" src="{{ asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
@@ -48,18 +48,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      
-      <!-- Fullscreen 
+
+      <!-- Fullscreen
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>-->
-      
+
       <li class="nav-item">
             <a href="#" class="d-block nav-link">{{Auth::User()->name}} {{Auth::User()->lastname}}</a>
       </li>
-      
+
       <!-- Logout -->
       <li class="nav-item dropdown">
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">Opciones</a>
@@ -77,7 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <a href="#" class="dropdown-item dropdown-footer"></a>
         </div>
       </li>
-      
+
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <img src="{{ asset('dist/img/logo-universidad-blanco.png')}}" alt="AdminLTE Logo" class="img-fluid " style="opacity: .8">
     </a>
     <a href="{{ url('home') }}" class="brand-link">
-      <span class="brand-text font-weight-bold"> EVALUACIÓN POSTGRADOS </span><br>
+      <span class="brand-text font-weight-bold"> ACADÉMICO </span><br>
       <h5 class="text-center"> {{Auth::User()->role}} </h5>
     </a>
 
@@ -97,22 +97,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
       <!--<div class="user-panel mt-3 pb-3 mb-3 d-flex">
-         
+
         <div class="image">
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="image">
           <i class="fa-solid fa-circle-user"></i>
         </div>
-      
+
 
         <div class="info">
           <a href="#" class="d-block"></a>
-          
+
         </div>
       </div>-->
 
-      <!-- SidebarSearch Form 
+      <!-- SidebarSearch Form
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
           <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
@@ -131,7 +131,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
 
 
-          
+
 
           @can('jefes.index')
 
@@ -156,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           @endcan
-          
+
           @can('docentes.index')
           <li class="nav-item">
             <a href="{{url('/docentes')}}" class="nav-link">
@@ -190,7 +190,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          
+
 
           @can('programas.index')
           <li class="nav-item">
@@ -203,35 +203,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('actividades.index')
+
+
+          @can('planes.index')
+
           <li class="nav-item">
-            <a href="{{url('/actividades')}}" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
+            <a href="{{url('/planes')}}" class="nav-link">
+
+              <i class="nav-icon fas fa-user" ></i>
               <p>
-                @hasanyrole(['admin','planeación'])
-                plan de trabajo
-                @endhasanyrole
-                @hasanyrole(['jefe','decano'])
-                Programacion
-                @endhasanyrole
-                @hasanyrole('docente')
-                programacion
-                @endhasanyrole
-                
+                Planes de trabajo
               </p>
             </a>
           </li>
           @endcan
 
-
-          
           @can('asignaciones.index')
 
           <li class="nav-item">
             <a href="{{url('/asignaciones')}}" class="nav-link">
+
               <i class="nav-icon fas fa-user" ></i>
               <p>
-                Asignaciones(docente)
+                Asignaciones
               </p>
             </a>
           </li>
@@ -260,15 +254,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
   <!-- Content Wrapper. Contains page content -->
-  
+
   @yield('content')
- 
+
   <!-- /.content-wrapper -->
 
 
 
-  <!-- Control Sidebar 
-   
+  <!-- Control Sidebar
+
   <aside class="control-sidebar control-sidebar-dark"> -->
     <!-- Control sidebar content goes here --> <!--
     <div class="p-3">
@@ -283,10 +277,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <footer class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
-      Evaluación Postgrados
+      Académico
     </div>
     <!-- Default to the left -->
-    <strong> Evaluación Postgrados &copy; <a href="https://www.unicartagena.edu.co" target="_blank"> Universidad de Cartagena</a>.</strong> Todos los de rechos reservados
+    <strong> Académico &copy; <a href="https://www.unicartagena.edu.co" target="_blank"> Universidad de Cartagena</a>.</strong> Todos los de rechos reservados
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -327,7 +321,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
 
-<!--bootstrap js CDN 
+<!--bootstrap js CDN
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
@@ -338,7 +332,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 -->
 <script>
-  
+
   /* Funciones Dropdown depending */
   function loadOptions(select1, select2, route){
       var ide = select1.val();
@@ -355,7 +349,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       }
   };
 
-              
+
   function loadOption(select1, select2, route, route2, id ){
     var ide = select1.val();
     if (ide !=''){
@@ -380,7 +374,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       };
   };
 
-  
+
 
 </script>
 
