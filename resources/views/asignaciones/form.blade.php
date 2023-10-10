@@ -42,7 +42,7 @@
                                         <option type="text" class="form-control" value="{{$funcion->id}}"
                                             @if(isset($funcionesSeleccionadas[0]))
                                                 {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
-                                            @endif>{{$funcion->funcion}}</option>
+                                            @endif>{{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
                                         @endforeach
                                     </select>
                                 </div>

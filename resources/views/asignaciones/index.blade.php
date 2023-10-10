@@ -105,39 +105,42 @@
                     <thead>
                         <tr>
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
-                            <th colspan='7'>DESCARGAS</th>
+                            <th colspan='7'>DESCARGAS (Hrs.)</th>
                             <th colspan='3'>FUNCION DOCENTE (Hrs.)</th>
                             @can('planes.index')
-                            <th colspan='2'>F. DOCENTE AJUSTADA</th>
+                                <th colspan='2'>AJUSTE</th>
                             @endcan
-                            <th rowspan='2'>Observ.</th>
-                            <th colspan='3'>Asignacion de clases</th>
-                            <th rowspan='2'>Total</th>
+                            <th rowspan='2'>Observaciones</th>
+                            <th colspan='4'>Asignacion de clases</th>
+                            <th rowspan='2'>SUMA</th>
                             <th rowspan='2'>Estado</th>
                             <th rowspan='2'>Editar</th>
                         </tr>
                         <tr>
                             <th>Nombres</th>
                             <th>Dedicac.</th>
-                            <th>Hrs</th>
+                            <th>Hrs.</th>
                             <th>Funciones</th>
                             <th>Inv.</th>
                             <th>%</th>
                             <th>Ext.</th>
                             <th>%</th>
-                            <th>% Total</th>
+                            <th>Total</th>
                             <th>Rest.</th>
                             <th>Soporte</th>
                             <th>Clases</th>
                             <th>Prep.</th>
                             <th>Estud.</th>
                             @can('planes.index')
-                            <th>Prep.</th>
-                            <th>Estud.</th>
+                                <th>Prep.</th>
+                                <th>Estud.</th>
                             @endcan
-                            <th>Asig.</th>
+                            <th>Asignatura</th>
                             <th>Programa</th>
                             <th>Hrs</th>
+                            <th>Total</th>
+
+
                         </tr>
                     </thead>
 
@@ -152,26 +155,26 @@
                                 {{'T. COMPLETO'}}
                                 @endif
                                 </small></td>
-                            <td> {{$asignacion->horas_dedicacion}}</td>
+                            <td class="text-center"> {{$asignacion->horas_dedicacion}}h</td>
                             <td>
                                 @foreach($asignacion->funcion as $funcion)
-                                 <small>{{$funcion->funcion}}</br></small>
+                                 <small>{{$funcion->funcion}} - {{$funcion->descarga *100 }}%</br></small>
                                 @endforeach
 
                             </td>
-                            <td> {{$asignacion->descarga_investigacion}} </td>
-                            <td> {{$asignacion->porcentaje_investigacion*100}} </td>
-                            <td> {{$asignacion->descarga_extension}} </td>
-                            <td> {{$asignacion->porcentaje_extension*100}} </td>
-                            <td> {{$asignacion->total_descargas*100}} </td>
-                            <td> {{$asignacion->horas_restantes}} </td>
-                            <td> {{$asignacion->soporte}} </td>
-                            <td> {{$asignacion->horas_clases}} </td>
-                            <td> {{$asignacion->horas_preparacion}} </td>
-                            <td> {{$asignacion->horas_estudiantes}} </td>
+                            <td class="text-center"> <b>{{$asignacion->descarga_investigacion}}</b></td>
+                            <td class="text-center"> {{$asignacion->porcentaje_investigacion*100}}%</td>
+                            <td class="text-center"> <b>{{$asignacion->descarga_extension}}</b> </td>
+                            <td class="text-center"> {{$asignacion->porcentaje_extension*100}}%</td>
+                            <td class="text-center"> {{$asignacion->total_descargas*100}}%</td>
+                            <td class="text-center"> {{$asignacion->horas_restantes}}h </td>
+                            <td class="text-center"> {{$asignacion->soporte}} </td>
+                            <td class="text-center"> {{$asignacion->horas_clases}} </td>
+                            <td class="text-center"> {{$asignacion->horas_preparacion}} </td>
+                            <td class="text-center"> {{$asignacion->horas_estudiantes}} </td>
                             @can('planes.index')
-                            <td> {{$asignacion->horas_preparacion_ajustada}} </td>
-                            <td> {{$asignacion->horas_estudiantes_ajustada}} </td>
+                            <td class="text-center"> {{$asignacion->horas_preparacion_ajustada}}</td>
+                            <td class="text-center"> {{$asignacion->horas_estudiantes_ajustada}}</td>
                             @endcan
                             <td> {{$asignacion->observaciones}} </td>
 
@@ -190,13 +193,22 @@
                                 <small>{{$asignatura->horas}}</small><br>
                                 @endforeach
                             </th>
-                            <td>{{$asignacion->horas_docencia}}</th>
+                            <td  class="text-center"><b>{{$asignacion->horas_docencia}}</b></th>
+
+                            <td class="text-center"> {{$asignacion->descarga_investigacion
+                                + $asignacion->descarga_extension
+                                + $asignacion->horas_docencia}}
+                                <b>({{$asignacion->descarga_investigacion
+                                + $asignacion->descarga_extension
+                                + $asignacion->horas_docencia
+                                - $asignacion->horas_dedicacion
+                                }})</b></td>
 
 
                             @if ($asignacion->estado=='APROBADO')
                                 <td><span class="btn btn-block btn-success btn-sm ">{{$asignacion->estado}}</span> </td>
                             @elseif ($asignacion->estado=='PENDIENTE')
-                            <td><span class="btn btn-block btn-secondary btn-sm">Pend.</span> </td>
+                            <td><span class="btn btn-block btn-secondary btn-sm">Pendiente</span> </td>
                             @endif
                             <td>
                                 <div class="row">
@@ -237,10 +249,11 @@
                             <th>Estud.</th>
                             @endcan
                             <th>Observ.</th>
-                            <th>Asig.</th>
+                            <th>Asignatura</th>
                             <th>Programa</th>
                             <th>Hrs</th>
                             <th>Total</th>
+                            <th>SUMA</th>
                             <th>Estado</th>
                             <th>Editar</th>
                         </tr>
