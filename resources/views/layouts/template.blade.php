@@ -324,17 +324,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!--bootstrap js CDN
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+<!--
 <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}">
 <link rel="stylesheet" href="{{ asset('plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js')}}">
-
+-->
 
 
 -->
 <script>
 
   /* Funciones Dropdown depending */
-  function loadOptions(select1, select2, route){
+/*  function loadOptions(select1, select2, route){
       var ide = select1.val();
       if (ide !=''){
           var promise = $.get(route + '/' + ide +'');
@@ -373,7 +373,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           });
       };
   };
-
+*/
 
 
 </script>

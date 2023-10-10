@@ -23,9 +23,7 @@
 
                     <div class="card-body">
 
-
                         <div class="form-group">
-
                             <div class="form-group ">
                                 <label for="horas_dedicadas" class="col-form-label">Horas dedicadas:</label>
                                 <select class="form-control" name="horas_dedicadas" id="horas_dedicadas" {{$mode == 'Mostrar'?'disabled':''}}>
@@ -33,60 +31,56 @@
                                     <option type="text" class="form-control" value="20" {{$asignacion->horas_dedicacion=='20' ? 'selected':''}}>Medio Tiempo (20h)</option>
                                 </select>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md">
-                                    <label for="funcion_1" class="col-form-label">Funcion administrativa 1:</label>
-                                    <select class="form-control" name="funcion_1" id="funcion_1" {{$mode == 'Mostrar'?'disabled':''}}>
-                                        <option type="text" class="form-control" value="">Seleccione...</option>
-                                        @foreach($funciones as $funcion)
-                                        <option type="text" class="form-control" value="{{$funcion->id}}"
-                                            @if(isset($funcionesSeleccionadas[0]))
-                                                {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
-                                            @endif>{{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md">
-                                    <label for="funcion_2" class="col-form-label">Funcion administrativa 3:</label>
-                                    <select class="form-control" name="funcion_2" id="funcion_2" {{$mode == 'Mostrar'?'disabled':''}}>
-                                        <option type="text" class="form-control" value="">Seleccione...</option>
-                                        @foreach($funciones as $funcion)
-                                        <option type="text" class="form-control" value="{{$funcion->id}}"
-                                            @if(isset($funcionesSeleccionadas[1]))
-                                                {{($funcion->id==$funcionesSeleccionadas[1] ? 'selected':'')}}
-                                            @endif>{{$funcion->funcion}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+
+
+
+                            <div class="form-group">
+                                <label  class="col-form-label">Funciones administrativas:</label>
                             </div>
 
-                            <div class="row">
-                                <div class="form-group col-md">
-                                    <label for="funcion_3" class="col-form-label">Funcion administrativa 2:</label>
-                                    <select class="form-control" name="funcion_3" id="funcion_3" {{$mode == 'Mostrar'?'disabled':''}}>
-                                        <option type="text" class="form-control" value="">Seleccione...</option>
-                                        @foreach($funciones as $funcion)
-                                        <option type="text" class="form-control" value="{{$funcion->id}}"
-                                            @if(isset($funcionesSeleccionadas[2]))
-                                                {{($funcion->id==$funcionesSeleccionadas[2] ? 'selected':'')}}
-                                            @endif>{{$funcion->funcion}}</option>
-                                        @endforeach
-                                    </select>
+                            <div class=" row">
+
+                                <div class="form-group " id="funciones">
+                                    <div class=" col-sm" id="r-f1">
+                                        <div class="form-group" >
+                                            <select class="form-control" name="funcion_1" id="funcion_1" {{$mode == 'Mostrar'?'disabled':''}}>
+                                                <option type="text" class="form-control" value="">Seleccione...</option>
+                                                @foreach($funciones as $funcion)
+                                                <option type="text" class="form-control" value="{{$funcion->id}}"
+                                                    @if(isset($funcionesSeleccionadas[0]))
+                                                        {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
+                                                    @endif>
+                                                        {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md">
-                                    <label for="funcion_4" class="col-form-label">Funcion administrativa 4:</label>
-                                    <select class="form-control" name="funcion_4" id="funcion_4" {{$mode == 'Mostrar'?'disabled':''}}>
-                                        <option type="text" class="form-control" value="">Seleccione...</option>
-                                        @foreach($funciones as $funcion)
-                                        <option type="text" class="form-control" value="{{$funcion->id}}"
-                                            @if(isset($funcionesSeleccionadas[3]))
-                                                {{($funcion->id==$funcionesSeleccionadas[3] ? 'selected':'')}}
-                                            @endif>{{$funcion->funcion}}</option>
-                                        @endforeach
-                                    </select>
+
+                                <div class=" col-sm row" id="botones">
+                                        <div class="col-sm">
+                                            <a  class="btn btn-primary" id="add_funcion">
+                                                <i class="fas fa-plus-square fa-rotate-270 fa-lg" style='color: white'></i>
+                                                <!-- <input type="submit" name='edit' value="edit"> -->
+                                            </a>
+                                        </div>
+                                        <div class="col-sm">
+                                            <a  class="btn btn-danger" id="remove_funcion">
+                                                <i class="fas fa-minus-square fa-lg" style='color: white'></i>
+                                                <!-- <input type="submit" name='edit' value="edit"> -->
+                                            </a>
+                                        </div>
+
                                 </div>
 
                             </div>
+
+
+
+
+
+
+
 
                             <div class="row">
                                 <div class="form-group col-md">
@@ -131,6 +125,42 @@
         </div>
     </div>
 </div>
+
+<script>
+    var contador=1;
+
+    $('#remove_funcion').on('click', function(){
+        if(contador>1){
+            $("#r-f"+ contador +"").remove();
+            contador --;
+            console.log('Remove - Contador= ' + contador);
+        }
+
+    });
+
+    $('#add_funcion').on('click', function(){
+        //$("#add_funcion").remove();
+        contador ++;
+        console.log('Add - Contador= '+contador);
+        $('#funciones').append(`
+            <div class=" col-sm" id="r-f${contador}">
+                <div class="form-group" >
+                    <select class="form-control" name="funcion_${contador}" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
+                        <option type="text" class="form-control" value="">Seleccione...</option>
+                        @foreach($funciones as $funcion)
+                        <option type="text" class="form-control" value="{{$funcion->id}}"
+                            @if(isset($funcionesSeleccionadas[0]))
+                                {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
+                            @endif>
+                                {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        `);
+    });
+
+</script>
 
 
 

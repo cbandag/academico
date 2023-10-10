@@ -100,6 +100,13 @@ class AsignacionesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $contador=0;
+
+        while (isset($request['funcion_'.$contador.''])){
+            $funcion[$contador]=$request['funcion_'.$contador.''];
+            $contador++;
+        }
+        
         $horas_dedicacion = $request['horas_dedicadas'];
         $data = Request()->validate([
             'horas_dedicadas'=> 'numeric',
