@@ -6,11 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-    
+
 class DocentesController extends Controller
 {
-    
-    
+
+
     /**
      * Display a listing of the resource.
      */
@@ -33,8 +33,14 @@ class DocentesController extends Controller
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
-        
-        return view('users.index', compact('users','jefes','model','route','title'));
+
+        $años_periodos = DB::table('asignaciones')->select('año', 'periodo')->GROUPBY('año', 'periodo')->orderBy('año','DESC')->orderBy('periodo','DESC')->get();
+
+        !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
+        !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
+        $año_periodo_seleccionado='1';
+
+        return view('users.index', compact('users','jefes','model','route','title','años_periodos','año','periodo'));
     }
 
     /**
@@ -134,7 +140,7 @@ class DocentesController extends Controller
      */
     public function update(Request $request,  $id)
     {
-        
+
         if ($request['password'] != null && $request['password_confirmation'] != null) {
             //$request['password'] = $request['password'];
             //$request['password_confirmation'] = $request['password'];
@@ -165,9 +171,9 @@ class DocentesController extends Controller
 
         $data['password'] = Hash::make($request['password']);
 
-        
-        
-        
+
+
+
 
         $user = User::findOrFail($id);
         DB::transaction(function() use ($data,$user){
@@ -193,7 +199,7 @@ class DocentesController extends Controller
         //luego crearlos si no existen
         //en el controlador de actividades o asignaturas sql toca agregar las horas por actividad
         // de cada docente se unen atraves de la cedula del docente
-        //toca crear otra tabla con los calculos de la suma de horas 
+        //toca crear otra tabla con los calculos de la suma de horas
 
         //cambiar programacio por asignacion
 
@@ -213,10 +219,10 @@ class DocentesController extends Controller
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
-        
+
         return view('users.index', compact('users','jefes','model','route','title'));
 
-        
+
         $data = Request()->validate([
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
@@ -258,11 +264,40 @@ class DocentesController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     
+
     public function destroy( $id)
     {
         User::destroy($id);
         return redirect()->route('docentes.index')->with('message','Periodo eliminado con éxito!!');
     }
     */
+
+    public function importar(Request $request){
+        if($request->hasFile('documento')){
+            $path = $request->file('documento')->getRealPath();
+            $datos = Excel::load($path, function($reader){})->get();
+
+            if (!empty($datos) && $datos->count()){
+                $datos = $datos->toArray();
+
+                for($i=0;$i<count($datos);$i++){
+                    $datosImportar[] = $datos[$i];
+                }
+
+
+            }
+            Docentes::insert();
+        }
+        return back();
+    }
+
+    public function export()
+    {
+
+        return Excel::download(new DocentesExport,'docentes.xlsx');
+
+        //return Excel::download(new InvoicesExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
+
+
+    }
 }

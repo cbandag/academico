@@ -59,10 +59,10 @@
             <!-- Agregar Curso-->
             <div class="card-body">
                 <div class="row align-items-center ">
+                    <!--
                     <div class="form-group col-md">
                         <form action="{{ url('/asignaciones/import/') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <!-- <label for="exampleInputFile">Importar Periodos</label> -->
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name='documento' id="exampleInputFile">
@@ -74,6 +74,7 @@
                             </div>
                         </form>
                     </div>
+                -->
 
 
                     <div class="form-group col-md">
@@ -105,7 +106,7 @@
                     <thead>
                         <tr>
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
-                            <th colspan='7'>DESCARGAS (Hrs.)</th>
+                            <th colspan='6'>DESCARGAS (Hrs.)</th>
                             <th colspan='3'>FUNCION DOCENTE (Hrs.)</th>
                             @can('planes.index')
                                 <th colspan='2'>AJUSTE</th>
@@ -127,7 +128,7 @@
                             <th>%</th>
                             <th>Total</th>
                             <th>Rest.</th>
-                            <th>Soporte</th>
+
                             <th>Clases</th>
                             <th>Prep.</th>
                             <th>Estud.</th>
@@ -168,7 +169,7 @@
                             <td class="text-center"> {{$asignacion->porcentaje_extension*100}}%</td>
                             <td class="text-center"> {{$asignacion->total_descargas*100}}%</td>
                             <td class="text-center"> {{$asignacion->horas_restantes}}h </td>
-                            <td class="text-center"> {{$asignacion->soporte}} </td>
+
                             <td class="text-center"> {{$asignacion->horas_clases}} </td>
                             <td class="text-center"> {{$asignacion->horas_preparacion}} </td>
                             <td class="text-center"> {{$asignacion->horas_estudiantes}} </td>
@@ -193,15 +194,18 @@
                                 <small>{{$asignatura->horas}}</small><br>
                                 @endforeach
                             </th>
-                            <td  class="text-center"><b>{{$asignacion->horas_docencia}}</b></th>
+
+                            <td  class="text-center"><b>{{$asignacion->horas_docencia}}</b>
+                                <b>({{$asignacion->horas_docencia -$asignacion->horas_clases}})</b>
+                            </th>
 
                             <td class="text-center"> {{$asignacion->descarga_investigacion
                                 + $asignacion->descarga_extension
                                 + $asignacion->horas_docencia}}
-                                <b>({{$asignacion->descarga_investigacion
-                                + $asignacion->descarga_extension
-                                + $asignacion->horas_docencia
-                                - $asignacion->horas_dedicacion
+                                <b>({{
+                                 $asignacion->horas_clases
+
+                                - $asignacion->horas_docencia
                                 }})</b></td>
 
 
@@ -240,7 +244,7 @@
                             <th>%</th>
                             <th>Total</th>
                             <th>Rest.</th>
-                            <th>Soporte</th>
+
                             <th>Clases</th>
                             <th>Prep.</th>
                             <th>Estud.</th>

@@ -53,4 +53,8 @@ class User extends Authenticatable
     public function asignacion(){
         return $this->hasMany(Asignaciones::class,'identificacion','identificacion');
     }
+
+    public function programa(){
+        return $this->hasMany(Programa::class);
+    }
 }

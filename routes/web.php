@@ -54,7 +54,7 @@ Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, '
 //Route::get('/periodo/index', [PeriodosController::class,'index']);
 //Route::resource('user', UsersController::class)->middleware('auth');
 Route::resource('docentes', DocentesController::class)->middleware('auth');
-Route::resource('jefes', JefesController::class)->middleware('auth');
+//Route::resource('jefes', JefesController::class)->middleware('auth');
 Route::resource('decanos', DecanosController::class)->middleware('auth');
 Route::resource('periodos', PeriodosController::class)->middleware('auth');
 Route::resource('facultades', FacultadesController::class)->middleware('auth');

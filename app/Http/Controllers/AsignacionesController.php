@@ -25,7 +25,6 @@ class AsignacionesController extends Controller
         !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
         !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
 
-
         $asignaciones = Asignacion::where('año','=',$año)->where('periodo','=',$periodo)->get();
         $users = User::all();
         $asignaturas = AsignaturasPorDocente::all();
@@ -89,10 +88,10 @@ class AsignacionesController extends Controller
 
         //$funciones = Funcion::findorFail($id);
         $funcionesSeleccionadas=array();
-        foreach ($asignacion->funcion as $id_funcion) {
+        foreach ($asignacion->funcion as $key => $id_funcion) {
             array_push($funcionesSeleccionadas, $id_funcion->id);
         }
-    return view('asignaciones.edit', compact('asignacion','funciones','funcionesSeleccionadas'/*,'funcion_2','funcion_3','funcion_4'*/));
+    return view('asignaciones.edit', compact('asignacion','funciones','funcionesSeleccionadas'));
     }
 
     /**
@@ -100,20 +99,13 @@ class AsignacionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $contador=0;
+        $asignacion = Asignacion::findorFail($id);
+        $funcion = Funcion::All();
 
-        while (isset($request['funcion_'.$contador.''])){
-            $funcion[$contador]=$request['funcion_'.$contador.''];
-            $contador++;
-        }
-        
         $horas_dedicacion = $request['horas_dedicadas'];
+
         $data = Request()->validate([
             'horas_dedicadas'=> 'numeric',
-            'funcion_1'=>'numeric|integer|nullable',
-            'funcion_2'=>'numeric|integer|nullable',
-            'funcion_3'=>'numeric|integer|nullable',
-            'funcion_4'=>'numeric|integer|nullable',
             'descarga_investigacion'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
             'descarga_extension'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
             'soporte'=>'string|nullable|max:255',
@@ -125,30 +117,38 @@ class AsignacionesController extends Controller
             'estado.required'=>'El estado es requerido.'*/
         ]);
 
-        $asignacion = Asignacion::findorFail($id);
-        $funcion = Funcion::All();
 
-
-        ($data['funcion_1']=='' ? $funcion_1=0 : $funcion_1 = Funcion::find($data['funcion_1'])->descarga );
-        ($data['funcion_2']=='' ? $funcion_2=0 : $funcion_2 = Funcion::find($data['funcion_2'])->descarga );
-        ($data['funcion_3']=='' ? $funcion_3=0 : $funcion_3 = Funcion::find($data['funcion_3'])->descarga );
-        ($data['funcion_4']=='' ? $funcion_4=0 : $funcion_4 = Funcion::find($data['funcion_4'])->descarga );
 
         $descarga_investigacion = $data['descarga_investigacion'];
         $descarga_extension = $data['descarga_extension'];
         $porcentaje_investigacion = $descarga_investigacion>($horas_dedicacion*0.5) ? 0.5:($descarga_investigacion/$horas_dedicacion);
         $porcentaje_extension = $descarga_extension>($horas_dedicacion*0.5) ? 0.5:($descarga_extension/$horas_dedicacion);
-        $total_descargas = $funcion_1+$funcion_2+$funcion_3+$funcion_4+$porcentaje_investigacion+$porcentaje_extension;
+
+        $suma_funciones=0;
+        foreach ($request->all() as $key => $idFuncion) {
+            if (str_contains($key,'funcion_')) {
+                if(isset($idFuncion)){
+                    $suma_funciones += Funcion::find($idFuncion)->descarga;
+                }
+
+            }
+        }
+        $total_descargas = $suma_funciones + $porcentaje_investigacion + $porcentaje_extension;
+
         $total_descargas>1?$total_descargas=1:$total_descargas=$total_descargas;
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;
-        $horas_clases = $horas_restantes * 0.4;
+
+        //$horas_clases = round($horas_restantes * 0.4 , 0);
+        //$horas_clases = '0.' . explode(',',$horas_restantes * 0.4); 
+        //$horas_clases =  (($horas_restantes - intval($horas_restantes))*100)/100;
+
+        /*if(explode(',',$horas_restantes * 0.4) >= 0.5){
+
+        }*/
         $horas_preparacion= $horas_restantes * 0.3;
         $horas_estudiantes= $horas_restantes * 0.25;
 
-
-
-
-        DB::transaction(function() use ($data,$asignacion, $porcentaje_investigacion,$porcentaje_extension,$total_descargas,$horas_restantes,$horas_clases,$horas_preparacion,$horas_estudiantes){
+        DB::transaction(function() use ($data, $request, $asignacion, $porcentaje_investigacion,$porcentaje_extension,$total_descargas,$horas_restantes,$horas_clases,$horas_preparacion,$horas_estudiantes){
             $asignacion->update([
                 'horas_dedicacion'=>$data['horas_dedicadas'],
                 'descarga_investigacion'=>$data['descarga_investigacion'],
@@ -169,13 +169,20 @@ class AsignacionesController extends Controller
             ]);
 
             $asignacion->funcion()->detach();//elimina todos las funciones de asignacion
+            $id=array();
+            foreach ($request->all() as $key => $idFuncion) {
+                if (str_contains($key,'funcion_')) {
+                    if(isset($idFuncion)){
+                        //$asignacion->funcion()->attach($idFuncion);
+                        array_push($id, $idFuncion);
 
-            $data['funcion_1']!='' ? $asignacion->funcion()->attach($data['funcion_1']):'';
-            $data['funcion_2']!='' ? $asignacion->funcion()->attach($data['funcion_2']):'';
-            $data['funcion_3']!='' ? $asignacion->funcion()->attach($data['funcion_3']):'';
-            $data['funcion_4']!='' ? $asignacion->funcion()->attach($data['funcion_4']):'';
+                    }
+                }
+            }
+            $asignacion->funcion()->sync($id);
 
-            //$asignacion->funcion()->sync([$data['funcion_1'],$data['funcion_2'],$data['funcion_3'],$data['funcion_3']]);
+
+
         });
 
         return redirect()->route('asignaciones.index')->with('message','Asignacion guardada con éxito!!');

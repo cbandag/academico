@@ -12,14 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('funciones_por_asignacion', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            //$table->bigIncrements('id');
             $table->unsignedBigInteger('asignacion_id');
             $table->unsignedBigInteger('funcion_id');
 
-            $table->timestamps();
+
+            //$table->timestamps();
 
             $table->foreign('asignacion_id')->references('id')->on('asignaciones');
             $table->foreign('funcion_id')->references('id')->on('funciones');
+            $table->unique(array('asignacion_id', 'funcion_id'));//Evitar reladiones duplicadas
         });
     }
 

@@ -15,10 +15,6 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('identificacion');
             $table->string('horas_dedicacion')->nullable();
-            /*$table->unsignedBigInteger('funcion_1')->nullable();
-            $table->unsignedBigInteger('funcion_2')->nullable();
-            $table->unsignedBigInteger('funcion_3')->nullable();
-            $table->unsignedBigInteger('funcion_4')->nullable();*/
             $table->string('descarga_investigacion')->nullable();
             $table->string('porcentaje_investigacion')->nullable();
             $table->string('descarga_extension')->nullable();
@@ -30,17 +26,18 @@ return new class extends Migration
             $table->double('horas_preparacion')->nullable();
             $table->double('horas_estudiantes')->nullable();
             $table->double('horas_preparacion_ajustada')->nullable();
-            $table->double('horas_estudiantes__ajustada')->nullable();
+            $table->double('horas_estudiantes_ajustada')->nullable();
             $table->string('observaciones')->nullable();
             $table->double('horas_docencia')->nullable();
             $table->string('año');
             $table->string('periodo');
             $table->string('estado');
+            $table->unsignedBigInteger('jefe');
 
             $table->timestamps();
 
-            /*$table->foreign('funcion_1')->references('id')->on('funciones');
-            $table->foreign('funcion_2')->references('id')->on('funciones');
+            $table->foreign('jefe')->references('id')->on('users');
+           /* $table->foreign('funcion_2')->references('id')->on('funciones');
             $table->foreign('funcion_3')->references('id')->on('funciones');
             $table->foreign('funcion_4')->references('id')->on('funciones');*/
 

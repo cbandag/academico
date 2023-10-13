@@ -33,38 +33,38 @@
                             </div>
 
 
-
                             <div class="form-group">
                                 <label  class="col-form-label">Funciones administrativas:</label>
                             </div>
 
-                            <div class=" row">
-
-                                <div class="form-group " id="funciones">
-                                    <div class=" col-sm" id="r-f1">
-                                        <div class="form-group" >
-                                            <select class="form-control" name="funcion_1" id="funcion_1" {{$mode == 'Mostrar'?'disabled':''}}>
+                            <div class="row">
+                                <div class="form-group col-8" id="funciones">
+                                    @foreach($funcionesSeleccionadas as $key => $fs)
+                                    <div class="" id="r-f{{$key+1}}">
+                                        <div class="form-group">
+                                            <select class="form-control" name="funcion_{{$key+1}}" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
                                                 <option type="text" class="form-control" value="">Seleccione...</option>
                                                 @foreach($funciones as $funcion)
                                                 <option type="text" class="form-control" value="{{$funcion->id}}"
-                                                    @if(isset($funcionesSeleccionadas[0]))
-                                                        {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
+                                                    @if(isset($funcionesSeleccionadas[$key]))
+                                                        {{($funcion->id==$funcionesSeleccionadas[$key] ? 'selected':'')}}
                                                     @endif>
                                                         {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
 
-                                <div class=" col-sm row" id="botones">
-                                        <div class="col-sm">
+                                <div class=" col-4 row" id="botones">
+                                        <div class="col-6">
                                             <a  class="btn btn-primary" id="add_funcion">
                                                 <i class="fas fa-plus-square fa-rotate-270 fa-lg" style='color: white'></i>
                                                 <!-- <input type="submit" name='edit' value="edit"> -->
                                             </a>
                                         </div>
-                                        <div class="col-sm">
+                                        <div class="col-6">
                                             <a  class="btn btn-danger" id="remove_funcion">
                                                 <i class="fas fa-minus-square fa-lg" style='color: white'></i>
                                                 <!-- <input type="submit" name='edit' value="edit"> -->
@@ -74,10 +74,6 @@
                                 </div>
 
                             </div>
-
-
-
-
 
 
 
@@ -127,10 +123,19 @@
 </div>
 
 <script>
-    var contador=1;
+    var contador=0;
+
+
+    $( document ).ready(function() {
+        @isset($key)
+            contador= '{{$key + 1}}';
+        @endisset
+        /*contador= $('#funciones').childElementCount;*/
+        console.log( "ready! contador= " + contador);
+    });
 
     $('#remove_funcion').on('click', function(){
-        if(contador>1){
+        if(contador>0){
             $("#r-f"+ contador +"").remove();
             contador --;
             console.log('Remove - Contador= ' + contador);
@@ -140,23 +145,22 @@
 
     $('#add_funcion').on('click', function(){
         //$("#add_funcion").remove();
-        contador ++;
+        contador++;
         console.log('Add - Contador= '+contador);
         $('#funciones').append(`
-            <div class=" col-sm" id="r-f${contador}">
-                <div class="form-group" >
-                    <select class="form-control" name="funcion_${contador}" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
-                        <option type="text" class="form-control" value="">Seleccione...</option>
-                        @foreach($funciones as $funcion)
-                        <option type="text" class="form-control" value="{{$funcion->id}}"
-                            @if(isset($funcionesSeleccionadas[0]))
-                                {{($funcion->id==$funcionesSeleccionadas[0] ? 'selected':'')}}
-                            @endif>
-                                {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
-                        @endforeach
-                    </select>
+                <div id="r-f${contador}">
+                    <div class="form-group">
+                        <select class="form-control" name="funcion_${contador}" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
+                            <option type="text" class="form-control" value="">Seleccione...</option>
+                            @foreach($funciones as $funcion)
+                            <option type="text" class="form-control" value="{{$funcion->id}}">
+                                {{$funcion->funcion}} - {{$funcion->descarga *100 }}%
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
+
         `);
     });
 

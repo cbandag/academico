@@ -132,14 +132,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-
+        <!--
           @can('jefes.index')
 
           <li class="nav-item">
             <a href="{{url('/jefes')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
-                Jefes inmmediatos
+                Usuarios
               </p>
             </a>
           </li>
@@ -156,6 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           @endcan
+        -->
 
           @can('docentes.index')
           <li class="nav-item">
