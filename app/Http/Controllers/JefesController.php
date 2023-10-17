@@ -6,11 +6,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-    
+
 class JefesController extends Controller
 {
-    
-    
+
+
     /**
      * Display a listing of the resource.
      */
@@ -33,7 +33,7 @@ class JefesController extends Controller
         $model = 'jefe';
         $route ='jefes';
         $title ='Jefes';
-        
+
         return view('users.index', compact('users','jefes','model','route','title'));
     }
 
@@ -84,7 +84,7 @@ class JefesController extends Controller
                 'identificacion' => $data['identificacion'],
                 'password' => Hash::make($data['password']),
                 'estado' => ($data['estado']),
-            ])->assignRole('jefe');;
+            ])->assignRole('jefe');
 
         });
         $model = 'jefe';
@@ -134,7 +134,7 @@ class JefesController extends Controller
      */
     public function update(Request $request,  $id)
     {
-        
+
         if ($request['password'] != null && $request['password_confirmation'] != null) {
             //$request['password'] = $request['password'];
             //$request['password_confirmation'] = $request['password'];
@@ -165,9 +165,9 @@ class JefesController extends Controller
 
         $data['password'] = Hash::make($request['password']);
 
-        
-        
-        
+
+
+
 
         $user = User::findOrFail($id);
         DB::transaction(function() use ($data,$user){

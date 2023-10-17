@@ -2,14 +2,15 @@
 
 namespace App\Imports;
 
-use App\Models\Docente;
+use App\Models\User;
+use App\Models\Jefes_por_periodo;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Hash;
 
-class DocentesImport implements ToCollection, WithHeadingRow
+class JefesImport implements ToCollection, WithHeadingRow
 {
     /**
     * @param array $row
@@ -21,31 +22,32 @@ class DocentesImport implements ToCollection, WithHeadingRow
     {
         foreach ($rows as $row)
         {
-            Docente::create([
+            $user = User::updateOrCreate([
+                'identificacion' => $row['identificacion'],
+            ],[
                 'nombres' => $row['nombres'],
                 'apellidos' => $row['apellidos'],
                 'email' => $row['email'],
-                'identificacion' => $row['identificacion'],
-                'estado' => $row['estado'],
-                'nombre' => $row['nombre'],
-                'password' => Hash::make($data['identificacion']),
-            ]);
+                //'estado' => $row['estado'],
+                'password' => Hash::make($row['identificacion']),
+            ])->assignRole('jefe');
 
-            Jefes_por_periodo::create([
+
+
+
+            $user->Jefes_por_periodo()->updateOrCreate([
                 'identificacion' => $row['identificacion'],
-                'jefe' => $row['jefe']
+                'año' => $row['year'],
+                'periodo' => $row['periodo']
+            ],[
+
             ]);
 
         }
     }
-    //La idea es descargarlo vacio, luego llenar manualmente el excel,
-    //finalmente importarlo con su identificacion, este se actualizara
-
-
-    /*public function model(array $row)
+    public function headingRow()
     {
-        return new Docente([
+        return 1;
+    }
 
-        ]);
-    }*/
 }

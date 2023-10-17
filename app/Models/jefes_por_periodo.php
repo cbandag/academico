@@ -11,13 +11,20 @@ class Jefes_por_periodo extends Model
     protected $table = "jefes_por_periodo";
     protected $fillable = [
         'user_id',
+        'identificacion',
+        'jefe',
         'año',
         'periodo'
     ];
 
     public function user(){
-        return $this->hasOne(User::class,'id', 'user_id');
+        return $this->belongsTo(User::class,'user_id', 'user_id');
     }
+    /*
+    public function jefe(){
+        return $this->belongsTo(User::class,'jefe', 'user_id');
+    }
+    */
 
 /*
     public function programa(){

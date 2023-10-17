@@ -17,16 +17,12 @@ return new class extends Migration
             $table->string('apellidos');
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('identificacion')->default('');
-            $table->unsignedBigInteger('jefe')->nullable();
+            $table->string('identificacion');/*->default('');*/
             $table->string('estado')->default('Activo');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('jefe')->references('id')->on('users');
-            
-            
         });
     }
 

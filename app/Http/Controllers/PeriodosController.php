@@ -12,6 +12,8 @@ use Excel;
 use App\Imports\PeriodosImport;
 use App\Exports\PeriodosExport;
 
+use App\Models\User;
+
 class PeriodosController extends Controller
 {
     /**

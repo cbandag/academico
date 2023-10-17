@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Excel;
+use App\Imports\JefesImport;
+use App\Exports\JefesExport;
 
 class DocentesController extends Controller
 {
@@ -16,19 +19,30 @@ class DocentesController extends Controller
      */
     public function index()
     {
-        $users = DB::table('users')
+        /*$jefes = DB::table('users')
+        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+        ->select('users.*', 'model_has_roles.model_id')
+        ->where('roles.name','like','jefe')
+        ->get();*/
+
+        $jefes = DB::table('users')
+        ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion')
+        ->select('users.*', 'jefes_por_periodo.periodo')
+        ->where('jefes_por_periodo.año','=','2023')
+        ->where('jefes_por_periodo.periodo','=','2')
+        ->get();
+
+
+        $docentes = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
         ->where('roles.name','like','docente')
         ->get();
 
-        $jefes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','jefe')
-        ->get();
+
+
 
         $model = 'docente';
         $route ='docentes';
@@ -40,7 +54,7 @@ class DocentesController extends Controller
         !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
         $año_periodo_seleccionado='1';
 
-        return view('users.index', compact('users','jefes','model','route','title','años_periodos','año','periodo'));
+        return view('users.index', compact('jefes','docentes','model','route','title','años_periodos','año','periodo'));
     }
 
     /**
@@ -90,7 +104,7 @@ class DocentesController extends Controller
                 'identificacion' => $data['identificacion'],
                 'password' => Hash::make($data['password']),
                 'estado' => ($data['estado']),
-            ])->assignRole('docente');;
+            ])->assignRole('docente');
 
         });
         $model = 'docente';
@@ -298,6 +312,15 @@ class DocentesController extends Controller
 
         //return Excel::download(new InvoicesExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
 
+
+    }
+
+    public function importJefes(Request $request){
+        $request->validate([
+            'documento' => 'required|file|mimes:xls,xlsx'
+        ]);
+        Excel::import(new JefesImport, $request->file('documento'));
+        return redirect()->route('docentes.index')->with('message','Jefes importados con éxito!!');
 
     }
 }

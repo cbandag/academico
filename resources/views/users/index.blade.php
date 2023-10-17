@@ -105,86 +105,167 @@
 
             <div class="card-body">
 
-                <!-- Agregar Curso-->
-                <div class="card-body">
+                <!-- Agregar Usuarios-->
+
+
+                <div class="card-body ">
                     <div class="box-title">
                         <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
                         @csrf
                     </div><br>
 
-                    <!-- Listar Asignaturas -->
-                    <table id="users" class="table table-bordered table-striped rounded">
-                        <thead>
-                            <tr>
-                                <th>Nombres</th>
-                                <th>Identificacion</th>
-                                <th>Correo</th>
-                                <th>Jefe</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
+                    <!-- Listar Jefes -->
+                    <div class="row">
+                        <div class="card-body  col-5">
+                            <table  class="table table-bordered table-striped rounded ">
+                            <thead>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Identificacion</th>
+                                    <th>Correo</th>
+                                    <th>Jefe</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                        @foreach($users as $user)
-                            <tr>
-                                <td> {{$user->nombres}} {{$user->apellidos}} </td>
-                                <td> {{$user->identificacion}}  </td>
-                                <td> {{$user->email}} </td>
-                                <td> {{$user->nombres}} {{$user->apellidos}} </td>
+                            <tbody>
+                            @foreach($jefes as $jefe)
+                                <tr>
+                                    <td> {{$jefe->nombres}} {{$jefe->apellidos}} </td>
+                                    <td> {{$jefe->identificacion}}  </td>
+                                    <td> {{$jefe->email}} </td>
+                                    <td> {{$jefe->nombres}} {{$jefe->apellidos}} </td>
 
 
-                                @if ($user->estado=='ACTIVO')
-                                    <td><span class="btn btn-block btn-success btn-sm ">{{$user->estado}}</span> </td>
-                                @elseif ($user->estado=='INACTIVO')
-                                    <td><span class="btn btn-block btn-secondary btn-sm">{{$user->estado}}</span> </td>
-                                @endif
-                                <td>
-                                    <div class="row">
-                                        <!-- Mostrar -->
-                                        <div class="col-sm">
-                                            <a href="{{ url('/'.$route.'/'. $user->id )}}" class="btn btn-default">
-                                                @csrf
-                                                <i class="fa fa-eye" style='color: black'></i>
-                                                <!-- <input type="submit" name='show' value="show"> -->
-                                            </a>
+                                    @if ($jefe->estado=='ACTIVO')
+                                        <td><span class="btn btn-block btn-success btn-sm ">{{$jefe->estado}}</span> </td>
+                                    @elseif ($jefe->estado=='INACTIVO')
+                                        <td><span class="btn btn-block btn-secondary btn-sm">{{$jefe->estado}}</span> </td>
+                                    @endif
+                                    <td>
+                                        <div class="row">
+                                            <!-- Mostrar -->
+                                            <div class="col-sm">
+                                                <a href="{{ url('/'.$route.'/'. $jefe->id )}}" class="btn btn-default">
+                                                    @csrf
+                                                    <i class="fa fa-eye" style='color: black'></i>
+                                                    <!-- <input type="submit" name='show' value="show"> -->
+                                                </a>
+                                            </div>
+                                            <!-- Editar -->
+                                            <div class="col-sm">
+                                                <a href="{{ url('/'.$route.'/'. $jefe->id . '/edit/' ) }}" class="btn btn-info">
+                                                    <i class="fa fa-pencil-alt" style='color: white'></i>
+                                                    <!-- <input type="submit" name='edit' value="edit"> -->
+                                                </a>
+                                            </div>
+
+                                            <!-- Borrar -->
+                                            <div class="col-sm">
+                                                <form action="{{ url('/'.$route.'/'. $jefe->id) }}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
+                                                        <i class="fa fa-trash" style='color: white'></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <!-- Editar -->
-                                        <div class="col-sm">
-                                            <a href="{{ url('/'.$route.'/'. $user->id . '/edit/' ) }}" class="btn btn-info">
-                                                <i class="fa fa-pencil-alt" style='color: white'></i>
-                                                <!-- <input type="submit" name='edit' value="edit"> -->
-                                            </a>
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Correo</th>
+                                    <th>Identificacion</th>
+                                    <th>Jefe</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                        <div class="card-body  col-7">
+                            <table  class="table table-bordered table-striped rounded ">
+                            <thead>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Identificacion</th>
+                                    <th>Correo</th>
+                                    <th>Jefe</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                            @foreach($docentes as $docente)
+                                <tr>
+                                    <td> {{$docente->nombres}} {{$docente->apellidos}} </td>
+                                    <td> {{$docente->identificacion}}  </td>
+                                    <td> {{$docente->email}} </td>
+                                    <td> {{$docente->nombres}} {{$docente->apellidos}} </td>
+
+
+                                    @if ($docente->estado=='ACTIVO')
+                                        <td><span class="btn btn-block btn-success btn-sm ">{{$docente->estado}}</span> </td>
+                                    @elseif ($docente->estado=='INACTIVO')
+                                        <td><span class="btn btn-block btn-secondary btn-sm">{{$docente->estado}}</span> </td>
+                                    @endif
+                                    <td>
+                                        <div class="row">
+                                            <!-- Mostrar -->
+                                            <div class="col-sm">
+                                                <a href="{{ url('/'.$route.'/'. $docente->id )}}" class="btn btn-default">
+                                                    @csrf
+                                                    <i class="fa fa-eye" style='color: black'></i>
+                                                    <!-- <input type="submit" name='show' value="show"> -->
+                                                </a>
+                                            </div>
+                                            <!-- Editar -->
+                                            <div class="col-sm">
+                                                <a href="{{ url('/'.$route.'/'. $docente->id . '/edit/' ) }}" class="btn btn-info">
+                                                    <i class="fa fa-pencil-alt" style='color: white'></i>
+                                                    <!-- <input type="submit" name='edit' value="edit"> -->
+                                                </a>
+                                            </div>
+
+                                            <!-- Borrar -->
+                                            <div class="col-sm">
+                                                <form action="{{ url('/'.$route.'/'. $docente->id) }}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
+                                                        <i class="fa fa-trash" style='color: white'></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
 
-                                        <!-- Borrar -->
-                                        <div class="col-sm">
-                                            <form action="{{ url('/'.$route.'/'. $user->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
-                                                    <i class="fa fa-trash" style='color: white'></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
 
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Correo</th>
+                                    <th>Identificacion</th>
+                                    <th>Jefe</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                            </table>
+                        </div>
+                    </div>
 
-                        <tfoot>
-                            <tr>
-                                <th>Nombres</th>
-                                <th>Correo</th>
-                                <th>Identificacion</th>
-                                <th>Jefe</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </tfoot>
-                    </table>
 
                 </div>
             </div><!-- card-body -->

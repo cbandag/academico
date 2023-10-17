@@ -53,6 +53,9 @@ class User extends Authenticatable
     public function asignacion(){
         return $this->hasMany(Asignaciones::class,'identificacion','identificacion');
     }
+    public function jefes_por_periodo(){
+        return $this->hasMany(Jefes_por_periodo::class,'user_id','id');
+    }
 
     public function programa(){
         return $this->hasMany(Programa::class);

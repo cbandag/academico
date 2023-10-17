@@ -49,6 +49,9 @@ Route::post('/asignaciones/año/', [App\Http\Controllers\AsignacionesController:
 Route::post('/periodos/import',[App\Http\Controllers\PeriodosController::class, 'import'])->name('programaciones.import')->middleware('auth');
 Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, 'export'])->name('programaciones.export')->middleware('auth');
 
+Route::post('/jefes/import',[App\Http\Controllers\DocentesController::class, 'importJefes'])->name('jefes.import')->middleware('auth');
+Route::get('/jefes/export',[App\Http\Controllers\DocentesController::class, 'exportJefes'])->name('jefes.export')->middleware('auth');
+
 
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);

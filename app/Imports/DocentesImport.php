@@ -2,12 +2,14 @@
 
 namespace App\Imports;
 
-use App\Models\Docente;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Hash;
+
+
 
 class DocentesImport implements ToCollection, WithHeadingRow
 {
@@ -21,20 +23,33 @@ class DocentesImport implements ToCollection, WithHeadingRow
     {
         foreach ($rows as $row)
         {
-            Docente::create([
+            Docente::updateOrCreate([
+                'identificacion' => $row->ide,
+            ],[
                 'nombres' => $row['nombres'],
                 'apellidos' => $row['apellidos'],
                 'email' => $row['email'],
-                'identificacion' => $row['identificacion'],
                 'estado' => $row['estado'],
-                'nombre' => $row['nombre'],
-                'password' => Hash::make($data['identificacion']),
+                'password' => Hash::make($data['identificacion'])
             ]);
 
-            Asignaciones::create([
-                'identificacion' => $row['identificacion'],
-                'jefe' => $row['jefe']
+            Asignacion::updateOrCreate([
+                'identificacion' => $row->ide,
+                'año' => $row->año,
+                'periodo' => $row->periodo
+            ],[
+                'jefe' => $row['jefe'],
             ]);
+
+            Jefes_por_periodo::updateOrCreate([
+                'identificacion' => $row['identificacion'],
+                'año' => $row['año'],
+                'periodo' => $row['periodo']
+            ],[
+                'jefe' => $row['jefe'],
+            ]);
+
+
 
         }
     }
