@@ -59,9 +59,10 @@
                     </form>
                 </div>
                 <div class="form-group col-2">
-                    <a class="btn btn-success" href="{{ url('/docentes/export/') }}">Exportar Jefes</a>
+                    <a class="btn btn-success" href="{{ url('/jefes/export/') }}">Exportar Jefes</a>
                     @csrf
                 </div>
+
                 <div class="form-group col-3">
                     <form action="{{ url('/docentes/import/') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -116,26 +117,24 @@
 
                     <!-- Listar Jefes -->
                     <div class="row">
-                        <div class="card-body  col-5">
+                        <div class="card-body  col-6">
                             <table  class="table table-bordered table-striped rounded ">
                             <thead>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Identificacion</th>
+                                    <th>Ident.</th>
                                     <th>Correo</th>
-                                    <th>Jefe</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
+                                    <th>Ir</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                             @foreach($jefes as $jefe)
                                 <tr>
-                                    <td> {{$jefe->nombres}} {{$jefe->apellidos}} </td>
-                                    <td> {{$jefe->identificacion}}  </td>
-                                    <td> {{$jefe->email}} </td>
-                                    <td> {{$jefe->nombres}} {{$jefe->apellidos}} </td>
+                                    <td> <small>{{$jefe->nombres}} {{$jefe->apellidos}} </small></td>
+                                    <td>{{$jefe->identificacion}}</td>
+                                    <td> <small> {{$jefe->email}} </small></td>
+
 
 
                                     @if ($jefe->estado=='ACTIVO')
@@ -153,24 +152,7 @@
                                                     <!-- <input type="submit" name='show' value="show"> -->
                                                 </a>
                                             </div>
-                                            <!-- Editar -->
-                                            <div class="col-sm">
-                                                <a href="{{ url('/'.$route.'/'. $jefe->id . '/edit/' ) }}" class="btn btn-info">
-                                                    <i class="fa fa-pencil-alt" style='color: white'></i>
-                                                    <!-- <input type="submit" name='edit' value="edit"> -->
-                                                </a>
-                                            </div>
 
-                                            <!-- Borrar -->
-                                            <div class="col-sm">
-                                                <form action="{{ url('/'.$route.'/'. $jefe->id) }}" method="POST">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
-                                                        <i class="fa fa-trash" style='color: white'></i>
-                                                    </button>
-                                                </form>
-                                            </div>
                                         </div>
 
                                     </td>
@@ -181,25 +163,21 @@
                             <tfoot>
                                 <tr>
                                     <th>Nombres</th>
+                                    <th>Ident.</th>
                                     <th>Correo</th>
-                                    <th>Identificacion</th>
-                                    <th>Jefe</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
+                                    <th>Ir</th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
-                        <div class="card-body  col-7">
+                        <div class="card-body  col-6">
                             <table  class="table table-bordered table-striped rounded ">
                             <thead>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Identificacion</th>
+                                    <th>Ident.</th>
                                     <th>Correo</th>
                                     <th>Jefe</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </thead>
 
@@ -207,9 +185,9 @@
                             @foreach($docentes as $docente)
                                 <tr>
                                     <td> {{$docente->nombres}} {{$docente->apellidos}} </td>
-                                    <td> {{$docente->identificacion}}  </td>
-                                    <td> {{$docente->email}} </td>
-                                    <td> {{$docente->nombres}} {{$docente->apellidos}} </td>
+                                    <td> {{$docente->identificacion}} </td>
+                                    <td> <small>{{$docente->email}} </small></td>
+                                    <td> {{$docente->identificacion_jefe}}  </td>
 
 
                                     @if ($docente->estado=='ACTIVO')
@@ -217,37 +195,7 @@
                                     @elseif ($docente->estado=='INACTIVO')
                                         <td><span class="btn btn-block btn-secondary btn-sm">{{$docente->estado}}</span> </td>
                                     @endif
-                                    <td>
-                                        <div class="row">
-                                            <!-- Mostrar -->
-                                            <div class="col-sm">
-                                                <a href="{{ url('/'.$route.'/'. $docente->id )}}" class="btn btn-default">
-                                                    @csrf
-                                                    <i class="fa fa-eye" style='color: black'></i>
-                                                    <!-- <input type="submit" name='show' value="show"> -->
-                                                </a>
-                                            </div>
-                                            <!-- Editar -->
-                                            <div class="col-sm">
-                                                <a href="{{ url('/'.$route.'/'. $docente->id . '/edit/' ) }}" class="btn btn-info">
-                                                    <i class="fa fa-pencil-alt" style='color: white'></i>
-                                                    <!-- <input type="submit" name='edit' value="edit"> -->
-                                                </a>
-                                            </div>
 
-                                            <!-- Borrar -->
-                                            <div class="col-sm">
-                                                <form action="{{ url('/'.$route.'/'. $docente->id) }}" method="POST">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
-                                                        <i class="fa fa-trash" style='color: white'></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-
-                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -256,10 +204,8 @@
                                 <tr>
                                     <th>Nombres</th>
                                     <th>Correo</th>
-                                    <th>Identificacion</th>
+                                    <th>Ident.</th>
                                     <th>Jefe</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
                                 </tr>
                             </tfoot>
                             </table>

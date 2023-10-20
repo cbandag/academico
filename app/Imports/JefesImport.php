@@ -28,19 +28,16 @@ class JefesImport implements ToCollection, WithHeadingRow
                 'nombres' => $row['nombres'],
                 'apellidos' => $row['apellidos'],
                 'email' => $row['email'],
-                //'estado' => $row['estado'],
                 'password' => Hash::make($row['identificacion']),
             ])->assignRole('jefe');
 
 
 
-
             $user->Jefes_por_periodo()->updateOrCreate([
-                'identificacion' => $row['identificacion'],
-                'año' => $row['year'],
-                'periodo' => $row['periodo']
-            ],[
-
+            //Jefes_por_periodo::updateOrCreate([
+                'identificacion_jefe' => $row['identificacion'],
+                'año' => '2023',
+                'periodo' => '2'
             ]);
 
         }

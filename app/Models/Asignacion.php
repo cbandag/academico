@@ -10,7 +10,7 @@ class Asignacion extends Model
     use HasFactory;
     protected $table = "asignaciones";
     protected $fillable = [
-        'identificacion',
+        'identificacion_docente',
         'horas_dedicacion',
         'funcion_1',
         'funcion_2',
@@ -28,20 +28,27 @@ class Asignacion extends Model
         'horas_estudiantes',
         'observaciones',
         'horas_docencia',
+        'identificacion_jefe',
         'año',
         'periodo',
         'estado'
         ];
 
+        public function docente()
+        {
+            return $this->BelongsTo(User::class,'identificacion_docente','identificacion');
+        }
+
+        public function jefe()
+        {
+            return $this->BelongsTo(User::class,'identificacion_jefe','identificacion');
+        }
 
         public function asignaturas()
         {
-            return $this->hasMany(AsignaturasPorDocente::class,'identificacion','identificacion');
+            return $this->hasMany(AsignaturasPorDocente::class,'identificacion_docente','identificacion');
         }
-        public function user()
-        {
-            return $this->BelongsTo(User::class,'identificacion','identificacion');
-        }
+
 
         public function funcion()
         {

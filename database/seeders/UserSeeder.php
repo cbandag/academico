@@ -23,8 +23,9 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => '28bandag@gmail.com',
             'password'=> '12345678'
-            
+
         ])->assignRole('admin');
+        /*
 
         User::Create([
             'nombres' => 'Sixto',
@@ -33,7 +34,7 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => 'sixmafire@gmail.com',
             'password'=> '12345678'
-            
+
         ])->assignRole('admin');
 
         User::Create([
@@ -43,7 +44,7 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => 'planeacion@gmail.com',
             'password'=> '12345678'
-            
+
         ])->assignRole('planeación');
 
         User::Create([
@@ -53,7 +54,7 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => 'jefe@gmail.com',
             'password'=> '12345678'
-            
+
         ])->assignRole('jefe');
 
         User::Create([
@@ -63,10 +64,10 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => 'docente@gmail.com',
             'password'=> '12345678'
-            
+
         ])->assignRole('docente');
 
-        /*
+
         DB::table('users')->insert([
             'nombres' => 'Carlos',
             'apellidos' => 'Banda',
@@ -74,7 +75,7 @@ class UserSeeder extends Seeder
             'estado' => 'ACTIVO',
             'email' => '28bandag@gmail.com',
             'password'=> Hash::make('12345678')
-            
+
         ]);
 
 

@@ -52,6 +52,9 @@ Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, '
 Route::post('/jefes/import',[App\Http\Controllers\DocentesController::class, 'importJefes'])->name('jefes.import')->middleware('auth');
 Route::get('/jefes/export',[App\Http\Controllers\DocentesController::class, 'exportJefes'])->name('jefes.export')->middleware('auth');
 
+Route::post('/docentes/import',[App\Http\Controllers\DocentesController::class, 'importDocentes'])->name('docentes.import')->middleware('auth');
+Route::get('/docentes/export',[App\Http\Controllers\DocentesController::class, 'exportDocentes'])->name('docentes.export')->middleware('auth');
+
 
 
 //Route::get('/periodo/index', [PeriodosController::class,'index']);

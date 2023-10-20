@@ -10,15 +10,13 @@ class Jefes_por_periodo extends Model
     use HasFactory;
     protected $table = "jefes_por_periodo";
     protected $fillable = [
-        'user_id',
-        'identificacion',
-        'jefe',
+        'identificacion_jefe',
         'año',
         'periodo'
     ];
 
     public function user(){
-        return $this->belongsTo(User::class,'user_id', 'user_id');
+        return $this->belongsTo(User::class,'identificacion_jefe', 'identificacion');
     }
     /*
     public function jefe(){

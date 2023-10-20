@@ -24,7 +24,6 @@ class User extends Authenticatable
         'apellidos',
         'email',
         'identificacion',
-        'jefe',
         'estado',
         'nombre',
         'password',
@@ -51,10 +50,11 @@ class User extends Authenticatable
     ];
 
     public function asignacion(){
-        return $this->hasMany(Asignaciones::class,'identificacion','identificacion');
+        return $this->hasMany(Asignacion::class,'identificacion_docente','identificacion');
     }
+
     public function jefes_por_periodo(){
-        return $this->hasMany(Jefes_por_periodo::class,'user_id','id');
+        return $this->hasMany(Jefes_por_periodo::class,'identificacion_jefe','identificacion');
     }
 
     public function programa(){

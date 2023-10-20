@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('asignaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('identificacion');
+            $table->string('identificacion_docente')->unique();
             $table->string('horas_dedicacion')->nullable();
             $table->string('descarga_investigacion')->nullable();
             $table->string('porcentaje_investigacion')->nullable();
@@ -29,14 +29,18 @@ return new class extends Migration
             $table->double('horas_estudiantes_ajustada')->nullable();
             $table->string('observaciones')->nullable();
             $table->double('horas_docencia')->nullable();
+            $table->string('identificacion_jefe')->nullable();
             $table->string('año');
             $table->string('periodo');
             $table->string('estado');
-            $table->unsignedBigInteger('jefe');
+
 
             $table->timestamps();
 
-            $table->foreign('jefe')->references('id')->on('users');
+            $table->foreign('identificacion_docente')->references('identificacion')->on('users');
+            $table->foreign('identificacion_jefe')->references('identificacion')->on('users');
+            $table->unique(array('identificacion_docente', 'año','periodo'));
+
            /* $table->foreign('funcion_2')->references('id')->on('funciones');
             $table->foreign('funcion_3')->references('id')->on('funciones');
             $table->foreign('funcion_4')->references('id')->on('funciones');*/

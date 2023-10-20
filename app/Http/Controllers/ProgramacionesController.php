@@ -118,11 +118,11 @@ class ProgramacionesController extends Controller
                 }
 */
                 Asignacion::updateOrCreate([
-                    'identificacion' => $programacion->ide,
+                    'identificacion_docente' => $programacion->ide,
                     'año' => $programacion->año,
                     'periodo' => $programacion->periodo
                 ],[
-                    'dedicacion' => $programacion->npqprf,
+                    //'dedicacion' => $programacion->npqprf,
                     //'horas_dedicacion' => 40,
                     'estado' => 'PENDIENTE'
                 ]);

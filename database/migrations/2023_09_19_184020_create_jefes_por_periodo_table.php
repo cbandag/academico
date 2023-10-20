@@ -12,13 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jefes_por_periodo', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->string('identificacion');
+            //$table->unsignedBigInteger('user_id');
+            $table->string('identificacion_jefe');
             $table->string('año');
             $table->string('periodo');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            //$table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('identificacion_jefe')->references('identificacion')->on('users');
+            $table->unique(array('identificacion_jefe', 'año','periodo'));
         });
     }
 

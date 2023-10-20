@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Excel;
 use App\Imports\JefesImport;
 use App\Exports\JefesExport;
+use App\Imports\DocentesImport;
+use App\Exports\DocentesExport;
 
 class DocentesController extends Controller
 {
@@ -27,22 +29,28 @@ class DocentesController extends Controller
         ->get();*/
 
         $jefes = DB::table('users')
-        ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion')
-        ->select('users.*', 'jefes_por_periodo.periodo')
+        ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+        ->select('users.*')
         ->where('jefes_por_periodo.año','=','2023')
         ->where('jefes_por_periodo.periodo','=','2')
         ->get();
 
 
+/*
         $docentes = DB::table('users')
         ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
         ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
         ->select('users.*', 'model_has_roles.model_id')
         ->where('roles.name','like','docente')
         ->get();
-
-
-
+*/
+        
+        $docentes = DB::table('users')
+        ->leftjoin('asignaciones', 'users.identificacion', '=', 'asignaciones.identificacion_docente')
+        ->select('users.*','asignaciones.*')
+        ->where('asignaciones.año','=','2023')
+        ->where('asignaciones.periodo','=','2')
+        ->get();
 
         $model = 'docente';
         $route ='docentes';
@@ -321,6 +329,15 @@ class DocentesController extends Controller
         ]);
         Excel::import(new JefesImport, $request->file('documento'));
         return redirect()->route('docentes.index')->with('message','Jefes importados con éxito!!');
+
+    }
+
+    public function importDocentes(Request $request){
+        $request->validate([
+            'documento' => 'required|file|mimes:xls,xlsx'
+        ]);
+        Excel::import(new DocentesImport, $request->file('documento'));
+        return redirect()->route('docentes.index')->with('message','Docentes importados con éxito!!');
 
     }
 }
