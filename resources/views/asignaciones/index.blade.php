@@ -105,6 +105,8 @@
                 <table id="users" class="table table-sm table-bordered table-striped rounded">
                     <thead>
                         <tr>
+                            <th rowspan="2">JEFE </th>
+
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
                             <th colspan='6'>DESCARGAS (Hrs.)</th>
                             <th colspan='3'>FUNCION DOCENTE (Hrs.)</th>
@@ -148,7 +150,8 @@
                     <tbody>
                     @foreach($asignaciones as $asignacion)
                         <tr>
-                            <td> <small>{{$asignacion->user->nombres}} {{$asignacion->user->apellidos}}</small> </td>
+                            <td class="{{isset($asignacion->jefe->nombres) ? '':'p-3 mb-2 bg-warning text-dark'}}"> <small>{{isset($asignacion->jefe->nombres) ? $asignacion->jefe->nombres.' '.$asignacion->jefe->apellidos:''}}</small> </td>
+                            <td> <small>{{$asignacion->docente->nombres}} {{$asignacion->docente->apellidos}}</small> </td>
                             <td> <small>
                                 @if($asignacion->horas_dedicacion=='20')
                                 {{'M. TIEMPO'}}
@@ -233,7 +236,7 @@
                     </tbody>
 
                     <tfoot>
-                        <tr>
+                        <tr><th>JEFE </th>
                             <th>Nombres</th>
                             <th>Dedicac.</th>
                             <th>Hrs</th>

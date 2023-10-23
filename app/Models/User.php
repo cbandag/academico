@@ -53,6 +53,10 @@ class User extends Authenticatable
         return $this->hasMany(Asignacion::class,'identificacion_docente','identificacion');
     }
 
+    public function jefe(){
+        return $this->hasMany(Asignacion::class,'identificacion_jefe','identificacion');
+    }
+
     public function jefes_por_periodo(){
         return $this->hasMany(Jefes_por_periodo::class,'identificacion_jefe','identificacion');
     }

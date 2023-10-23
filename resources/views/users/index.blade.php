@@ -184,10 +184,10 @@
                             <tbody>
                             @foreach($docentes as $docente)
                                 <tr>
-                                    <td> {{$docente->nombres}} {{$docente->apellidos}} </td>
+                                    <td>{{$docente->nombres}} {{$docente->apellidos}} </td>
                                     <td> {{$docente->identificacion}} </td>
                                     <td> <small>{{$docente->email}} </small></td>
-                                    <td> {{$docente->identificacion_jefe}}  </td>
+                                    <td class="{{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}"><small> {{$docente->nombre_jefe}} {{$docente->apellido_jefe}}</small></td>
 
 
                                     @if ($docente->estado=='ACTIVO')

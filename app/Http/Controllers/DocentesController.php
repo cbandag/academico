@@ -44,12 +44,22 @@ class DocentesController extends Controller
         ->where('roles.name','like','docente')
         ->get();
 */
-        
-        $docentes = DB::table('users')
-        ->leftjoin('asignaciones', 'users.identificacion', '=', 'asignaciones.identificacion_docente')
-        ->select('users.*','asignaciones.*')
+/*
+        $docentes = DB::table('users AS docentes')
+        ->leftjoin('asignaciones', 'docentes.identificacion', '=', 'asignaciones.identificacion_docente')
+        ->join('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
+        ->select('docentes.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe','asignaciones.*')
         ->where('asignaciones.año','=','2023')
         ->where('asignaciones.periodo','=','2')
+        ->get();
+*/
+        $docentes = DB::table('asignaciones')
+        ->leftjoin('users AS docentes', 'asignaciones.identificacion_docente', '=', 'docentes.identificacion')
+        ->leftjoin('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
+        ->select('docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
+        /*->where('asignaciones.año','=','2023')
+        ->where('asignaciones.periodo','=','2')
+        ->whereRaw('asignaciones.identificacion_jefe IS NULL')*/
         ->get();
 
         $model = 'docente';

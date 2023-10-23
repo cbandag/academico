@@ -25,7 +25,7 @@ class AsignacionesController extends Controller
         !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
         !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
 
-        $asignaciones = Asignacion::where('año','=',$año)->where('periodo','=',$periodo)->get();
+        $asignaciones = Asignacion::where('año','=',$año)->where('periodo','=',$periodo)->orderBy('identificacion_jefe')->get();
         $users = User::all();
         $asignaturas = AsignaturasPorDocente::all();
         $funciones = Funcion::all();
@@ -139,7 +139,7 @@ class AsignacionesController extends Controller
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;
 
         //$horas_clases = round($horas_restantes * 0.4 , 0);
-        //$horas_clases = '0.' . explode(',',$horas_restantes * 0.4); 
+        //$horas_clases = '0.' . explode(',',$horas_restantes * 0.4);
         //$horas_clases =  (($horas_restantes - intval($horas_restantes))*100)/100;
 
         /*if(explode(',',$horas_restantes * 0.4) >= 0.5){

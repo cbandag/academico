@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Hash;
 
 class DocentesImport implements ToCollection, WithHeadingRow //WithValidation
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
 
     public function collection(Collection $rows)
     {
@@ -34,21 +29,24 @@ class DocentesImport implements ToCollection, WithHeadingRow //WithValidation
             ])->assignRole('docente');
 
             //$id_jefe =User::find($row['jefe']);
-            
 
-            if( null !== User::find($row['jefe']) ){
-                //$jefe = $row['jefe'];
-                Asignacion::updateOrCreate([
-                //$user->Asignacion()->updateOrCreate([
-                    'identificacion_docente' => $row['identificacion'],
-                    'año' => '2023',
-                    'periodo' => '2'
-                ],[
-                    'identificacion_jefe' => $row['jefe'],
-                    'horas_dedicacion' => $row['horas_dedicacion']/*=='Tiempo Completo'?'40':'20' */,
-                    'estado' => 'PENDIENTE'
-                ]);
+
+            if(User::where('identificacion',$row['jefe'])->first() ){
+                $jefe = $row['jefe'];
+            }else{
+                $jefe = null;
             }
+
+            Asignacion::updateOrCreate([
+            //$user->Asignacion()->updateOrCreate([
+                'identificacion_docente' => $row['identificacion'],
+                'año' => '2023',
+                'periodo' => '2'
+            ],[
+                'identificacion_jefe' => $jefe,
+                'horas_dedicacion' => $row['horas_dedicacion']/*=='Tiempo Completo'?'40':'20' */,
+                'estado' => 'PENDIENTE'
+            ]);
 
         }
 
