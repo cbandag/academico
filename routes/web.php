@@ -40,6 +40,7 @@ Route::group(['middleware' =>  'auth'],function () {
     Route::get('/', [App\Http\Controllers\Auth\LoginController::class,'index'])->name('home');
 });
 
+
 Route::get('/programaciones/docentes', [App\Http\Controllers\ProgramacionesController::class, 'importDocentes'])->name('programaciones.importDocentes')->middleware('auth');
 Route::get('/programaciones/asignaturas', [App\Http\Controllers\ProgramacionesController::class, 'importAsignaturasPorDocente'])->name('programaciones.importAsignaturasPorDocente')->middleware('auth');
 Route::get('/asignaciones/import', [App\Http\Controllers\AsignacionesController::class, 'import'])->name('programaciones.import')->middleware('auth');
@@ -54,6 +55,9 @@ Route::get('/jefes/export',[App\Http\Controllers\DocentesController::class, 'exp
 
 Route::post('/docentes/import',[App\Http\Controllers\DocentesController::class, 'importDocentes'])->name('docentes.import')->middleware('auth');
 Route::get('/docentes/export',[App\Http\Controllers\DocentesController::class, 'exportDocentes'])->name('docentes.export')->middleware('auth');
+
+
+
 
 
 
@@ -83,3 +87,9 @@ Route::put('/docentes/{id}', [DocentesController::class, 'update'])->name('docen
 Route::delete('/docentes/{id}', [DocentesController::class, 'destroy'])->name('docentes.destroy');
 Route::get('/docentes/{id}/edit', [DocentesController::class, 'edit'])->name('docentes.edit');
 */
+
+Route::get('/docentes/jefe/{id}',function ($id) {
+    return "Hola esta es una ruta";
+})->middleware('auth');
+
+Route::get('/docentes/jefe/{id}',[App\Http\Controllers\DocentesController::class, 'docentesPorJefe'])->name('docentes.docentesporjefe')->middleware('auth');

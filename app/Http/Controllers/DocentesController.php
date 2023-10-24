@@ -350,4 +350,22 @@ class DocentesController extends Controller
         return redirect()->route('docentes.index')->with('message','Docentes importados con éxito!!');
 
     }
+
+    public function docentesPorJefe($identificacion)
+    {
+
+        $docentes = DB::table('asignaciones')
+        ->leftjoin('users AS docentes', 'asignaciones.identificacion_docente', '=', 'docentes.identificacion')
+        ->leftjoin('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
+        ->select('docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
+        ->where('asignaciones.identificacion_jefe','=',$identificacion)
+        ->get();
+
+
+        return response()->json($docentes);
+
+    }
+
+
+
 }
