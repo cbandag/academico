@@ -10,9 +10,10 @@ class Periodo extends Model
     use HasFactory;
     protected $table = 'periodos';
     protected $fillable = [
+        'año',
         'periodo',
         'estado',
     ];
 
-    
+
 }

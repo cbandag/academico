@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\User;
+use App\Models\Periodo;
 use App\Models\Jefes_por_periodo;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
@@ -20,6 +21,8 @@ class JefesImport implements ToCollection, WithHeadingRow
 
     public function collection(Collection $rows)
     {
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+
         foreach ($rows as $row)
         {
             $user = User::updateOrCreate([
@@ -27,7 +30,7 @@ class JefesImport implements ToCollection, WithHeadingRow
             ],[
                 'nombres' => $row['nombres'],
                 'apellidos' => $row['apellidos'],
-                'email' => $row['email'],
+                'email' => strtolower($row['email']),
                 'password' => Hash::make($row['identificacion']),
             ])->assignRole('jefe');
 
@@ -36,8 +39,8 @@ class JefesImport implements ToCollection, WithHeadingRow
             $user->Jefes_por_periodo()->updateOrCreate([
             //Jefes_por_periodo::updateOrCreate([
                 'identificacion_jefe' => $row['identificacion'],
-                'año' => '2023',
-                'periodo' => '2'
+                'año' => $periodoActual->año,
+                'periodo' => $periodoActual->periodo
             ]);
 
         }

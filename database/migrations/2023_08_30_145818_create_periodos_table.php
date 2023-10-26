@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('periodos', function (Blueprint $table) {
-            $table->id();
-            $table->String('periodo')->unique();
+            $table->bigIncrements('id');
+            $table->String('año');
+            $table->String('periodo');
             $table->String('estado');
             $table->timestamps();
+
+            $table->unique(array('año','periodo'));
         });
     }
 

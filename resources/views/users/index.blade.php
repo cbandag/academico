@@ -43,87 +43,86 @@
     <!-- Main content -->
     <section class="content">
         <div class="card">
-            <div class="card-header row">
-                <div class="box-title col-1">
-                    <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
-                    @csrf
-                </div>
-
-                <div class="form-group col-2">
-                    <form action="{{ url('/jefes/import/') }}" method="post" enctype="multipart/form-data">
+            <div class="card-header">
+                <div class="row justify-content-between">
+                    <div class="box-title col-6 ">
+                        <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
                         @csrf
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name='documento' id="exampleInputFile">
-                                <label class="custom-file-label" for="exampleInputFile">Escoger archivo</label>
-                            </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-success" type="submit">Importar Jefes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="form-group col-2">
-                    <a class="btn btn-success" href="{{ url('/jefes/export/') }}">Exportar Jefes</a>
-                    @csrf
-                </div>
+                    </div>
 
-                <div class="form-group col-2">
-                    <form action="{{ url('/docentes/import/') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name='documento' id="exampleInputFile">
-                                <label class="custom-file-label" for="exampleInputFile">Escoger archivo</label>
-                            </div>
-                            <div class="input-group-append">
-                                <button class="btn btn-success" type="submit">Importar Docentes</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="form-group col-2">
-                    <a class="btn btn-success" href="{{ url('/docentes/export/') }}">Exportar Docentes</a>
-                    @csrf
-                </div>
-
-                <div class="form-group col-2">
-                    <div class="form-group">
-                        <form class="row "  action="{{ route('asignaciones.año') }}" method="POST">
+                    <div class="form-group col-6 ">
+                        <form class="form-group  row "  action="{{ route('asignaciones.año') }}" method="POST">
                             @csrf
-                            <select class="form-control col-7" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
-                                @foreach ($años_periodos as $año_periodo)
-                                <option type="text" class="form-control" value="{{$año_periodo->año}}-{{$año_periodo->periodo}}"
-                                    {{$año_periodo->año==$año && $año_periodo->periodo==$periodo?'selected':''}}>
-                                    {{$año_periodo->año}} - 0{{$año_periodo->periodo}}</option>
+                            <select class="form-control col-6" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
+                                @foreach ($periodos as $periodo)
+                                <option type="text" class="form-control" value="{{$periodo->año}}-{{$periodo->periodo}}"
+                                    {{$periodo->año==$periodoActual->año && $periodo->periodo==$periodoActual->periodo?'selected':''}}>
+                                    {{$periodo->año}}-{{$periodo->periodo}}</option>
                                 @endforeach
                             </select>
-                            <div class="input-group-append col-5     ">
+                            <div class="input-group-append col     ">
                                 <button class="btn btn-success " type="submit">Mostrar</button>
                             </div>
-
                         </form>
                     </div>
+                </div>
+
+                <div class="row justify-content-between">
+                    <div class="form-group col-6 row">
+                        <form class="col-8" action="{{ url('/jefes/import/') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name='documento' onchange="cargarJefes(this)">
+                                    <label class="custom-file-label" for="exampleInputFile" id="archivo-jefes">Cargar</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="submit">Importar Jefes</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class=" col-4 ">
+                            <a class="btn btn-success" href="{{ url('/jefes/export/') }}">Exportar Jefes</a>
+                            @csrf
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group col-6 row">
+                        <form class="col-8" action="{{ url('/docentes/import/') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name='documento' onchange="cargarDocentes(this)">
+                                    <label class="custom-file-label" id="archivo-docentes">Escoger archivo</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-success" type="submit">Importar Docentes</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="form-group col-4">
+                        <a class="btn btn-success" href="{{ url('/docentes/export/') }}">Exportar Docentes</a>
+                        @csrf
+                    </div>
+                    </div>
+
+
                 </div>
             </div>
 
 
-            <div class="card-body">
 
-                <!-- Agregar Usuarios-->
-
-
-                <div class="card-body ">
-
-                    <!-- Listar Jefes -->
-                    <div class="row">
-                        <div class="card-body  col-5">
-                            <table  class="table table-bordered table-striped rounded ">
+            <div class="card-body ">
+                <!-- Listar Jefes -->
+                <div class="row">
+                    <div class="  col-6">
+                        <table  class="table table-bordered table-striped rounded ">
                             <thead>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Ident.</th>
+
                                     <th>Correo</th>
                                     <th>Cant.</th>
                                     <th>Ir</th>
@@ -134,7 +133,7 @@
                             @foreach($jefes as $jefe)
                                 <tr>
                                     <td> <small>{{explode(" ",$jefe->nombres)[0]}} {{explode(" ",$jefe->apellidos)[0]}} </small></td>
-                                    <td>{{$jefe->identificacion}}</td>
+
                                     <td> <small> {{$jefe->email}} </small></td>
 
 
@@ -147,7 +146,7 @@
                                     <td>
                                         <div class="row">
                                             <!-- Mostrar -->
-                                            <div class="col-sm">
+                                            <div class="">
                                                 <a href="{{ url('/'.$route.'/'. $jefe->id )}}" class="btn btn-default">
                                                     @csrf
                                                     <i class="fa fa-eye" style='color: black'></i>
@@ -155,15 +154,12 @@
                                                 </a>
                                             </div>
 
-
-
                                         </div>
-
                                     </td>
                                     <td>
                                         <div class="row">
                                             <!-- Ir -->
-                                            <div class="col-sm">
+                                            <div class="col">
                                                 <a id="idJefe" value="{{ $jefe->id }}" class="btn btn-default" onclick="listarDocentesJefe({{ $jefe->identificacion }})">
                                                     @csrf
                                                     <i class="fa fa-arrow-right" style='color: black'></i>
@@ -181,7 +177,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Nombres</th>
-                                    <th>Ident.</th>
+
                                     <th>Correo</th>
                                     <th>Cant.</th>
                                     <th>Ir</th>
@@ -189,58 +185,80 @@
                             </tfoot>
                         </table>
                     </div>
-                        <div class="card-body  col-6">
-                            <table  class="table table-bordered table-striped rounded "id="listaDocentes">
-                                <thead>
-                                    <tr>
-                                        <th>Nombres</th>
-                                        <th>Ident.</th>
-                                        <th>Correo</th>
-                                        <th>Jefe</th>
-                                    </tr>
-                                </thead>
+
+                    <div class="  col-6">
+                        <table  class="table table-bordered table-striped rounded "id="listaDocentes">
+                            <thead>
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Correo</th>
+                                    <th>Edit.</th>
+                                    <th>Elim.</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tbody">
+                            @foreach($docentes as $docente)
+                                <tr class="tr">
+                                    <td><small>{{ explode(" ",$docente->nombres)[0]}} {{explode(" ",$docente->apellidos)[0]}} </small></td>
+
+                                    <td> <small>{{$docente->email}} </small></td>
+                                     <!--<td class="{{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}">
+                                        <small> {{explode(" ",$docente->nombre_jefe)[0]}} {{explode(" ",$docente->apellido_jefe)[0] }}</small></td>
+                                     -->
+
+                                    @if ($docente->estado=='ACTIVO')
+                                        <td><span class="btn btn-block btn-success btn-sm ">{{$docente->estado}}</span> </td>
+                                    @elseif ($docente->estado=='INACTIVO')
+                                        <td><span class="btn btn-block btn-secondary btn-sm">{{$docente->estado}}</span> </td>
+                                    @endif
+                                    <td>
+                                        <!-- Editar -->
+                                        <div class="col-sm">
+                                            <a href="{{ url('/docentes/'. $docente->id ) }}" class="btn btn-info">
+                                                <i class="fa fa-pencil-alt" style='color: white'></i>
+                                                <!-- <input type="submit" name='edit' value="edit"> -->
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <!-- Borrar -->
+                                        <div class="col-sm">
+                                            <form action="{{ url('/docentes/'. $docente->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
+                                                    <i class="fa fa-trash" style='color: white'></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
 
 
-                                <tbody id="tbody">
-                                @foreach($docentes as $docente)
-                                    <tr class="tr">
-                                        <td><small>{{ explode(" ",$docente->nombres)[0]}} {{explode(" ",$docente->apellidos)[0]}} </small></td>
-                                        <td> {{$docente->identificacion}} </td>
-                                        <td> <small>{{$docente->email}} </small></td>
-                                        <td class="{{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}">
-                                            <small> {{explode(" ",$docente->nombre_jefe)[0]}} {{explode(" ",$docente->apellido_jefe)[0] }}</small></td>
 
+                                </tr>
+                            @endforeach
+                            </tbody>
 
-                                        @if ($docente->estado=='ACTIVO')
-                                            <td><span class="btn btn-block btn-success btn-sm ">{{$docente->estado}}</span> </td>
-                                        @elseif ($docente->estado=='INACTIVO')
-                                            <td><span class="btn btn-block btn-secondary btn-sm">{{$docente->estado}}</span> </td>
-                                        @endif
+                            <tfoot id="tfoot">
+                                <tr>
+                                    <th>Nombres</th>
+                                    <th>Correo</th>
+                                    <th>Edit.</th>
+                                    <th>Elim.</th>
 
-
-
-                                    </tr>
-                                @endforeach
-                                </tbody>
-
-                                <tfoot id="tfoot">
-                                    <tr>
-                                        <th>Nombres</th>
-                                        <th>Ident.</th>
-                                        <th>Correo</th>
-                                        <th>Jefe</th>
-                                    </tr>
-                                </tfoot>
+                                </tr>
+                            </tfoot>
 
 
 
-                            </table>
-                        </div>
+                        </table>
                     </div>
-
-
                 </div>
-            </div><!-- card-body -->
+
+
+            </div>
+
 
 
 
@@ -252,8 +270,28 @@
 
 <script>
 
+    function cargarJefes(archivoCargado){
+        let archivo = archivoCargado.files;
+        console.log("Nombre de archivo " + archivo[0].name);
 
-   function listarDocentesJefe(e){
+        document.getElementById('archivo-jefes').innerHTML = archivo[0].name;
+        /*for (var i = 0; i < files.length; i++) {
+            alert("Filename " + files[i].name);
+        }*/
+    };
+
+    function cargarDocentes(archivoCargado){
+        let archivo = archivoCargado.files;
+        console.log("Nombre de archivo " + archivo[0].name);
+
+        document.getElementById('archivo-docentes').innerHTML = archivo[0].name;
+        /*for (var i = 0; i < files.length; i++) {
+            alert("Filename " + files[i].name);
+        }*/
+    };
+
+
+    function listarDocentesJefe(e){
     console.log('Listar docentes de identificacion_jefe: ' + e);
 
     fetch('/academico/public/docentes/jefe/'+ e+'/')
@@ -270,37 +308,51 @@
 
    function listartabla(docentes){
 
+
+
+
+
     $('.tr').remove();
+
+
     docentes.forEach(function(docente, indice, arreglo){
         console.log( indice + ' ' + docente['nombres']  );
+
         $('#tbody').append( `
                     <tr class="tr">
                         <td><small>${docente['nombres']} ${docente['apellidos']} </small></td>
-                        <td> ${docente['identificacion']} </td>
                         <td> <small>${docente['email']} </small></td>
-                        <td class="${docente['identificacion_jefe'] == null ? 'p-3 mb-2 bg-warning text-dark':''}">
-                            <small> ${docente['nombre_jefe']} ${docente['apellido_jefe']}</small></td>
-
-                        @if ($docente->estado=='ACTIVO')
-                            <td><span class="btn btn-block btn-success btn-sm ">${docente['estado']}</span> </td>
-                        @elseif ($docente->estado=='INACTIVO')
-                            <td><span class="btn btn-block btn-secondary btn-sm">${docente['estado']}</span> </td>
-                        @endif
+                        <td>
+                            <!-- Editar -->
+                            <div class="col-sm">
+                                <a href="{{ isset($docente->id) ? url('/docentes/'. $docente->id . '/edit/') : '' }}" class="btn btn-info">
+                                    <i class="fa fa-pencil-alt" style='color: white'></i>
+                                    <!-- <input type="submit" name='edit' value="edit"> -->
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <!-- Borrar -->
+                            <div class="col-sm">
+                                <form action="{{ isset($docente->id) ? url('/docentes/'. $docente->id) : '' }}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
+                                        <i class="fa fa-trash" style='color: white'></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
 
                     </tr>
         `);
     })
+    //$('#cargando').remove();
 
    }
 
 
 
-    $('#click').on('click', function(){
-        //$("#add_funcion").remove();
-        console.log('Remove - Contador= ' + contador);
-        /*fetch('/docentesporjefe/'+);*/
-
-    });
 
 </script>
 

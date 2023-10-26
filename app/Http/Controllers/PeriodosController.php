@@ -22,9 +22,6 @@ class PeriodosController extends Controller
     public function index()
 
     {
-
-
-
         $periodos= Periodo::all();
         return view('periodos.index', compact('periodos'));
     }
@@ -43,20 +40,24 @@ class PeriodosController extends Controller
     public function store(Request $request)
     {
         $data = Request()->validate([
-            'periodo'=>'required|string|unique:periodos,periodo|max:7',
-            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
-
+            'año'=>'required|string|unique:periodos,periodo|max:4',
+            'periodo'=>'required|string|unique:periodos,año|max:2',
+            'estado'=>'required|string|in:ACTIVO,INACTIVO',
         ],[
+            'año.required'=>'El año es requerido.',
             'periodo.required'=>'El periodo es requerido.',
             'estado.required'=>'El estado es requerido.'
         ]);
 
         DB::transaction(function() use ($data){
+            if($data['estado']=='ACTIVO'){
+                Periodo::all()->update(['estado' => 'INACTIVO']);
+            }
             Periodo::create([
+                'año' => $data['año'],
                 'periodo' => $data['periodo'],
                 'estado' => $data['estado'],
             ]);
-
         });
 
         return redirect()->route('periodos.index')->with('message','Periodo creado con éxito!!');
@@ -90,23 +91,28 @@ class PeriodosController extends Controller
     public function update(Request $request, $id)
     {
         $data = Request()->validate([
-            'periodo'=>'required|string|unique:periodos,periodo|max:7',
-            'estado'=>'required|string|in:ACTIVO,INACTIVO',
-
+            //'año'=>'required|string|unique:periodos,periodo|max:4',
+            //'periodo'=>'required|string|unique:periodos,año|max:2',
+            'estado'=>'required|string|in:INACTIVO,ACTIVO',
         ],[
-            'periodo.required'=>'El periodo es requerido.',
-            'periodo.unique'=>'Este periodo ya existe.',
+            //'año.required'=>'El año es requerido.',
+            //'periodo.required'=>'El periodo es requerido.',
             'estado.required'=>'El estado es requerido.'
         ]);
         $periodo = Periodo::findOrFail($id);
 
         DB::transaction(function() use ($data,$periodo){
+            if($data['estado']=='ACTIVO'){
+                Periodo::where('estado','=','ACTIVO')->update(['estado' => 'INACTIVO']);
+            }
             $periodo->update([
-                'periodo' => $data['periodo'],
+                //'año' => $data['año'],
+                //'periodo' => $data['periodo'],
                 'estado' => $data['estado'],
             ]);
 
         });
+
 
         return redirect()->route('periodos.index')->with('message','Periodo modificado con éxito!!');
     }

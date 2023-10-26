@@ -86,12 +86,12 @@ class RoleSeeder extends Seeder
         $permission1 = Permission::create(['name' => 'programaciones.show'])->syncRoles([$admin, $planeacion]);
         $permission1 = Permission::create(['name' => 'programaciones.destroy'])->syncRoles([$admin, $planeacion]);
 
-        $permission1 = Permission::create(['name' => 'asignaciones.index'])->syncRoles([$admin, $planeacion]);
-        $permission1 = Permission::create(['name' => 'asignaciones.create'])->syncRoles([$admin, $planeacion]);
-        $permission1 = Permission::create(['name' => 'asignaciones.edit'])->syncRoles([$admin, $planeacion]);
-        $permission1 = Permission::create(['name' => 'asignaciones.update'])->syncRoles([$admin, $planeacion]);
-        $permission1 = Permission::create(['name' => 'asignaciones.show'])->syncRoles([$admin, $planeacion]);
-        $permission1 = Permission::create(['name' => 'asignaciones.destroy'])->syncRoles([$admin, $planeacion]);
+        $permission1 = Permission::create(['name' => 'asignaciones.index'])->syncRoles([$admin, $planeacion, $jefe]);
+        $permission1 = Permission::create(['name' => 'asignaciones.create'])->syncRoles([$admin, $planeacion, $jefe]);
+        $permission1 = Permission::create(['name' => 'asignaciones.edit'])->syncRoles([$admin, $planeacion, $jefe]);
+        $permission1 = Permission::create(['name' => 'asignaciones.update'])->syncRoles([$admin, $planeacion, $jefe]);
+        $permission1 = Permission::create(['name' => 'asignaciones.show'])->syncRoles([$admin, $planeacion, $jefe]);
+        $permission1 = Permission::create(['name' => 'asignaciones.destroy'])->syncRoles([$admin, $planeacion, $jefe]);
 
         $permission1 = Permission::create(['name' => 'planes.index'])->syncRoles([$admin, $planeacion]);
         $permission1 = Permission::create(['name' => 'planes.create'])->syncRoles([$admin, $planeacion]);

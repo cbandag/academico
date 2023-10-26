@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\User;
+use App\Models\Periodo;
 use App\Models\Asignacion;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
@@ -17,6 +18,7 @@ class DocentesImport implements ToCollection, WithHeadingRow //WithValidation
 
     public function collection(Collection $rows)
     {
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
         foreach ($rows as $row)
         {
             $user = User::updateOrCreate([
@@ -24,7 +26,7 @@ class DocentesImport implements ToCollection, WithHeadingRow //WithValidation
             ],[
                 'nombres' => $row['nombres'],
                 'apellidos' => $row['apellidos'],
-                'email' => $row['email'],
+                'email' => strtolower($row['email']),
                 'password' => Hash::make($row['identificacion']),
             ])->assignRole('docente');
 
@@ -40,8 +42,8 @@ class DocentesImport implements ToCollection, WithHeadingRow //WithValidation
             Asignacion::updateOrCreate([
             //$user->Asignacion()->updateOrCreate([
                 'identificacion_docente' => $row['identificacion'],
-                'año' => '2023',
-                'periodo' => '2'
+                'año' => $periodoActual->año,
+                'periodo' => $periodoActual->periodo
             ],[
                 'identificacion_jefe' => $jefe,
                 'horas_dedicacion' => $row['horas_dedicacion']/*=='Tiempo Completo'?'40':'20' */,

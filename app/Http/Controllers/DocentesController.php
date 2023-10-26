@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Periodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,45 +22,22 @@ class DocentesController extends Controller
      */
     public function index()
     {
-        /*$jefes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','jefe')
-        ->get();*/
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
 
         $jefes = DB::table('users')
         ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
         ->select('users.*')
-        ->where('jefes_por_periodo.año','=','2023')
-        ->where('jefes_por_periodo.periodo','=','2')
+        ->where('jefes_por_periodo.año','=',$periodoActual->año)
+        ->where('jefes_por_periodo.periodo','=',$periodoActual->periodo)
         ->get();
 
-
-/*
-        $docentes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','docente')
-        ->get();
-*/
-/*
-        $docentes = DB::table('users AS docentes')
-        ->leftjoin('asignaciones', 'docentes.identificacion', '=', 'asignaciones.identificacion_docente')
-        ->join('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
-        ->select('docentes.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe','asignaciones.*')
-        ->where('asignaciones.año','=','2023')
-        ->where('asignaciones.periodo','=','2')
-        ->get();
-*/
         $docentes = DB::table('asignaciones')
         ->leftjoin('users AS docentes', 'asignaciones.identificacion_docente', '=', 'docentes.identificacion')
         ->leftjoin('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
         ->select('docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
-        /*->where('asignaciones.año','=','2023')
-        ->where('asignaciones.periodo','=','2')
-        ->whereRaw('asignaciones.identificacion_jefe IS NULL')*/
+        ->where('asignaciones.año','=', $periodoActual->año)
+        ->where('asignaciones.periodo','=', $periodoActual->periodo)
         ->get();
 
         $model = 'docente';
@@ -67,12 +45,12 @@ class DocentesController extends Controller
         $title ='Docentes';
 
         $años_periodos = DB::table('asignaciones')->select('año', 'periodo')->GROUPBY('año', 'periodo')->orderBy('año','DESC')->orderBy('periodo','DESC')->get();
-
+/*
         !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
         !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
         $año_periodo_seleccionado='1';
-
-        return view('users.index', compact('jefes','docentes','model','route','title','años_periodos','año','periodo'));
+*/
+        return view('users.index', compact('periodoActual','periodos','jefes','docentes','model','route','title'));
     }
 
     /**
@@ -156,11 +134,13 @@ class DocentesController extends Controller
     {
         $user = User::findOrFail($id);
         $jefes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.role_id')
-        ->where('roles.name','like','jefe')
+        ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+        ->select('users.*')
+        ->where('jefes_por_periodo.año','=','2023')
+        ->where('jefes_por_periodo.periodo','=','2')
         ->get();
+
+
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
