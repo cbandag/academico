@@ -35,16 +35,17 @@ class DocentesController extends Controller
         $docentes = DB::table('asignaciones')
         ->leftjoin('users AS docentes', 'asignaciones.identificacion_docente', '=', 'docentes.identificacion')
         ->leftjoin('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
-        ->select('docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
+        ->select('docentes.id AS id_docente','docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
         ->where('asignaciones.año','=', $periodoActual->año)
         ->where('asignaciones.periodo','=', $periodoActual->periodo)
         ->get();
+
 
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
 
-        $años_periodos = DB::table('asignaciones')->select('año', 'periodo')->GROUPBY('año', 'periodo')->orderBy('año','DESC')->orderBy('periodo','DESC')->get();
+        //$años_periodos = DB::table('asignaciones')->select('año', 'periodo')->GROUPBY('año', 'periodo')->orderBy('año','DESC')->orderBy('periodo','DESC')->get();
 /*
         !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
         !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
@@ -203,6 +204,20 @@ class DocentesController extends Controller
         $route ='docentes';
         $title ='Docentes';
         return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
+    }
+
+    public function reset_password(Request $request,  $id)
+    {
+        $user = User::findOrFail($id);
+        DB::transaction(function() use ( $user){
+            $user->update([
+                'password' => Hash::make($user->identificacion),
+            ]);
+        });
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        return redirect()->route('docentes.index')->with('message','Contraseña restaurada con éxito!!');
     }
 
     public function importAll(Request $request)

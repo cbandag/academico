@@ -56,7 +56,7 @@ Route::get('/jefes/export',[App\Http\Controllers\DocentesController::class, 'exp
 Route::post('/docentes/import',[App\Http\Controllers\DocentesController::class, 'importDocentes'])->name('docentes.import')->middleware('auth');
 Route::get('/docentes/export',[App\Http\Controllers\DocentesController::class, 'exportDocentes'])->name('docentes.export')->middleware('auth');
 
-
+Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\DocentesController::class, 'reset_password'])->name('docentes.reset_password')->middleware('auth');
 
 
 

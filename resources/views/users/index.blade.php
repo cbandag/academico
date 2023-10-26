@@ -60,7 +60,7 @@
                                     {{$periodo->año}}-{{$periodo->periodo}}</option>
                                 @endforeach
                             </select>
-                            <div class="input-group-append col     ">
+                            <div class="input-group-append col">
                                 <button class="btn btn-success " type="submit">Mostrar</button>
                             </div>
                         </form>
@@ -215,7 +215,7 @@
                                     <td>
                                         <!-- Editar -->
                                         <div class="col-sm">
-                                            <a href="{{ url('/docentes/'. $docente->id ) }}" class="btn btn-info">
+                                            <a href="{{ url('/docentes/'. $docente->id_docente ) }}" class="btn btn-info">
                                                 <i class="fa fa-pencil-alt" style='color: white'></i>
                                                 <!-- <input type="submit" name='edit' value="edit"> -->
                                             </a>
@@ -224,7 +224,9 @@
                                     <td>
                                         <!-- Borrar -->
                                         <div class="col-sm">
-                                            <form action="{{ url('/docentes/'. $docente->id) }}" method="POST">
+                                            
+
+                                            <form action="{{ url('/docentes/'. $docente->id_docente) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">

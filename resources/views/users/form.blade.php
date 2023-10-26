@@ -108,13 +108,28 @@
                     </div>
 
                     <div class="card-footer text-right">
+
                         <a type='button' class="btn btn-danger" href="{{url('/'.$route.'/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary ">{{$mode}}</button>
                         @endif
+
                     </div>
 
+
+
             </form>
+
+            <div class="card-footer text-right">
+                <form action="{{ url('/docentes/'. $user->id).'/reset_password' }}" method="POST">
+                    @method('PUT')
+                    @csrf
+                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres restaurar la contraseña?')">
+                        Restaurar contraseña
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
