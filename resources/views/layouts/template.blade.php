@@ -159,6 +159,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         -->
 
           @can('docentes.index')
+
           <li class="nav-item">
             <a href="{{url('/docentes')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
@@ -167,6 +168,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
           </li>
+
           @endcan
 
           @can('periodos.index')
@@ -206,10 +208,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
+
           @can('planes.index')
 
           <li class="nav-item">
-            <a href="{{url('/planes')}}" class="nav-link">
+            <a href="{{url('/planes/{}')}}" class="nav-link">
 
               <i class="nav-icon fas fa-user" ></i>
               <p>
@@ -221,16 +224,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           @can('asignaciones.index')
 
-          <li class="nav-item">
-            <a href="{{url('/asignaciones')}}" class="nav-link">
+          @role('jefe')
+                <li class="nav-item">
+                    <a href="{{url('/asignaciones/jefe/'.Auth::User()->id.'/')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
+                    <p>
+                        Mis docentes
+                    </p>
+                    </a>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a href="{{url('/asignaciones')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
+                    <p>
+                        Asignaciones
+                    </p>
+                    </a>
+                </li>
+            @endrole
 
-              <i class="nav-icon fas fa-user" ></i>
-              <p>
-                Asignaciones
-              </p>
-            </a>
-          </li>
+
+
+
           @endcan
+
+
+
+
+
 
           @can('programaciones.index')
 
@@ -277,7 +297,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
+    <div class=" center-textd-none d-sm-inline">
       Académico
     </div>
     <!-- Default to the left -->

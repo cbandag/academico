@@ -58,6 +58,9 @@ Route::get('/docentes/export',[App\Http\Controllers\DocentesController::class, '
 
 Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\DocentesController::class, 'reset_password'])->name('docentes.reset_password')->middleware('auth');
 
+Route::get('/asignaciones/jefe/{id}',[App\Http\Controllers\AsignacionesController::class, 'jefe'])->name('asignaciones.jefe')->middleware('auth');
+
+
 
 
 
@@ -74,9 +77,11 @@ Route::resource('asignaciones', AsignacionesController::class)->middleware('auth
 Route::resource('planes', AsignacionesController::class)->middleware('auth');
 
 
+/*
+Route::get('asignaciones/{id}', ['as' => 'asignaciones.index', 'uses' => 'asignacionesController@index']);
+Route::resource('asignaciones', 'ScopesController', ['except' => ['index']]);
 
-
-
+*/
 
 /*
 Route::get('/docentes', [DocentesController::class, 'index'])->name('docentes.index');

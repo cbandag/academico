@@ -38,11 +38,11 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-8" id="funciones">
+                                <div class="form-group col-8 " id="funciones">
                                     @foreach($funcionesSeleccionadas as $key => $fs)
                                     <div class="" id="r-f{{$key+1}}">
-                                        <div class="form-group">
-                                            <select class="form-control" name="funcion_{{$key+1}}" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                        <div class="form-group ">
+                                            <select class="form-control " name="funcion_{{$key+1}}" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
                                                 <option type="text" class="form-control" value="">Seleccione...</option>
                                                 @foreach($funciones as $funcion)
                                                 <option type="text" class="form-control" value="{{$funcion->id}}"
@@ -110,10 +110,10 @@
                         </div>
                     </div>
 
-                    <div class="card-footer">
-                        <a type='button' class="btn btn-danger" href="{{url('/asignaciones/')}}">Cancelar</a>
+                    <div class="card-footer  text-right">
+                        <a type='button' class="btn btn-danger " href="{{url('/asignaciones/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
-                        <button type="submit" class="btn btn-primary ">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                         @endif
                     </div>
 

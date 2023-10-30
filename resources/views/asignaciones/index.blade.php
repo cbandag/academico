@@ -53,60 +53,43 @@
     <!-- Main content -->
     <section class="content">
         <div class="card">
+            <div class="card-header">
+                <div class="row justify-content-between">
+                    <div class="box-title col-6 ">
+                        @if($siPeriodoActivo == true)
+                        <a class="btn btn-success" href="{{ url('/'.'asignaciones'.'/create/') }}">Añadir docente</a>
+                        @endif
+                    </div>
 
-        <div class="card-body">
-
-            <!-- Agregar Curso-->
-            <div class="card-body">
-                <div class="row align-items-center ">
-                    <!--
-                    <div class="form-group col-md">
-                        <form action="{{ url('/asignaciones/import/') }}" method="post" enctype="multipart/form-data">
+                    <div class="form-group col-6 ">
+                        @if($siPeriodoActivo == true)
+                        <form class="form-group  row "  action="{{ route('asignaciones.año') }}" method="POST">
                             @csrf
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name='documento' id="exampleInputFile">
-                                    <label class="custom-file-label" for="exampleInputFile">Escoger archivo</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="submit">Importar</button>
-                                </div>
+                            <select class="form-control col-6" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
+                                @foreach ($periodos as $periodo)
+                                <option type="text" class="form-control" value="{{$periodo->año}}-{{$periodo->periodo}}"
+                                    {{$periodo->año==$periodoActual->año && $periodo->periodo==$periodoActual->periodo?'selected':''}}>
+                                    {{$periodo->año}}-{{$periodo->periodo}}</option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-append col">
+                                <button class="btn btn-success " type="submit">Mostrar</button>
                             </div>
                         </form>
+                        @endif
                     </div>
-                -->
+                </div>
+            </div>
 
 
-                    <div class="form-group col-md">
-                        <a class="btn btn-success" href="{{ url('/asignaciones/export/') }}">Exportar Asignaciones</a>
-                        @csrf
-                    </div>
-
-                    <div class="col-md">
-                        <div class="form-group">
-                            <form class="row "  action="{{ route('asignaciones.año') }}" method="POST">
-                                @csrf
-                                <select class="form-control col-md" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
-                                    @foreach ($años_periodos as $año_periodo)
-                                    <option type="text" class="form-control" value="{{$año_periodo->año}}-{{$año_periodo->periodo}}"
-                                        {{$año_periodo->año==$año && $año_periodo->periodo==$periodo?'selected':''}}>
-                                        {{$año_periodo->año}} - 0{{$año_periodo->periodo}}</option>
-                                    @endforeach
-                                </select>
-                                <div class="input-group-append col-md">
-                                    <button class="btn btn-success " type="submit">Cargar periodo</button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-
-                <!-- Listar Asignaturas -->
+            <div class="card-body">
+                 <!-- Listar Asignaturas -->
                 <table id="users" class="table table-sm table-bordered table-striped rounded">
                     <thead>
                         <tr>
+                            @hasanyrole('planeacion|admin')
                             <th rowspan="2">JEFE </th>
-
+                            @endhasanyrole
                             <th colspan='4'>INFORMACIÓN DOCENTE</th>
                             <th colspan='6'>DESCARGAS (Hrs.)</th>
                             <th colspan='3'>FUNCION DOCENTE (Hrs.)</th>
@@ -150,7 +133,9 @@
                     <tbody>
                     @foreach($asignaciones as $asignacion)
                         <tr>
+                            @hasanyrole('planeacion|admin')
                             <td class="{{isset($asignacion->jefe->nombres) ? '':'p-3 mb-2 bg-warning text-dark'}}"> <small>{{isset($asignacion->jefe->nombres) ? $asignacion->jefe->nombres.' '.$asignacion->jefe->apellidos:''}}</small> </td>
+                            @endhasanyrole
                             <td> <small>{{$asignacion->docente->nombres}} {{$asignacion->docente->apellidos}}</small> </td>
                             <td> <small>
                                 @if($asignacion->horas_dedicacion=='20')
@@ -171,7 +156,7 @@
                             <td class="text-center"> <b>{{$asignacion->descarga_extension}}</b> </td>
                             <td class="text-center"> {{$asignacion->porcentaje_extension*100}}%</td>
                             <td class="text-center"> {{$asignacion->total_descargas*100}}%</td>
-                            <td class="text-center"> {{$asignacion->horas_restantes}}h </td>
+                            <td class="text-center"> {{$asignacion->horas_restantes!==null ?$asignacion->horas_restantes.'h':''}} </td>
 
                             <td class="text-center"> {{$asignacion->horas_clases}} </td>
                             <td class="text-center"> {{$asignacion->horas_preparacion}} </td>
@@ -227,6 +212,14 @@
                                             <!-- <input type="submit" name='edit' value="edit"> -->
                                         </a>
                                     </div>
+                                    <!-- Editar -->
+                                    <div class="col-sm">
+                                        <a href="{{ url('/asignaciones/'. $asignacion->id . '/edit/' ) }}" class="btn btn-info">
+                                            <i class="fa fa-undo" style='color: white'></i>
+
+                                            <!-- <input type="submit" name='refresh' value="refresh"> -->
+                                        </a>
+                                    </div>
 
                                 </div>
 
@@ -236,7 +229,10 @@
                     </tbody>
 
                     <tfoot>
-                        <tr><th>JEFE </th>
+                        <tr>
+                            @hasanyrole('planeacion|admin')
+                            <th>JEFE </th>
+                            @endhasanyrole
                             <th>Nombres</th>
                             <th>Dedicac.</th>
                             <th>Hrs</th>
@@ -268,7 +264,7 @@
                 </table>
 
             </div>
-        </div><!-- card-body -->
+
 
 
 

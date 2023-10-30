@@ -50,7 +50,7 @@ class PeriodosController extends Controller
         ]);
 
         DB::transaction(function() use ($data){
-            if($data['estado']=='ACTIVO'){
+            if($data['estado']=='ACTIVO' && Periodo::first() !== null ){
                 Periodo::all()->update(['estado' => 'INACTIVO']);
             }
             Periodo::create([

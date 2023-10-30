@@ -46,11 +46,14 @@
             <div class="card-header">
                 <div class="row justify-content-between">
                     <div class="box-title col-6 ">
+                        @if($siPeriodoActivo == true)
                         <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
-                        @csrf
+                        @endif
+
                     </div>
 
                     <div class="form-group col-6 ">
+                        @if($siPeriodoActivo == true)
                         <form class="form-group  row "  action="{{ route('asignaciones.año') }}" method="POST">
                             @csrf
                             <select class="form-control col-6" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
@@ -63,7 +66,9 @@
                             <div class="input-group-append col">
                                 <button class="btn btn-success " type="submit">Mostrar</button>
                             </div>
+
                         </form>
+                        @endif
                     </div>
                 </div>
 
@@ -224,7 +229,7 @@
                                     <td>
                                         <!-- Borrar -->
                                         <div class="col-sm">
-                                            
+
 
                                             <form action="{{ url('/docentes/'. $docente->id_docente) }}" method="POST">
                                                 @method('DELETE')

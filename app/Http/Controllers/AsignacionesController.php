@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Asignacion;
 use App\Models\Funcion;
 use App\Models\User;
+use App\Models\Periodo;
 use App\Models\AsignaturasPorDocente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\AsignacionesExport;
 //use Maatwebsite\Excel\Facades\Excel;
 use Excel;
-
+use Auth;
 
 class AsignacionesController extends Controller
 {
@@ -20,18 +21,56 @@ class AsignacionesController extends Controller
      */
     public function index()
     {
-        $años_periodos = DB::table('asignaciones')->select('año', 'periodo')->GROUPBY('año', 'periodo')->orderBy('año','DESC')->orderBy('periodo','DESC')->get();
+        $periodos = Periodo::all();
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
 
-        !isset($años_periodos->first()->año)     ? $año='0000'     : $año = $años_periodos->first()->año;
-        !isset($años_periodos->first()->periodo) ? $periodo='0' : $periodo = $años_periodos->first()->periodo;
+        if ($periodoActual->first() !== null) {
+            $siPeriodoActivo = true;
+        }else{
+            $siPeriodoActivo = false;
+        }
 
-        $asignaciones = Asignacion::where('año','=',$año)->where('periodo','=',$periodo)->orderBy('identificacion_jefe')->get();
+        $asignaciones = Asignacion::
+        where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+        ->where('asignaciones.periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+        ->orderBy('identificacion_jefe')->get();
+
         $users = User::all();
         $asignaturas = AsignaturasPorDocente::all();
         $funciones = Funcion::all();
-        $año_periodo_seleccionado='1';
-        return view('asignaciones.index', compact('asignaciones','users','asignaturas','funciones','años_periodos','año','periodo'));
+        return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
     }
+
+    public function jefe($id)
+    {
+        if ($id==Auth::user()->id) {
+            $periodos = Periodo::all();
+            $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+
+            if ($periodoActual->first() !== null) {
+                $siPeriodoActivo = true;
+            }else{
+                $siPeriodoActivo = false;
+            }
+
+            $asignaciones = Asignacion::where('identificacion_jefe','=', User::find($id)->identificacion)
+            /*->where('año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->orderBy('identificacion_jefe')*/->get();
+
+            $users = User::all();
+            $asignaturas = AsignaturasPorDocente::all();
+            $funciones = Funcion::all();
+            return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
+        }else{
+            return view('home');
+        }
+    }
+
+
+
+
+
 
     public function año(Request $request)
     {
