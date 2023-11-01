@@ -23,13 +23,13 @@ class ProgramacionSeeder extends Seeder
                 'materia'=>'MATEMATICAS FINANCIERAS',
                 'grupo'=>'B1',
                 'tipo'=>'CC',
-                'ide'=>'9113817',
-                'nombres'=>'LUIS ALFONSO',
-                'apellidos'=>'ARIAS VILORIA',
+                'ide'=>'33156597',
+                'nombres'=>'ADALGIZA',
+                'apellidos'=>'MARQUEZ POLO',
                 'npqprf'=>'Planta',
                 'horas'=>'1',
-                'año'=>'2023',
-                'periodo'=>'2'
+                'año'=>'2022',
+                'periodo'=>'1'
             ],[
 
                 'codigo_programa'=>'414',
@@ -38,13 +38,13 @@ class ProgramacionSeeder extends Seeder
                 'materia'=>'MATEMATICAS FINANCIERAS',
                 'grupo'=>'C1',
                 'tipo'=>'CC',
-                'ide'=>'9113817',
-                'nombres'=>'LUIS ALFONSO',
-                'apellidos'=>'ARIAS VILORIA',
+                'ide'=>'33156597',
+                'nombres'=>'ADALGIZA ',
+                'apellidos'=>'MARQUEZ POLO',
                 'npqprf'=>'Planta',
-                'horas'=>'1',
-                'año'=>'2023',
-                'periodo'=>'2'
+                'horas'=>'2',
+                'año'=>'2022',
+                'periodo'=>'1'
             ],[
 
                 'codigo_programa'=>'205',
@@ -53,14 +53,17 @@ class ProgramacionSeeder extends Seeder
                 'materia'=>'MATEMATICA FINANCIERA',
                 'grupo'=>'B1',
                 'tipo'=>'CC',
-                'ide'=>'9113817',
-                'nombres'=>'LUIS ALFONSO',
-                'apellidos'=>'ARIAS VILORIA',
+                'ide'=>'33156597',
+                'nombres'=>'ADALGIZA ',
+                'apellidos'=>'MARQUEZ POLO',
                 'npqprf'=>'Planta',
-                'horas'=>'1',
-                'año'=>'2023',
-                'periodo'=>'2'
-            ],[
+                'horas'=>'5',
+                'año'=>'2022',
+                'periodo'=>'1'
+            ]
+
+
+            ,[
 
                 'codigo_programa'=>'414',
                 'programa'=>'ADMINISTRACION DE EMPRESAS DISTANCIA - CARTAGENA',

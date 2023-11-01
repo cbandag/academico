@@ -98,7 +98,7 @@
                             @endcan
                             <th rowspan='2'>Observaciones</th>
                             <th colspan='4'>Asignacion de clases</th>
-                            <th rowspan='2'>SUMA</th>
+                            
                             <th rowspan='2'>Estado</th>
                             <th rowspan='2'>Editar</th>
                         </tr>
@@ -158,7 +158,7 @@
                             <td class="text-center"> {{$asignacion->total_descargas*100}}%</td>
                             <td class="text-center"> {{$asignacion->horas_restantes!==null ?$asignacion->horas_restantes.'h':''}} </td>
 
-                            <td class="text-center"> {{$asignacion->horas_clases}} </td>
+                            <td class="text-center"> <b>{{$asignacion->horas_clases}}</b> </td>
                             <td class="text-center"> {{$asignacion->horas_preparacion}} </td>
                             <td class="text-center"> {{$asignacion->horas_estudiantes}} </td>
                             @can('planes.index')
@@ -169,7 +169,7 @@
 
                             <td>
                                 @foreach ($asignacion->asignaturas as  $asignatura)
-                                <small>{{substr($asignatura->asignatura,0,10)}}</small><br>
+                                <small>{{$asignatura->asignatura}}</small><br>
                                 @endforeach
                             </th>
                             <td>
@@ -187,14 +187,7 @@
                                 <b>({{$asignacion->horas_docencia -$asignacion->horas_clases}})</b>
                             </th>
 
-                            <td class="text-center"> {{$asignacion->descarga_investigacion
-                                + $asignacion->descarga_extension
-                                + $asignacion->horas_docencia}}
-                                <b>({{
-                                 $asignacion->horas_clases
 
-                                - $asignacion->horas_docencia
-                                }})</b></td>
 
 
                             @if ($asignacion->estado=='APROBADO')
@@ -214,7 +207,7 @@
                                     </div>
                                     <!-- Editar -->
                                     <div class="col-sm">
-                                        <a href="{{ url('/asignaciones/'. $asignacion->id . '/edit/' ) }}" class="btn btn-info">
+                                        <a href="{{ url('/asignaciones/'. $asignacion->id . '/importasignaturas/' ) }}" class="btn btn-info">
                                             <i class="fa fa-undo" style='color: white'></i>
 
                                             <!-- <input type="submit" name='refresh' value="refresh"> -->
@@ -256,7 +249,7 @@
                             <th>Programa</th>
                             <th>Hrs</th>
                             <th>Total</th>
-                            <th>SUMA</th>
+
                             <th>Estado</th>
                             <th>Editar</th>
                         </tr>

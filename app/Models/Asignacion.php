@@ -46,7 +46,7 @@ class Asignacion extends Model
 
         public function asignaturas()
         {
-            return $this->hasMany(AsignaturasPorDocente::class,'identificacion_docente','identificacion');
+            return $this->hasMany(AsignaturasPorDocente::class,'asignacion_id','id');
         }
 
 

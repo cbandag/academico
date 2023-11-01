@@ -24,13 +24,9 @@
                     <div class="card-body">
 
                         <div class="form-group">
-                            <div class="form-group ">
-                                <label for="horas_dedicadas" class="col-form-label">Horas dedicadas:</label>
-                                <select class="form-control" name="horas_dedicadas" id="horas_dedicadas" {{$mode == 'Mostrar'?'disabled':''}}>
-                                    <option type="text" class="form-control" value="40" {{$asignacion->horas_dedicacion=='40' ? 'selected':''}}>Tiempo Completo (40h)</option>
-                                    <option type="text" class="form-control" value="20" {{$asignacion->horas_dedicacion=='20' ? 'selected':''}}>Medio Tiempo (20h)</option>
-                                </select>
-                            </div>
+
+
+
 
 
                             <div class="form-group">
@@ -38,6 +34,7 @@
                             </div>
 
                             <div class="row">
+
                                 <div class="form-group col-8 " id="funciones">
                                     @foreach($funcionesSeleccionadas as $key => $fs)
                                     <div class="" id="r-f{{$key+1}}">
@@ -79,13 +76,32 @@
 
 
                             <div class="row">
-                                <div class="form-group col-md">
-                                    <label for="descarga_investigacion" class="col-form-label">Descarga por Investigación</label>
-                                    <input type="number" min="0" max='99' class="form-control" id="descarga_investigacion" name="descarga_investigacion" value="{{isset($asignacion->descarga_investigacion)?$asignacion->descarga_investigacion:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                <div class="form-group col-4">
+                                    <label for="horas_dedicadas" class="col-form-label">Horas dedicadas:</label>
+                                    <select class="form-control" name="horas_dedicadas" id="horas_dedicadas" {{$mode == 'Mostrar' || $mode == 'Editar' ?'disabled':''}}>
+                                        <option type="text" class="form-control" value="40" {{$asignacion->horas_dedicacion=='40' ? 'selected':''}}>Tiempo Completo (40h)</option>
+                                        <option type="text" class="form-control" value="20" {{$asignacion->horas_dedicacion=='20' ? 'selected':''}}>Medio Tiempo (20h)</option>
+                                    </select>
                                 </div>
-                                <div class="form-group col-md">
-                                    <label for="descarga_extension" class="col-form-label">Descarga por Extensión</label>
-                                    <input type="number" min="0" max='99' class="form-control" id="descarga_extension" name="descarga_extension" value="{{isset($asignacion->descarga_extension)?$asignacion->descarga_extension:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                <div class="form-group col-3">
+                                    <label for="descarga_investigacion" class="col-form-label">Horas Investigación</label>
+                                    <input type="number" min="0" max='99' class="form-control" id="descarga_investigacion" name="descarga_investigacion" onchange="sumaIE(this)"
+                                        value="{{isset($asignacion->descarga_investigacion)?$asignacion->descarga_investigacion:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label  class="col-form-label">Horas Extensión</label>
+                                    <input type="number" min="0" max='99' class="form-control" id="descarga_extension" name="descarga_extension" onchange="sumaIE(this)"
+                                        value="{{isset($asignacion->descarga_extension)?$asignacion->descarga_extension:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label  class="col-form-label">Total:</label>
+                                    <label for="descarga_extension" class="form-control" id="sumaIE">{{$asignacion->horas_dedicacion/2}}hrs max </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label class="col-form-label">La suma de horas de investigación + extensión no deben superar el 50% de las horas dedicadas</label>
+
                                 </div>
                             </div>
 
@@ -124,6 +140,25 @@
 
 <script>
     var contador=0;
+    var i = Number(document.getElementById('descarga_investigacion').value);
+    var e = Number(document.getElementById('descarga_extension').value);
+    var total=0;
+    function sumaIE(element){
+        let valor = Number(element.value);
+        let id = element.id;
+
+        if(id=='descarga_investigacion'){
+            i=valor;
+        }else if(id=='descarga_extension'){
+            e=valor;
+        }
+        total = i+e;
+
+
+        console.log("Nombre del elemento " + element.id + ' = ' + valor);
+        console.log("Suma = " + total);
+        document.getElementById('sumaIE').innerHTML = total;
+    }
 
 
     $( document ).ready(function() {

@@ -39,17 +39,17 @@
                                     <label for="periodo" class="col-form-label">Periodo:</label>
                                     <select class="form-control" name="periodo" id="periodo" {{$mode == 'Mostrar' || $mode == 'Editar'?'disabled':''}}>
                                         <option value="">Seleccione...</option>
-                                        <option type="text" class="form-control" value="01"
+                                        <option type="text" class="form-control" value="1"
                                             @isset($periodo->periodo)
-                                                {{$periodo->periodo =='01'?'selected':'' }}
+                                                {{$periodo->periodo =='1'?'selected':'' }}
                                             @endisset
-                                        >01</option>
+                                        >1</option>
 
-                                        <option type="text" class="form-control " value="02"
+                                        <option type="text" class="form-control " value="2"
                                             @isset($periodo->periodo)
-                                                {{$periodo->periodo =='02'?'selected':'' }}
+                                                {{$periodo->periodo =='2'?'selected':'' }}
                                             @endisset
-                                        >02</option>
+                                        >2</option>
                                     </select>
                                 </div>
 

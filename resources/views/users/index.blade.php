@@ -44,16 +44,17 @@
     <section class="content">
         <div class="card">
             <div class="card-header">
+                @if($siPeriodoActivo == true)
                 <div class="row justify-content-between">
                     <div class="box-title col-6 ">
-                        @if($siPeriodoActivo == true)
+
                         <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
-                        @endif
+
 
                     </div>
 
                     <div class="form-group col-6 ">
-                        @if($siPeriodoActivo == true)
+
                         <form class="form-group  row "  action="{{ route('asignaciones.año') }}" method="POST">
                             @csrf
                             <select class="form-control col-6" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
@@ -68,7 +69,7 @@
                             </div>
 
                         </form>
-                        @endif
+
                     </div>
                 </div>
 
@@ -111,7 +112,8 @@
                         <a class="btn btn-success" href="{{ url('/docentes/export/') }}">Exportar Docentes</a>
                         @csrf
                     </div>
-                    </div>
+                </div>
+                @endif
 
 
                 </div>
@@ -280,6 +282,7 @@
     function cargarJefes(archivoCargado){
         let archivo = archivoCargado.files;
         console.log("Nombre de archivo " + archivo[0].name);
+        
 
         document.getElementById('archivo-jefes').innerHTML = archivo[0].name;
         /*for (var i = 0; i < files.length; i++) {
@@ -299,62 +302,58 @@
 
 
     function listarDocentesJefe(e){
-    console.log('Listar docentes de identificacion_jefe: ' + e);
+        console.log('Listar docentes de identificacion_jefe: ' + e);
 
-    fetch('/academico/public/docentes/jefe/'+ e+'/')
-    .then(function(response){
-        //console.log(response.json());
-        return response.json();
-    })
-    .then(function(jsonData){
-        listartabla(jsonData);
+        fetch('/academico/public/docentes/jefe/'+ e+'/')
+        .then(function(response){
+            //console.log(response.json());
+            return response.json();
+        })
+        .then(function(jsonData){
+            listartabla(jsonData);
 
-    });
+        });
 
-   }
+    }
 
    function listartabla(docentes){
 
+        $('.tr').remove();
 
 
+        docentes.forEach(function(docente, indice, arreglo){
+            console.log( indice + ' ' + docente['nombres']  );
 
+            $('#tbody').append( `
+                        <tr class="tr">
+                            <td><small>${docente['nombres']} ${docente['apellidos']} </small></td>
+                            <td> <small>${docente['email']} </small></td>
+                            <td>
+                                <!-- Editar -->
+                                <div class="col-sm">
+                                    <a href="{{ isset($docente->id) ? url('/docentes/'. $docente->id . '/edit/') : '' }}" class="btn btn-info">
+                                        <i class="fa fa-pencil-alt" style='color: white'></i>
+                                        <!-- <input type="submit" name='edit' value="edit"> -->
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- Borrar -->
+                                <div class="col-sm">
+                                    <form action="{{ isset($docente->id) ? url('/docentes/'. $docente->id) : '' }}" method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
+                                            <i class="fa fa-trash" style='color: white'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
 
-    $('.tr').remove();
-
-
-    docentes.forEach(function(docente, indice, arreglo){
-        console.log( indice + ' ' + docente['nombres']  );
-
-        $('#tbody').append( `
-                    <tr class="tr">
-                        <td><small>${docente['nombres']} ${docente['apellidos']} </small></td>
-                        <td> <small>${docente['email']} </small></td>
-                        <td>
-                            <!-- Editar -->
-                            <div class="col-sm">
-                                <a href="{{ isset($docente->id) ? url('/docentes/'. $docente->id . '/edit/') : '' }}" class="btn btn-info">
-                                    <i class="fa fa-pencil-alt" style='color: white'></i>
-                                    <!-- <input type="submit" name='edit' value="edit"> -->
-                                </a>
-                            </div>
-                        </td>
-                        <td>
-                            <!-- Borrar -->
-                            <div class="col-sm">
-                                <form action="{{ isset($docente->id) ? url('/docentes/'. $docente->id) : '' }}" method="POST">
-                                    @method('DELETE')
-                                    @csrf
-                                    <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">
-                                        <i class="fa fa-trash" style='color: white'></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-
-                    </tr>
-        `);
-    })
-    //$('#cargando').remove();
+                        </tr>
+            `);
+        })
+        //$('#cargando').remove();
 
    }
 

@@ -12,19 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('asignaturas_por_docente', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('identificacion');
+            $table->unsignedBigInteger('asignacion_id');
             $table->string('codigo_asignatura');
             $table->string('asignatura');
             $table->string('grupo');
             $table->string('programa');
             $table->double('horas');
-            $table->double('año');
-            $table->double('periodo');
-
-
 
             $table->timestamps();
+            $table->foreign('asignacion_id')->references('id')->on('asignaciones');
+            //$table->unique(array('asignacion_id','codigo_asignatura','grupo'));//Evitar reladiones duplicadas
         });
     }
 

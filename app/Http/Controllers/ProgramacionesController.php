@@ -22,12 +22,12 @@ class ProgramacionesController extends Controller
         ->distinct('programaciones.ide')
         ->orderBy('programaciones.ide','desc')
         ->get();
+        
         $asignaturas = DB::connection('pgsql')->table('programaciones')
         ->select('programaciones.*')
         ->distinct('programaciones.ide')
         ->orderBy('programaciones.ide','desc')
         ->get();
-
 
         $programaciones= Programacion::on('pgsql')->get();//all();
         return view('programaciones.index', compact('programaciones','docentes'));
@@ -132,6 +132,9 @@ class ProgramacionesController extends Controller
         return redirect()->route('programaciones.index')->with('message','Docentes importados con éxito!!');
 
     }
+
+
+
     public function importAsignaturasPorDocente()
     {
         $asignaturas = DB::connection('pgsql')->table('programaciones')
@@ -139,6 +142,7 @@ class ProgramacionesController extends Controller
             ->where('npqprf','=','Planta')
             ->orderBy('programaciones.ide','desc')
             ->get();
+
         $lista_horas_docencia = DB::connection('pgsql')->table('programaciones')
             ->where('npqprf','=','Planta')
             ->select('ide','año','periodo', DB::raw(' SUM(horas) as total_horas'))
@@ -172,7 +176,6 @@ class ProgramacionesController extends Controller
                     'estado' => 'PENDIENTE',
                 ]);
             }
-
 
         });
 

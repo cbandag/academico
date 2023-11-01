@@ -158,6 +158,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
         -->
 
+        @can('periodos.index')
+          <li class="nav-item">
+            <a href="{{url('/periodos')}}" class="nav-link">
+              <i class="nav-icon fas fa-calendar-check"></i>
+              <p>
+              Periodos
+              </p>
+            </a>
+          </li>
+          @endcan
+
           @can('docentes.index')
 
           <li class="nav-item">
@@ -171,16 +182,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           @endcan
 
-          @can('periodos.index')
-          <li class="nav-item">
-            <a href="{{url('/periodos')}}" class="nav-link">
-              <i class="nav-icon fas fa-calendar-check"></i>
-              <p>
-              Periodos
-              </p>
-            </a>
-          </li>
-          @endcan
+
 
           @can('facultades.index')
           <li class="nav-item">

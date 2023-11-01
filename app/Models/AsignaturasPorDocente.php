@@ -10,7 +10,7 @@ class AsignaturasPorDocente extends Model
     use HasFactory;
     protected $table = "asignaturas_por_docente";
     protected $fillable = [
-        'identificacion',
+        'asignacion_id',
         'codigo_asignatura',
         'asignatura',
         'grupo',

@@ -30,8 +30,7 @@ class AsignacionesController extends Controller
             $siPeriodoActivo = false;
         }
 
-        $asignaciones = Asignacion::
-        where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+        $asignaciones = Asignacion::where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
         ->where('asignaciones.periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
         ->orderBy('identificacion_jefe')->get();
 
@@ -141,22 +140,24 @@ class AsignacionesController extends Controller
         $asignacion = Asignacion::findorFail($id);
         $funcion = Funcion::All();
 
-        $horas_dedicacion = $request['horas_dedicadas'];
+        $horas_dedicacion = $asignacion->horas_dedicacion;
+        //$request->push('total_descarga', $request['descarga_investigacion'] + $request['descarga_extension']) ;
+        $request->request->add(['total_descarga' => $request['descarga_investigacion'] + $request['descarga_extension']]);
 
         $data = Request()->validate([
-            'horas_dedicadas'=> 'numeric',
-            'descarga_investigacion'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
-            'descarga_extension'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
+            'descarga_investigacion'=>'numeric|integer|min:0',
+            'descarga_extension'=>'numeric|integer|min:0',
+            'total_descarga'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
             'soporte'=>'string|nullable|max:255',
             'observaciones'=>'string|nullable|max:255',
             'estado'=>'required|string|in:APROBADO,PENDIENTE',
         ],[
+            'total_descarga'=>'El total de horas de investigación + extension superan el límite: '.($horas_dedicacion)/2 .' horas' ,
+
             /*'periodo.required'=>'El periodo es requerido.',
             'periodo.unique'=>'Este periodo ya existe.',
             'estado.required'=>'El estado es requerido.'*/
         ]);
-
-
 
         $descarga_investigacion = $data['descarga_investigacion'];
         $descarga_extension = $data['descarga_extension'];
@@ -169,27 +170,20 @@ class AsignacionesController extends Controller
                 if(isset($idFuncion)){
                     $suma_funciones += Funcion::find($idFuncion)->descarga;
                 }
-
             }
         }
         $total_descargas = $suma_funciones + $porcentaje_investigacion + $porcentaje_extension;
-
         $total_descargas>1?$total_descargas=1:$total_descargas=$total_descargas;
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;
+        //$horas_restantes = $horas_dedicacion - ($descarga_investigacion + $descarga_extension + ($suma_funciones*$horas_dedicacion));
 
-        //$horas_clases = round($horas_restantes * 0.4 , 0);
-        //$horas_clases = '0.' . explode(',',$horas_restantes * 0.4);
-        //$horas_clases =  (($horas_restantes - intval($horas_restantes))*100)/100;
+        $horas_clases = round($horas_restantes * 0.4 , 0);
 
-        /*if(explode(',',$horas_restantes * 0.4) >= 0.5){
-
-        }*/
-        $horas_preparacion= $horas_restantes * 0.3;
+        $horas_preparacion= round($horas_restantes * 0.3 , 0) ;
         $horas_estudiantes= $horas_restantes * 0.25;
 
         DB::transaction(function() use ($data, $request, $asignacion, $porcentaje_investigacion,$porcentaje_extension,$total_descargas,$horas_restantes,$horas_clases,$horas_preparacion,$horas_estudiantes){
             $asignacion->update([
-                'horas_dedicacion'=>$data['horas_dedicadas'],
                 'descarga_investigacion'=>$data['descarga_investigacion'],
                 'porcentaje_investigacion'=>$porcentaje_investigacion,
                 'descarga_extension'=>$data['descarga_extension'],
@@ -219,8 +213,6 @@ class AsignacionesController extends Controller
                 }
             }
             $asignacion->funcion()->sync($id);
-
-
 
         });
 
@@ -261,6 +253,54 @@ class AsignacionesController extends Controller
 
         //return Excel::download(new InvoicesExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
 
+
+    }
+
+
+    public function importAsignaturasPorDocente($id)
+    {
+        $asignacion = Asignacion::find($id);
+
+        $asignaturasDelDocente = DB::connection('pgsql')->table('programaciones')
+            ->select('programaciones.*')
+            ->where('npqprf','=','Planta')
+            ->where('ide','=',$asignacion->identificacion_docente)
+            ->where('año','=', $asignacion->año)
+            ->where('periodo','=', $asignacion->periodo)
+            ->get();
+
+        $total_horas_docencia = DB::connection('pgsql')->table('programaciones')
+            ->where('npqprf','=','Planta')
+            ->where('ide','=',$asignacion->identificacion_docente)
+            ->where('año','=', $asignacion->año)
+            ->where('periodo','=', $asignacion->periodo)
+            ->select('ide','año','periodo', DB::raw('SUM(horas) as total_horas'))
+            ->groupBy('ide','año','periodo')
+            ->first();
+
+
+        DB::transaction(function() use ( $asignaturasDelDocente, $total_horas_docencia, $asignacion){
+            foreach ($asignaturasDelDocente as $key => $asignatura) {
+                AsignaturasPorDocente::updateOrCreate([
+                    'asignacion_id' => $asignacion->id,
+                    'codigo_asignatura' => $asignatura->codigo_materia,
+                    'grupo' => $asignatura->grupo,
+                ],[
+                    'horas' => $asignatura->horas,
+                    'asignatura' => $asignatura->materia,
+                    'programa' => $asignatura->programa
+                ]);
+            }
+
+            $asignacion->update([
+                'horas_docencia' => $total_horas_docencia->total_horas,
+                'estado' => 'PENDIENTE',
+            ]);
+
+
+        });
+
+        return redirect()->route('asignaciones.index')->with('message','Las asignaturas fueron importadas para el docente, de manera exitosa.');
 
     }
 }
