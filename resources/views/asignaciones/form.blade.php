@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-6 mx-auto">
+    <div class="col-12 mx-auto">
         <div class="card">
 
             <div class="card-header">
@@ -26,16 +26,13 @@
                         <div class="form-group">
 
 
-
-
-
                             <div class="form-group">
                                 <label  class="col-form-label">Funciones administrativas:</label>
                             </div>
 
                             <div class="row">
 
-                                <div class="form-group col-8 " id="funciones">
+                                <div class="form-group col-10 " id="funciones">
                                     @foreach($funcionesSeleccionadas as $key => $fs)
                                     <div class="" id="r-f{{$key+1}}">
                                         <div class="form-group ">
@@ -54,7 +51,7 @@
                                     @endforeach
                                 </div>
 
-                                <div class=" col-4 row" id="botones">
+                                <div class=" col-2 row" id="botones">
                                         <div class="col-6">
                                             <a  class="btn btn-primary" id="add_funcion">
                                                 <i class="fas fa-plus-square fa-rotate-270 fa-lg" style='color: white'></i>
@@ -76,7 +73,7 @@
 
 
                             <div class="row">
-                                <div class="form-group col-4">
+                                <div class="form-group col-3">
                                     <label for="horas_dedicadas" class="col-form-label">Horas dedicadas:</label>
                                     <select class="form-control" name="horas_dedicadas" id="horas_dedicadas" {{$mode == 'Mostrar' || $mode == 'Editar' ?'disabled':''}}>
                                         <option type="text" class="form-control" value="40" {{$asignacion->horas_dedicacion=='40' ? 'selected':''}}>Tiempo Completo (40h)</option>
@@ -89,11 +86,11 @@
                                         value="{{isset($asignacion->descarga_investigacion)?$asignacion->descarga_investigacion:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
                                 </div>
                                 <div class="form-group col-3">
-                                    <label  class="col-form-label">Horas Extensión</label>
+                                    <label  class="col-form-label">Horas Extensión:</label>
                                     <input type="number" min="0" max='99' class="form-control" id="descarga_extension" name="descarga_extension" onchange="sumaIE(this)"
                                         value="{{isset($asignacion->descarga_extension)?$asignacion->descarga_extension:'0'}}" {{$mode == 'Mostrar'?'disabled':''}}>
                                 </div>
-                                <div class="form-group col-2">
+                                <div class="form-group col-3">
                                     <label  class="col-form-label">Total:</label>
                                     <label for="descarga_extension" class="form-control" id="sumaIE">{{$asignacion->horas_dedicacion/2}}hrs max </label>
                                 </div>

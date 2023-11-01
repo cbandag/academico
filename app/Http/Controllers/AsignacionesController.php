@@ -40,6 +40,13 @@ class AsignacionesController extends Controller
         return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
     }
 
+
+
+
+
+
+
+
     public function jefe($id)
     {
         if ($id==Auth::user()->id) {
@@ -60,15 +67,12 @@ class AsignacionesController extends Controller
             $users = User::all();
             $asignaturas = AsignaturasPorDocente::all();
             $funciones = Funcion::all();
+
             return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
         }else{
             return view('home');
         }
     }
-
-
-
-
 
 
     public function año(Request $request)
@@ -119,7 +123,7 @@ class AsignacionesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit( $id)
+    public function edit($id)
     {
         $asignacion = Asignacion::findorFail($id);
         $funciones = Funcion::all();
@@ -131,6 +135,14 @@ class AsignacionesController extends Controller
         }
     return view('asignaciones.edit', compact('asignacion','funciones','funcionesSeleccionadas'));
     }
+
+
+
+
+
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -216,7 +228,8 @@ class AsignacionesController extends Controller
 
         });
 
-        return redirect()->route('asignaciones.index')->with('message','Asignacion guardada con éxito!!');
+
+        return redirect()->route('asignaciones.jefe', ['id' => Auth::user()->id])->with('message','Asignacion guardada con éxito!!');
     }
 
     /**
@@ -300,7 +313,7 @@ class AsignacionesController extends Controller
 
         });
 
-        return redirect()->route('asignaciones.index')->with('message','Las asignaturas fueron importadas para el docente, de manera exitosa.');
+        return redirect()->route('asignaciones.jefe', Auth::user()->id)->with('message','Las asignaturas fueron importadas para el docente, de manera exitosa.');
 
     }
 }

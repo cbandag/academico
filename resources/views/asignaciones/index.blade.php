@@ -98,7 +98,7 @@
                             @endcan
                             <th rowspan='2'>Observaciones</th>
                             <th colspan='4'>Asignacion de clases</th>
-                            
+
                             <th rowspan='2'>Estado</th>
                             <th rowspan='2'>Editar</th>
                         </tr>
@@ -150,7 +150,7 @@
                                  <small>{{$funcion->funcion}} - {{$funcion->descarga *100 }}%</br></small>
                                 @endforeach
 
-                            </td>
+                            </td>   
                             <td class="text-center"> <b>{{$asignacion->descarga_investigacion}}</b></td>
                             <td class="text-center"> {{$asignacion->porcentaje_investigacion*100}}%</td>
                             <td class="text-center"> <b>{{$asignacion->descarga_extension}}</b> </td>

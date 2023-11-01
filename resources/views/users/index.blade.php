@@ -206,11 +206,12 @@
 
                             <tbody id="tbody">
                             @foreach($docentes as $docente)
-                                <tr class="tr">
+
+                                <tr class="tr {{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}">
                                     <td><small>{{ explode(" ",$docente->nombres)[0]}} {{explode(" ",$docente->apellidos)[0]}} </small></td>
 
                                     <td> <small>{{$docente->email}} </small></td>
-                                     <!--<td class="{{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}">
+                                     <!-- <td class="{{$docente->identificacion_jefe == null ? 'p-3 mb-2 bg-warning text-dark':''}}">
                                         <small> {{explode(" ",$docente->nombre_jefe)[0]}} {{explode(" ",$docente->apellido_jefe)[0] }}</small></td>
                                      -->
 
@@ -282,7 +283,7 @@
     function cargarJefes(archivoCargado){
         let archivo = archivoCargado.files;
         console.log("Nombre de archivo " + archivo[0].name);
-        
+
 
         document.getElementById('archivo-jefes').innerHTML = archivo[0].name;
         /*for (var i = 0; i < files.length; i++) {
@@ -319,10 +320,11 @@
    function listartabla(docentes){
 
         $('.tr').remove();
-
+        var docente_id;
 
         docentes.forEach(function(docente, indice, arreglo){
-            console.log( indice + ' ' + docente['nombres']  );
+            console.log( indice + ' ' + docente['nombres'] + ' - ' + docente['docente_id'] );
+            docente_id=docente['docente_id'];
 
             $('#tbody').append( `
                         <tr class="tr">
@@ -331,7 +333,7 @@
                             <td>
                                 <!-- Editar -->
                                 <div class="col-sm">
-                                    <a href="{{ isset($docente->id) ? url('/docentes/'. $docente->id . '/edit/') : '' }}" class="btn btn-info">
+                                    <a href="{{ url('/docentes/${ docente_id}/edit/') }}" class="btn btn-info">
                                         <i class="fa fa-pencil-alt" style='color: white'></i>
                                         <!-- <input type="submit" name='edit' value="edit"> -->
                                     </a>
@@ -340,7 +342,7 @@
                             <td>
                                 <!-- Borrar -->
                                 <div class="col-sm">
-                                    <form action="{{ isset($docente->id) ? url('/docentes/'. $docente->id) : '' }}" method="POST">
+                                    <form href="{{ url('/docentes/${docente_id}') }}" method="POST">
                                         @method('DELETE')
                                         @csrf
                                         <button  class="btn btn-danger"  type="submit" onclick="return confirm('¿Seguro que quieres borrar?')">

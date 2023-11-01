@@ -75,7 +75,7 @@
                                         @foreach($jefes as $jefe)
                                         <option type="text" class="form-control" value="{{$jefe->id}}"
                                             @isset($user->id)
-                                                {{$user->jefe_inmediato == $jefe->id ?'selected':'' }}
+                                                {{$jefeActual->identificacion_jefe == $jefe->identificacion ?'selected':'' }}
                                             @endisset
 
                                         >{{$jefe->nombres}} {{$jefe->apellidos}} </option>

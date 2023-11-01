@@ -113,17 +113,37 @@ class DocentesController extends Controller
      */
     public function show( $id)
     {
-        $user = User::findOrFail($id);
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
+        if (Periodo::where('periodos.estado','=', 'ACTIVO')->first() !== null) {
+            $siPeriodoActivo = true;
+        }else{
+            $siPeriodoActivo = false;
+        }
+
         $jefes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.role_id')
-        ->where('roles.name','like','jefe')
-        ->get();
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*')
+            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $user = User::findOrFail($id);
+
+        $jefeActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            /*->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')*/
+            ->first();
+
+
+
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
-        return view('users.show', compact('user','jefes','model','route','title'));
+        return view('users.show', compact('user','jefes','jefeActual','model','route','title'));
     }
 
     /**
@@ -131,20 +151,41 @@ class DocentesController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
+        if (Periodo::where('periodos.estado','=', 'ACTIVO')->first() !== null) {
+            $siPeriodoActivo = true;
+        }else{
+            $siPeriodoActivo = false;
+        }
+
         $jefes = DB::table('users')
-        ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
-        ->select('users.*')
-        ->where('jefes_por_periodo.año','=','2023')
-        ->where('jefes_por_periodo.periodo','=','2')
-        ->get();
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*')
+            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $user = User::findOrFail($id);
+
+        $jefeActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            /*->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')*/
+            ->first();
+
 
 
         $model = 'docente';
         $route ='docentes';
         $title ='Docentes';
-        return view('users.edit', compact('user','jefes','model','route','title'));
+        return view('users.show', compact('user','jefes','jefeActual','model','route','title'));
     }
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -350,7 +391,7 @@ class DocentesController extends Controller
         $docentes = DB::table('asignaciones')
         ->leftjoin('users AS docentes', 'asignaciones.identificacion_docente', '=', 'docentes.identificacion')
         ->leftjoin('users AS jefes', 'asignaciones.identificacion_jefe', '=', 'jefes.identificacion')
-        ->select('docentes.*','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
+        ->select('docentes.*','docentes.id as docente_id','asignaciones.*','jefes.nombres AS nombre_jefe','jefes.apellidos AS apellido_jefe')
         ->where('asignaciones.identificacion_jefe','=',$identificacion)
         ->get();
 
