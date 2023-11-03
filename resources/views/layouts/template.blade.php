@@ -172,10 +172,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @can('docentes.index')
 
           <li class="nav-item">
-            <a href="{{url('/docentes')}}" class="nav-link">
+            <a href="{{url('/usuarios')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
-                Docentes
+                Usuarios
               </p>
             </a>
           </li>
@@ -183,7 +183,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
 
 
-
+<!--
           @can('facultades.index')
           <li class="nav-item">
             <a href="{{url('/facultades')}}" class="nav-link">
@@ -207,7 +207,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           @endcan
-
+-->
 
 
 

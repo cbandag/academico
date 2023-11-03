@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\JefesController;
 use App\Http\Controllers\DecanosController;
 use App\Http\Controllers\DocentesController;
@@ -52,24 +52,28 @@ Route::get('/asignaciones/{id}/importasignaturas/',[App\Http\Controllers\Asignac
 Route::post('/periodos/import',[App\Http\Controllers\PeriodosController::class, 'import'])->name('programaciones.import')->middleware('auth');
 Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, 'export'])->name('programaciones.export')->middleware('auth');
 
-Route::post('/jefes/import',[App\Http\Controllers\DocentesController::class, 'importJefes'])->name('jefes.import')->middleware('auth');
-Route::get('/jefes/export',[App\Http\Controllers\DocentesController::class, 'exportJefes'])->name('jefes.export')->middleware('auth');
+Route::post('/jefes/import',[App\Http\Controllers\UsuariosController::class, 'importJefes'])->name('jefes.import')->middleware('auth');
+Route::get('/jefes/export',[App\Http\Controllers\UsuariosController::class, 'exportJefes'])->name('jefes.export')->middleware('auth');
 
-Route::post('/docentes/import',[App\Http\Controllers\DocentesController::class, 'importDocentes'])->name('docentes.import')->middleware('auth');
-Route::get('/docentes/export',[App\Http\Controllers\DocentesController::class, 'exportDocentes'])->name('docentes.export')->middleware('auth');
-
-Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\DocentesController::class, 'reset_password'])->name('docentes.reset_password')->middleware('auth');
+Route::post('/docentes/import',[App\Http\Controllers\UsuariosController::class, 'importDocentes'])->name('usuarios.import')->middleware('auth');
+Route::get('/docentes/export',[App\Http\Controllers\UsuariosController::class, 'exportDocentes'])->name('usuarios.export')->middleware('auth');
 
 
+Route::get('/docentes/create',[App\Http\Controllers\UsuariosController::class, 'createDocentes'])->name('docentes.create')->middleware('auth');
+Route::post('/docentes/store',[App\Http\Controllers\UsuariosController::class, 'storeDocentes'])->name('docentes.store')->middleware('auth');
+Route::post('/docentes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editDocentes'])->name('docentes.edit')->middleware('auth');
+
+Route::get('/jefes/create',[App\Http\Controllers\UsuariosController::class, 'createJefes'])->name('jefes.import')->middleware('auth');
+Route::post('/jefes/store',[App\Http\Controllers\UsuariosController::class, 'storeJefes'])->name('jefes.store')->middleware('auth');
+Route::get('/jefes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editJefes'])->name('jefes.edit')->middleware('auth');
+Route::put('/jefes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateJefes'])->name('jefes.update')->middleware('auth');
+
+Route::get('/jefesprovisionales/create',[App\Http\Controllers\UsuariosController::class, 'createJefesProvisionales'])->name('createjefesprovisionales.import')->middleware('auth');
+Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\UsuariosController::class, 'reset_password'])->name('docentes.reset_password')->middleware('auth');
 
 
 
-
-//Route::get('/periodo/index', [PeriodosController::class,'index']);
-//Route::resource('user', UsersController::class)->middleware('auth');
-Route::resource('docentes', DocentesController::class)->middleware('auth');
-//Route::resource('jefes', JefesController::class)->middleware('auth');
-Route::resource('decanos', DecanosController::class)->middleware('auth');
+Route::resource('usuarios', UsuariosController::class)->middleware('auth');
 Route::resource('periodos', PeriodosController::class)->middleware('auth');
 Route::resource('facultades', FacultadesController::class)->middleware('auth');
 Route::resource('programas', ProgramasController::class)->middleware('auth');

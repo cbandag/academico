@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('observaciones')->nullable();
             $table->double('horas_docencia')->nullable();
             $table->string('identificacion_jefe')->nullable();
+            $table->string('identificacion_jefe_provisional')->nullable();
             $table->string('año');
             $table->string('periodo');
             $table->string('estado');

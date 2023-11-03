@@ -13,7 +13,7 @@ use App\Exports\JefesExport;
 use App\Imports\DocentesImport;
 use App\Exports\DocentesExport;
 
-class DocentesController extends Controller
+class UsuariosController extends Controller
 {
 
 
@@ -45,34 +45,30 @@ class DocentesController extends Controller
         ->where('asignaciones.periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
         ->get();
 
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
 
-        return view('users.index', compact('periodoActual','periodos','siPeriodoActivo','jefes','docentes','model','route','title'));
+
+        return view('users.index', compact('periodoActual','periodos','siPeriodoActivo','jefes','docentes'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Docentes
      */
-    public function create()
+    public function createDocentes()
     {
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
         $jefes = DB::table('users')
-        ->leftjoin('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-        ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-        ->select('users.*', 'model_has_roles.model_id')
-        ->where('roles.name','like','jefe')
-        ->get();
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return view('users.create', compact('jefes','model','route','title'));
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*')
+            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        return view('users.createDocentes', compact('jefes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function storeDocentes(Request $request)
     {
         $data = Request()->validate([
             'nombres' => ['required', 'string', 'max:255'],
@@ -80,7 +76,95 @@ class DocentesController extends Controller
             'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
             'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'jefe' => ['numeric'],
+            //'jefe' => ['numeric', 'max:25'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+        ],[
+            'nombres.required' => 'El nombre es requerido.',
+            'apellidos.required' => 'El apellido es requerido.',
+            'email.required' => 'El email es requerido.',
+            'identificacion.required' => 'La identificacion es requerido.',
+            'password.required' => 'La password es requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+
+
+        if ($request['jefe']) {
+            $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+            $jefe = JefesPorPeriodo::
+                where('identificacion', $request['jefe'])
+                ->where('año', periodoActual->año)
+                ->where('periodo', periodoActual->periodo)->first();
+            if($jefe){
+                $jefe = $request['jefe'];
+            }else{
+                $jefe = null;
+            }
+            if($jefe->identificacion_jefe_provisional){
+                $jefe_provisional = $jefe->identificacion_jefe_provisional;
+            }else{
+                $jefe_provisional = null;
+            }
+        }
+
+
+
+        DB::transaction(function() use ($data, $jefe, $jefe_provisional){
+            User::create([
+                'nombres' => $data['nombres'],
+                'apellidos' => $data['apellidos'],
+                'email' => $data['email'],
+                'identificacion' => $data['identificacion'],
+                'password' => Hash::make($data['password']),
+                'estado' => ($data['estado']),
+            ])->assignRole('docente');
+
+
+
+            //$id_jefe =User::find($row['jefe']);
+            Asignacion::updateOrCreate([
+            //$user->Asignacion()->updateOrCreate([
+                'identificacion_docente' => $row['identificacion'],
+                'año' => $periodoActual->año,
+                'periodo' => $periodoActual->periodo
+            ],[
+                'identificacion_jefe' => $jefe,
+                'identificacion_jefe_provisional' => $jefe_provisional,
+                'horas_dedicacion' => $row['horas_dedicacion']/*=='Tiempo Completo'?'40':'20' */,
+                'estado' => 'PENDIENTE'
+            ]);
+
+        });
+
+        return redirect()->route('usuarios.index')->with('message','Docente creado con éxito!!');
+    }
+
+    /**
+     * Jefes
+     */
+    public function createJefes()
+    {
+
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
+        $jefes_provisionales = DB::table('users')
+            ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
+            ->select('users.*')
+            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        return view('users.createJefes', compact('jefes_provisionales'));
+    }
+
+    public function storeJefes(Request $request)
+    {
+        $data = Request()->validate([
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
+            'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
         ],[
             'nombres.required' => 'El nombre es requerido.',
@@ -102,11 +186,47 @@ class DocentesController extends Controller
             ])->assignRole('docente');
 
         });
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return redirect()->route('docentes.index','model','route','title')->with('message','Docente creado con éxito!!');
+
+        return redirect()->route('docentes.index')->with('message','Docente creado con éxito!!');
     }
+
+    public function editJefes($id)
+    {
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+        $user = User::findOrFail($id);
+
+        $jefesProvisionales = DB::table('users')
+            ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
+            ->select('users.*','jefes_provisionales.*')
+            ->where('jefes_provisionales.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_provisionales.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $jefeProvisionalActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            ->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->first();
+
+
+        return view('users.editJefes', compact('user','jefesProvisionales','jefeProvisionalActual'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -338,6 +458,14 @@ class DocentesController extends Controller
     }
     */
 
+
+
+
+
+
+
+
+
     public function importar(Request $request){
         if($request->hasFile('documento')){
             $path = $request->file('documento')->getRealPath();
@@ -372,7 +500,7 @@ class DocentesController extends Controller
             'documento' => 'required|file|mimes:xls,xlsx'
         ]);
         Excel::import(new JefesImport, $request->file('documento'));
-        return redirect()->route('docentes.index')->with('message','Jefes importados con éxito!!');
+        return redirect()->route('usuarios.index')->with('message','Jefes importados con éxito!!');
 
     }
 
@@ -381,7 +509,7 @@ class DocentesController extends Controller
             'documento' => 'required|file|mimes:xls,xlsx'
         ]);
         Excel::import(new DocentesImport, $request->file('documento'));
-        return redirect()->route('docentes.index')->with('message','Docentes importados con éxito!!');
+        return redirect()->route('usuarios.index')->with('message','Docentes importados con éxito!!');
 
     }
 

@@ -11,7 +11,7 @@
         @foreach($errors->all() as $error)
             {{$error}}<br>
         @endforeach
-        </div>    
+        </div>
     </div>
     @endif
 
@@ -21,9 +21,9 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">{{$title}}</h1>
+            <h1 class="m-0">Crear Docente</h1>
           </div><!-- /.col -->
-          
+
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
@@ -32,12 +32,12 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('users.form', ['mode'=>'Crear'])
-            
+        @include('users.form', ['mode'=>'Crear','model'=>'docentes'])
+
     </section>
 </div>
 
-    
+
 
 
 

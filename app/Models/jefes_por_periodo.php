@@ -11,6 +11,7 @@ class Jefes_por_periodo extends Model
     protected $table = "jefes_por_periodo";
     protected $fillable = [
         'identificacion_jefe',
+        'identificacion_jefe_provisional',
         'año',
         'periodo'
     ];

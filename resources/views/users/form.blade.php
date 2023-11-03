@@ -7,7 +7,7 @@
             </div>
 
             @if($mode=='Crear')
-                <form action="{{ route($route.'.store') }}"  method="POST">
+                <form action="{{ route($model.'.store') }}"  method="POST">
             @endif
 
             @if($mode=='Mostrar')
@@ -16,7 +16,7 @@
             @endif
 
             @if($mode=='Editar')
-                <form action="{{ route($route.'.update', [$user->id]) }}"  method="POST">
+                <form action="{{ route($model.'.update', [$user->id]) }}"  method="POST">
                 @method('PUT')
             @endif
                 @csrf
@@ -51,30 +51,34 @@
 
 
                             @if($mode == 'Crear' )
-                            <div class="form-group">
-                                <label for="password" class="col-form-label">Contraseña:</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" {{$mode=='Crear'?'required':''}} autocomplete="new-password">
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="row">
+                                <div class="form-group col-6">
+                                    <label for="password" class="col-form-label">Contraseña:</label>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" {{$mode=='Crear'?'required':''}} autocomplete="new-password">
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-6">
+                                    <label for="password-confirm" class="col-form-label">Confirmar contraseña:</label>
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" {{$mode=='Crear'?'required':''}} autocomplete="new-password">
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="password-confirm" class="col-form-label">Confirmar contraseña:</label>
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" {{$mode=='Crear'?'required':''}} autocomplete="new-password">
-                            </div>
                             @endif
 
                             <div class="row">
+                                @if($model=='docentes')
                                 <div class="form-group col-6">
                                     <label for="jefe" class="col-form-label">Jefe inmediato:</label>
                                     <select class="form-control" name="jefe" id="jefe" {{$mode == 'Mostrar'?'disabled':''}}>
                                         <option type="text" class="form-control" >Seleccione... </option>
                                         @foreach($jefes as $jefe)
                                         <option type="text" class="form-control" value="{{$jefe->id}}"
-                                            @isset($user->id)
+                                            @isset($jefeActual->identificacion_jefe)
                                                 {{$jefeActual->identificacion_jefe == $jefe->identificacion ?'selected':'' }}
                                             @endisset
 
@@ -82,7 +86,21 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                                @elseif($model=='jefes' && $mode=='Editar')
+                                <div class="form-group col-6">
+                                    <label for="jefeProvisional" class="col-form-label">Jefe Provisional:</label>
+                                    <select class="form-control" name="jefeProvisional" id="jefeProvisional" {{$mode == 'Mostrar'?'disabled':''}}>
+                                        <option type="text" class="form-control" >Seleccione... </option>
+                                        @foreach($jefesProvisionales as $jefeProvisional)
+                                        <option type="text" class="form-control" value="{{$jefe->id}}"
+                                            @isset($jefeProvisional->identificacion_jefe)
+                                                {{$jefeProvisional->identificacion_jefe == $jefe->identificacion ?'selected':'' }}
+                                            @endisset
+                                        >{{$jefeProvisional->nombres}} {{$jefeProvisional->apellidos}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
                                 <div class="form-group col-6">
                                     <label for="estado" class="col-form-label">Estado:</label>
                                     <select class="form-control" name="estado" id="estado" {{$mode == 'Mostrar'?'disabled':''}}>
@@ -100,7 +118,10 @@
                                         >INACTIVO</option>
                                     </select>
                                 </div>
+
+
                             </div>
+
 
 
 
@@ -109,7 +130,7 @@
 
                     <div class="card-footer text-right">
 
-                        <a type='button' class="btn btn-danger" href="{{url('/'.$route.'/')}}">Cancelar</a>
+                        <a type='button' class="btn btn-danger" href="{{url('/usuarios/')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary ">{{$mode}}</button>
                         @endif
@@ -119,7 +140,7 @@
 
 
             </form>
-
+            @isset($user->id)
             <div class="card-footer text-right">
                 <form action="{{ url('/docentes/'. $user->id).'/reset_password' }}" method="POST">
                     @method('PUT')
@@ -129,6 +150,7 @@
                     </button>
                 </form>
             </div>
+            @endisset
 
         </div>
     </div>

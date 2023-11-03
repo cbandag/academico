@@ -32,7 +32,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">DOCENTES</h1>
+            <h1 class="m-0">USUARIOS</h1>
           </div><!-- /.col -->
 
         </div><!-- /.row -->
@@ -46,16 +46,22 @@
             <div class="card-header">
                 @if($siPeriodoActivo == true)
                 <div class="row justify-content-between">
-                    <div class="box-title col-6 ">
+                    <div class="col-6 row">
 
-                        <a class="btn btn-success" href="{{ url('/'.$route.'/create/') }}">Añadir docente</a>
-
-
+                        <div class=" col-4 ">
+                            <a class="btn btn-success" href="{{ url('/jefes/create/') }}">Añadir jefe</a>
+                        </div>
+                        <div class=" col-4 ">
+                            <a class="btn btn-success" href="{{ url('/docentes/create/') }}">Añadir docente</a>
+                        </div>
+                        <div class=" col-4 ">
+                            <a class="btn btn-success" href="{{ url('/jefesprovisionales/create/') }}">Añadir jefe provisional</a>
+                        </div>
                     </div>
 
-                    <div class="form-group col-6 ">
+                    <div class="col-6 ">
 
-                        <form class="form-group  row "  action="{{ route('asignaciones.año') }}" method="POST">
+                        <form class="form-group row col-9"  action="{{ route('asignaciones.año') }}" method="POST">
                             @csrf
                             <select class="form-control col-6" name="año_periodo_seleccionado" id="año_periodo_seleccionado">
                                 @foreach ($periodos as $periodo)
@@ -154,7 +160,7 @@
                                         <div class="row">
                                             <!-- Mostrar -->
                                             <div class="">
-                                                <a href="{{ url('/'.$route.'/'. $jefe->id )}}" class="btn btn-default">
+                                                <a href="{{ url('/jefes/'. $jefe->id .'/edit')}}" class="btn btn-default">
                                                     @csrf
                                                     <i class="fa fa-eye" style='color: black'></i>
                                                     <!-- <input type="submit" name='show' value="show"> -->
