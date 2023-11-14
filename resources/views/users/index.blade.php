@@ -229,7 +229,7 @@
                                     <td>
                                         <!-- Editar -->
                                         <div class="col-sm">
-                                            <a href="{{ url('/docentes/'. $docente->id_docente ) }}" class="btn btn-info">
+                                            <a href="{{ url('/docentes/'. $docente->id_docente .'/edit/') }}" class="btn btn-info">
                                                 <i class="fa fa-pencil-alt" style='color: white'></i>
                                                 <!-- <input type="submit" name='edit' value="edit"> -->
                                             </a>

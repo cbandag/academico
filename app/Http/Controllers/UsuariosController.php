@@ -138,6 +138,81 @@ class UsuariosController extends Controller
         return redirect()->route('usuarios.index')->with('message','Docente creado con éxito!!');
     }
 
+/*
+    public function edit($id)
+    {
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+        $user = User::findOrFail($id);
+
+        $jefesProvisionales = DB::table('users')
+            ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
+            ->select('users.*','jefes_provisionales.*')
+            ->where('jefes_provisionales.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_provisionales.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $jefeProvisionalActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            ->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->first();
+
+
+        return view('users.editDocentes', compact('user','jefesProvisionales','jefeProvisionalActual'));
+    }
+
+*/
+
+    public function editDocentes($id)
+    {
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
+        if (Periodo::where('periodos.estado','=', 'ACTIVO')->first() !== null) {
+            $siPeriodoActivo = true;
+        }else{
+            $siPeriodoActivo = false;
+        }
+
+        $jefes = DB::table('users')
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*')
+            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $user = User::findOrFail($id);
+
+        $jefeActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            /*->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')*/
+            ->first();
+
+
+
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        return view('users.show', compact('user','jefes','jefeActual','model','route','title'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Jefes
      */

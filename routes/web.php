@@ -61,7 +61,8 @@ Route::get('/docentes/export',[App\Http\Controllers\UsuariosController::class, '
 
 Route::get('/docentes/create',[App\Http\Controllers\UsuariosController::class, 'createDocentes'])->name('docentes.create')->middleware('auth');
 Route::post('/docentes/store',[App\Http\Controllers\UsuariosController::class, 'storeDocentes'])->name('docentes.store')->middleware('auth');
-Route::post('/docentes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editDocentes'])->name('docentes.edit')->middleware('auth');
+Route::get('/docentes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editDocentes'])->name('docentes.edit')->middleware('auth');
+Route::put('/docentes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateDocentes'])->name('docentes.update')->middleware('auth');
 
 Route::get('/jefes/create',[App\Http\Controllers\UsuariosController::class, 'createJefes'])->name('jefes.import')->middleware('auth');
 Route::post('/jefes/store',[App\Http\Controllers\UsuariosController::class, 'storeJefes'])->name('jefes.store')->middleware('auth');
