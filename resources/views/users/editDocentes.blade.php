@@ -21,7 +21,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-12">
-            <h1 class="m-0">JEFES</h1>
+            <h1 class="m-0">DOCENTES</h1>
           </div><!-- /.col -->
 
         </div><!-- /.row -->
@@ -32,7 +32,7 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('users.form', ['mode'=>'Editar','model'=>'docentes'])
+        @include('users.form', ['mode'=>'Editar','title'=>'Docentes','model'=>'docentes'])
 
     </section>
 </div>

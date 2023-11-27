@@ -132,32 +132,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
 
-        <!--
-          @can('jefes.index')
-
-          <li class="nav-item">
-            <a href="{{url('/jefes')}}" class="nav-link">
-              <i class="nav-icon fas fa-user" ></i>
-              <p>
-                Usuarios
-              </p>
-            </a>
-          </li>
-          @endcan
-
-          @can('decanos.index')
-
-          <li class="nav-item">
-            <a href="{{url('/decanos')}}" class="nav-link">
-              <i class="nav-icon fas fa-user" ></i>
-              <p>
-                Decanos
-              </p>
-            </a>
-          </li>
-          @endcan
-        -->
-
         @can('periodos.index')
           <li class="nav-item">
             <a href="{{url('/periodos')}}" class="nav-link">
@@ -169,10 +143,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
 
-          @can('docentes.index')
+          @can('usuarios.index')
 
           <li class="nav-item">
-            <a href="{{url('/usuarios')}}" class="nav-link">
+            <a href="{{url('/usuarios/')}}" class="nav-link">
               <i class="nav-icon fas fa-user" ></i>
               <p>
                 Usuarios
@@ -182,47 +156,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           @endcan
 
-
-<!--
-          @can('facultades.index')
-          <li class="nav-item">
-            <a href="{{url('/facultades')}}" class="nav-link">
-              <i class="nav-icon fas fa-building"></i>
-              <p>
-                Facultades
-              </p>
-            </a>
-          </li>
-          @endcan
-
-
-
-          @can('programas.index')
-          <li class="nav-item">
-            <a href="{{url('/programas')}}" class="nav-link">
-              <i class="nav-icon fas fa-th-list"></i>
-              <p>
-              Programas
-              </p>
-            </a>
-          </li>
-          @endcan
--->
-
-
-
-          @can('planes.index')
-
-          <li class="nav-item">
-            <a href="{{url('/planes/{}')}}" class="nav-link">
-
-              <i class="nav-icon fas fa-user" ></i>
-              <p>
-                Planes de trabajo
-              </p>
-            </a>
-          </li>
-          @endcan
 
           @can('asignaciones.index')
 
@@ -244,13 +177,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </li>
             @endrole
 
-
-
-
           @endcan
 
+          @can('planes.index')
 
+          <li class="nav-item">
+            <a href="{{url('/planes/{}')}}" class="nav-link">
 
+              <i class="nav-icon fas fa-file" ></i>
+              <p>
+                Planes de trabajo
+              </p>
+            </a>
+          </li>
+          @endcan
 
 
 
@@ -258,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           <li class="nav-item">
             <a href="{{url('/programaciones')}}" class="nav-link">
-              <i class="nav-icon fas fa-user" ></i>
+              <i class="nav-icon far fa-file" ></i>
               <p>
                 Programaciones (SMA)
               </p>

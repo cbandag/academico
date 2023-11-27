@@ -33,54 +33,59 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Rutas de Auth
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::group(['middleware' =>  'auth'],function () {
     Route::get('/', [App\Http\Controllers\Auth\LoginController::class,'index'])->name('home');
+
+    /* Periodos */
+    Route::resource('periodos', PeriodosController::class)->middleware('auth');
+
+    /* Usuarios */
+    Route::get('/usuarios', [App\Http\Controllers\UsuariosController::class, 'index'])->name('usuarios.index');
+    Route::post('/jefes/import',[App\Http\Controllers\UsuariosController::class, 'importJefes'])->name('usuarios.importjefes');
+    Route::get('/jefes/export',[App\Http\Controllers\UsuariosController::class, 'exportJefes'])->name('usuarios.exportjefes');
+    Route::get('/jefes/create',[App\Http\Controllers\UsuariosController::class, 'createJefes'])->name('usuarios.createjefes');
+    Route::post('/jefes/store',[App\Http\Controllers\UsuariosController::class, 'storeJefes'])->name('usuarios.storejefes');
+    Route::get('/jefes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editJefes'])->name('usuarios.editjefes');
+    Route::put('/jefes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateJefes'])->name('usuarios.updatejefes');
+    Route::post('/docentes/import',[App\Http\Controllers\UsuariosController::class, 'importDocentes'])->name('usuarios.importdocentes');
+    Route::get('/docentes/export',[App\Http\Controllers\UsuariosController::class, 'exportDocentes'])->name('usuarios.exportdocentes');
+    Route::get('/docentes/create',[App\Http\Controllers\UsuariosController::class, 'createDocentes'])->name('usuarios.createdocentes');
+    Route::post('/docentes/store',[App\Http\Controllers\UsuariosController::class, 'storeDocentes'])->name('usuarios.storedocentes');
+    Route::get('/docentes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editDocentes'])->name('usuarios.editdocentes');
+    Route::put('/docentes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateDocentes'])->name('usuarios.updatedocentes');
+    Route::get('/jefesprovisionales/create',[App\Http\Controllers\UsuariosController::class, 'createJefesProvisionales'])->name('usuarios.createjefesprovisionales');
+    Route::post('/jefesprovisionales/store',[App\Http\Controllers\UsuariosController::class, 'storeJefesprovisionales'])->name('usuarios.storejefesprovisionales');
+    Route::get('/jefesprovisionales/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editJefesprovisionales'])->name('usuarios.editjefesprovisionales');
+    Route::put('/jefesprovisionales/{id}',[App\Http\Controllers\UsuariosController::class, 'updateJefesprovisionales'])->name('usuarios.updatejefesprovisionales');
+
+    Route::get('/docentes/jefe/{id}',[App\Http\Controllers\UsuariosController::class, 'docentesPorJefe'])->name('usuarios.docentesporjefe');
+    Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\UsuariosController::class, 'reset_password'])->name('usuarios.reset_password');
+
+
+    /* asignaciones */
+    Route::get('/asignaciones/', [App\Http\Controllers\AsignacionesController::class, 'index'])->name('asignaciones.index');
+    Route::get('/asignaciones/{id}', [DocentesController::class, 'show'])->name('asignaciones.show');
+    Route::get('/asignaciones/{id}/edit', [DocentesController::class, 'edit'])->name('asignaciones.edit');
+    Route::put('/asignaciones/{id}', [DocentesController::class, 'update'])->name('asignaciones.update');
+    Route::post('/asignaciones/año/', [App\Http\Controllers\AsignacionesController::class, 'año'])->name('asignaciones.año');
+    Route::get('/asignaciones/jefe/{id}',[App\Http\Controllers\AsignacionesController::class, 'jefe'])->name('asignaciones.jefe');
+    Route::get('/asignaciones/{id}/importasignaturas/',[App\Http\Controllers\AsignacionesController::class, 'importAsignaturas'])->name('asignaciones.importAsignaturas');
+
+
+    /* asignaciones */
+    Route::get('/planes/', [App\Http\Controllers\UsuariosController::class, 'index'])->name('planes.index');
+    Route::get('/planes/{id}', [DocentesController::class, 'show'])->name('planes.show');
+    Route::get('/planes/{id}/edit', [DocentesController::class, 'edit'])->name('planes.edit');
+    Route::put('/planes/{id}', [DocentesController::class, 'update'])->name('planes.update');
+    Route::post('/planes/año/', [App\Http\Controllers\AsignacionesController::class, 'año'])->name('planes.año');
+    Route::get('/planes/jefe/{id}',[App\Http\Controllers\AsignacionesController::class, 'jefe'])->name('planes.jefe');
+    Route::get('/planes/{id}/importasignaturas/',[App\Http\Controllers\AsignacionesController::class, 'importAsignaturas'])->name('planes.importAsignaturas');
+
+
+    /* programaciones */
+    Route::get('/programaciones/', [App\Http\Controllers\UsuariosController::class, 'index'])->name('programaciones.index');
 });
 
-
-Route::get('/programaciones/docentes', [App\Http\Controllers\ProgramacionesController::class, 'importDocentes'])->name('programaciones.importDocentes')->middleware('auth');
-Route::get('/programaciones/asignaturas', [App\Http\Controllers\ProgramacionesController::class, 'importAsignaturasPorDocente'])->name('programaciones.importAsignaturasPorDocente')->middleware('auth');
-Route::get('/asignaciones/import', [App\Http\Controllers\AsignacionesController::class, 'import'])->name('programaciones.import')->middleware('auth');
-Route::get('/asignaciones/export', [App\Http\Controllers\AsignacionesController::class, 'export'])->name('programaciones.export')->middleware('auth');
-Route::post('/asignaciones/año/', [App\Http\Controllers\AsignacionesController::class, 'año'])->name('asignaciones.año')->middleware('auth');
-Route::get('/asignaciones/jefe/{id}',[App\Http\Controllers\AsignacionesController::class, 'jefe'])->name('asignaciones.jefe')->middleware('auth');
-Route::get('/asignaciones/{id}/importasignaturas/',[App\Http\Controllers\AsignacionesController::class, 'importAsignaturasPorDocente'])->name('asignaciones.importasignaturasdocente')->middleware('auth');
-
-Route::post('/periodos/import',[App\Http\Controllers\PeriodosController::class, 'import'])->name('programaciones.import')->middleware('auth');
-Route::get('/periodos/export',[App\Http\Controllers\PeriodosController::class, 'export'])->name('programaciones.export')->middleware('auth');
-
-Route::post('/jefes/import',[App\Http\Controllers\UsuariosController::class, 'importJefes'])->name('jefes.import')->middleware('auth');
-Route::get('/jefes/export',[App\Http\Controllers\UsuariosController::class, 'exportJefes'])->name('jefes.export')->middleware('auth');
-
-Route::post('/docentes/import',[App\Http\Controllers\UsuariosController::class, 'importDocentes'])->name('usuarios.import')->middleware('auth');
-Route::get('/docentes/export',[App\Http\Controllers\UsuariosController::class, 'exportDocentes'])->name('usuarios.export')->middleware('auth');
-
-
-Route::get('/docentes/create',[App\Http\Controllers\UsuariosController::class, 'createDocentes'])->name('docentes.create')->middleware('auth');
-Route::post('/docentes/store',[App\Http\Controllers\UsuariosController::class, 'storeDocentes'])->name('docentes.store')->middleware('auth');
-Route::get('/docentes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editDocentes'])->name('docentes.edit')->middleware('auth');
-Route::put('/docentes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateDocentes'])->name('docentes.update')->middleware('auth');
-
-Route::get('/jefes/create',[App\Http\Controllers\UsuariosController::class, 'createJefes'])->name('jefes.import')->middleware('auth');
-Route::post('/jefes/store',[App\Http\Controllers\UsuariosController::class, 'storeJefes'])->name('jefes.store')->middleware('auth');
-Route::get('/jefes/{id}/edit',[App\Http\Controllers\UsuariosController::class, 'editJefes'])->name('jefes.edit')->middleware('auth');
-Route::put('/jefes/{id}',[App\Http\Controllers\UsuariosController::class, 'updateJefes'])->name('jefes.update')->middleware('auth');
-
-Route::get('/jefesprovisionales/create',[App\Http\Controllers\UsuariosController::class, 'createJefesProvisionales'])->name('createjefesprovisionales.import')->middleware('auth');
-Route::put('/docentes/{id}/reset_password',[App\Http\Controllers\UsuariosController::class, 'reset_password'])->name('docentes.reset_password')->middleware('auth');
-
-
-
-Route::resource('usuarios', UsuariosController::class)->middleware('auth');
-Route::resource('periodos', PeriodosController::class)->middleware('auth');
-Route::resource('facultades', FacultadesController::class)->middleware('auth');
-Route::resource('programas', ProgramasController::class)->middleware('auth');
-Route::resource('programaciones', ProgramacionesController::class)->middleware('auth');
-Route::resource('asignaciones', AsignacionesController::class)->middleware('auth');
-Route::resource('planes', AsignacionesController::class)->middleware('auth');
 
 
 /*
@@ -90,7 +95,7 @@ Route::resource('asignaciones', 'ScopesController', ['except' => ['index']]);
 */
 
 /*
-Route::get('/docentes', [DocentesController::class, 'index'])->name('docentes.index');
+Route::get('/docentes', [DocentesController::class, 'index'])->name('docentes.index')->middleware('auth');
 Route::post('/docentes/', [DocentesController::class, 'store'])->name('docentes.store');
 Route::get('/docentes/create', [DocentesController::class, 'create'])->name('docentes.create');
 Route::get('/docentes/{id}', [DocentesController::class, 'show'])->name('docentes.show');
@@ -99,8 +104,3 @@ Route::delete('/docentes/{id}', [DocentesController::class, 'destroy'])->name('d
 Route::get('/docentes/{id}/edit', [DocentesController::class, 'edit'])->name('docentes.edit');
 */
 
-Route::get('/docentes/jefe/{id}',function ($id) {
-    return "Hola esta es una ruta";
-})->middleware('auth');
-
-Route::get('/docentes/jefe/{id}',[App\Http\Controllers\DocentesController::class, 'docentesPorJefe'])->name('docentes.docentesporjefe')->middleware('auth');

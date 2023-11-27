@@ -32,7 +32,7 @@
     <!-- Main content -->
     <section class="content">
 
-        @include('users.form', ['mode'=>'Crear','model'=>'jefes'])
+        @include('users.form', ['mode'=>'Crear','title'=>'Jefes','model'=>'jefes'])
 
     </section>
 </div>

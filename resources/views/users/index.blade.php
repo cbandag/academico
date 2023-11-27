@@ -149,13 +149,14 @@
 
                                     <td> <small> {{$jefe->email}} </small></td>
 
-
+                                    <!--
 
                                     @if ($jefe->estado=='ACTIVO')
                                         <td><span class="btn btn-block btn-success btn-sm ">{{$jefe->estado}}</span> </td>
                                     @elseif ($jefe->estado=='INACTIVO')
                                         <td><span class="btn btn-block btn-secondary btn-sm">{{$jefe->estado}}</span> </td>
                                     @endif
+                                    -->
                                     <td>
                                         <div class="row">
                                             <!-- Mostrar -->
@@ -311,14 +312,13 @@
     function listarDocentesJefe(e){
         console.log('Listar docentes de identificacion_jefe: ' + e);
 
-        fetch('/academico/public/docentes/jefe/'+ e+'/')
+        fetch('/academico/public/docentes/jefe/'+ e +'/')
         .then(function(response){
             //console.log(response.json());
             return response.json();
         })
         .then(function(jsonData){
             listartabla(jsonData);
-
         });
 
     }

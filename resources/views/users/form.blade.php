@@ -3,11 +3,11 @@
         <div class="card">
 
             <div class="card-header">
-                <h5 class="card-title">{{$mode}} {{$model}}</h5>
+                <h5 class="card-title">{{$mode}} {{$title}}</h5>
             </div>
 
             @if($mode=='Crear')
-                <form action="{{ route($model.'.store') }}"  method="POST">
+                <form action="{{ route('usuarios.store'.$model) }}"  method="POST">
             @endif
 
             @if($mode=='Mostrar')
@@ -16,7 +16,7 @@
             @endif
 
             @if($mode=='Editar')
-                <form action="{{ route($model.'.update', [$user->id]) }}"  method="POST">
+                <form action="{{ route('usuarios.update'.$model, [$user->id]) }}"  method="POST">
                 @method('PUT')
             @endif
                 @csrf
@@ -75,7 +75,7 @@
                                 <div class="form-group col-6">
                                     <label for="jefe" class="col-form-label">Jefe inmediato:</label>
                                     <select class="form-control" name="jefe" id="jefe" {{$mode == 'Mostrar'?'disabled':''}}>
-                                        <option type="text" class="form-control" >Seleccione... </option>
+                                        <option type="text" class="form-control" value="">Seleccione... </option>
                                         @foreach($jefes as $jefe)
                                         <option type="text" class="form-control" value="{{$jefe->id}}"
                                             @isset($jefeActual->identificacion_jefe)
@@ -86,6 +86,17 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group col-6">
+                                    <label for="horas_dedicadas" class="col-form-label">Horas dedicadas:</label>
+                                    <select class="form-control" name="horas_dedicadas" id="horas_dedicadas" {{$mode == 'Mostrar'?'disabled':''}}>
+                                        <option type="text" class="form-control" value="" >Seleccione...</option>
+                                        <option type="text" class="form-control" value="40"{{isset($user)?($user->horas_dedicacion=='40' ? 'selected':''):''}}>Tiempo Completo (40h)</option>
+
+                                        <option type="text" class="form-control" value="20" {{isset($user)?($user->horas_dedicacion=='20' ? 'selected':''):''}}>Medio Tiempo (20h)</option>
+                                    </select>
+                                </div>
+
+
                                 @elseif($model=='jefes' && $mode=='Editar')
                                 <div class="form-group col-6">
                                     <label for="jefeProvisional" class="col-form-label">Jefe Provisional:</label>
@@ -101,6 +112,8 @@
                                     </select>
                                 </div>
                                 @endif
+
+
                                 <div class="form-group col-6">
                                     <label for="estado" class="col-form-label">Estado:</label>
                                     <select class="form-control" name="estado" id="estado" {{$mode == 'Mostrar'?'disabled':''}}>
@@ -117,6 +130,14 @@
                                             @endisset
                                         >INACTIVO</option>
                                     </select>
+                                </div>
+
+                                <div class="form-group col-6">
+                                    <label for="estado" class="col-form-label">Provisional:</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" id="customCheckbox1" value="option1">
+                                        <label for="customCheckbox1" class="custom-control-label">¿Jefe Provisional?</label>
+                                      </div>
                                 </div>
 
 

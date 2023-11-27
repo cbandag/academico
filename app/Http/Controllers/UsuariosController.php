@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Periodo;
+use App\Models\JefesPorPeriodo;
+use App\Models\Asignacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -45,10 +47,11 @@ class UsuariosController extends Controller
         ->where('asignaciones.periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
         ->get();
 
-
-
         return view('users.index', compact('periodoActual','periodos','siPeriodoActivo','jefes','docentes'));
     }
+
+
+
 
     /**
      * Docentes
@@ -76,39 +79,34 @@ class UsuariosController extends Controller
             'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
             'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            //'jefe' => ['numeric', 'max:25'],
+            'jefe' => ['required', 'string', 'max:25'],
             'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+            'horas_dedicadas' => ['required','numeric', 'max:40'],
         ],[
             'nombres.required' => 'El nombre es requerido.',
             'apellidos.required' => 'El apellido es requerido.',
             'email.required' => 'El email es requerido.',
+            'email.unique' => 'Ya existe un Jefe con esta identificacion.',
             'identificacion.required' => 'La identificacion es requerido.',
+            'identificacion.unique' => 'Ya existe un Jefe con esta identificacion.',
+            'jefe.required' => 'Seleccione el jefe requerido.',
             'password.required' => 'La password es requerido.',
             'estado.required'=>'El estado es requerido.'
         ]);
 
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $jefe_provisional = null;
 
-        if ($request['jefe']) {
-            $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
-            $jefe = JefesPorPeriodo::
-                where('identificacion', $request['jefe'])
-                ->where('año', periodoActual->año)
-                ->where('periodo', periodoActual->periodo)->first();
-            if($jefe){
-                $jefe = $request['jefe'];
-            }else{
-                $jefe = null;
-            }
-            if($jefe->identificacion_jefe_provisional){
-                $jefe_provisional = $jefe->identificacion_jefe_provisional;
-            }else{
-                $jefe_provisional = null;
-            }
-        }
+        $jefe = DB::table('users')
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*', 'jefes_por_periodo.identificacion_jefe', 'jefes_por_periodo.identificacion_jefe_provisional')
+            ->where('users.id','=',$data['jefe'])
+            ->where('año', $periodoActual->año)
+            ->where('periodo', $periodoActual->periodo)
+            ->first();
 
 
-
-        DB::transaction(function() use ($data, $jefe, $jefe_provisional){
+        DB::transaction(function() use ($data, $jefe, $jefe_provisional, $periodoActual){
             User::create([
                 'nombres' => $data['nombres'],
                 'apellidos' => $data['apellidos'],
@@ -119,17 +117,15 @@ class UsuariosController extends Controller
             ])->assignRole('docente');
 
 
-
             //$id_jefe =User::find($row['jefe']);
-            Asignacion::updateOrCreate([
-            //$user->Asignacion()->updateOrCreate([
-                'identificacion_docente' => $row['identificacion'],
+            Asignacion::Create([
+            /*$user->Asignacion()->updateOrCreate([*/
+                'identificacion_docente' => $data['identificacion'],
                 'año' => $periodoActual->año,
-                'periodo' => $periodoActual->periodo
-            ],[
-                'identificacion_jefe' => $jefe,
-                'identificacion_jefe_provisional' => $jefe_provisional,
-                'horas_dedicacion' => $row['horas_dedicacion']/*=='Tiempo Completo'?'40':'20' */,
+                'periodo' => $periodoActual->periodo,
+                'horas_dedicacion' => $data['horas_dedicadas'],
+                'identificacion_jefe' => $jefe->identificacion_jefe,
+                'identificacion_jefe_provisional' => null,
                 'estado' => 'PENDIENTE'
             ]);
 
@@ -183,32 +179,80 @@ class UsuariosController extends Controller
             ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
             ->get();
 
-        $user = User::findOrFail($id);
+        //$user = User::findOrFail($id);
+        //$user = User::findOrFail($id)
+        $user = User::where('users.id','=',$id)
+            ->leftjoin('asignaciones', 'users.identificacion', '=', 'asignaciones.identificacion_docente')
+            ->select('users.*', 'users.identificacion as identificacion', 'asignaciones.horas_dedicacion as horas_dedicacion')
+            ->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->first();
 
         $jefeActual = DB::table('asignaciones')
             ->select('asignaciones.*','identificacion_jefe')
-            ->where('identificacion_docente','=',$user->identificacion)
-            /*->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
-            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')*/
+            ->where('identificacion_docente','=', $user->identificacion)
+            ->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
             ->first();
 
 
 
-        $model = 'docente';
-        $route ='docentes';
-        $title ='Docentes';
-        return view('users.show', compact('user','jefes','jefeActual','model','route','title'));
+        return view('users.editDocentes', compact('user','jefes','jefeActual'));
     }
 
 
+    public function updateDocentes(Request $request ,$id)
+    {
+        $data = Request()->validate([
+            'jefe' => ['required', 'string', 'max:25'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+            'horas_dedicadas' => ['required','numeric', 'max:40'],
+        ],[
+            'jefe.required' => 'Seleccione el jefe requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $jefe_provisional = null;
+
+
+        $jefe = DB::table('users')
+            ->leftjoin('jefes_por_periodo', 'users.identificacion', '=', 'jefes_por_periodo.identificacion_jefe')
+            ->select('users.*', 'jefes_por_periodo.identificacion_jefe', 'jefes_por_periodo.identificacion_jefe_provisional')
+            ->where('users.id','=',$data['jefe'])
+            ->where('año', $periodoActual->año)
+            ->where('periodo', $periodoActual->periodo)
+            ->first();
+
+        $user = User::findOrFail($id);
+
+        $asignacion = DB::table('asignaciones')
+        ->where('identificacion_docente', '=', $user->identificacion)
+        ->where('año', $periodoActual->año)
+        ->where('periodo', $periodoActual->periodo)
+        ->limit(1);
 
 
 
 
+        DB::transaction(function() use ($data, $user, $jefe, $asignacion, $periodoActual){
+            $user->update([
+                'estado' => ($data['estado']),
+            ]);
 
 
+            //$id_jefe =User::find($row['jefe']);
+            $asignacion->update([
+                'horas_dedicacion' => $data['horas_dedicadas'],
+                'identificacion_jefe' => $jefe->identificacion_jefe,
+                'identificacion_jefe_provisional' => $jefe->identificacion_jefe_provisional,
+                'estado' => 'PENDIENTE'
+            ]);
 
+        });
 
+        return redirect()->route('usuarios.index')->with('message','Docente actualizado con éxito!!');
+    }
 
 
 
@@ -225,8 +269,8 @@ class UsuariosController extends Controller
         $jefes_provisionales = DB::table('users')
             ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
             ->select('users.*')
-            ->where('jefes_por_periodo.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
-            ->where('jefes_por_periodo.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->where('jefes_provisionales.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_provisionales.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
             ->get();
 
         return view('users.createJefes', compact('jefes_provisionales'));
@@ -234,6 +278,8 @@ class UsuariosController extends Controller
 
     public function storeJefes(Request $request)
     {
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+
         $data = Request()->validate([
             'nombres' => ['required', 'string', 'max:255'],
             'apellidos' => ['required', 'string', 'max:255'],
@@ -245,13 +291,15 @@ class UsuariosController extends Controller
             'nombres.required' => 'El nombre es requerido.',
             'apellidos.required' => 'El apellido es requerido.',
             'email.required' => 'El email es requerido.',
+            'email.unique' => 'Ya existe un Jefe con esta este correo.',
             'identificacion.required' => 'La identificacion es requerido.',
+            'identificacion.unique' => 'Ya existe un Jefe con esta identificacion.',
             'password.required' => 'La password es requerido.',
             'estado.required'=>'El estado es requerido.'
         ]);
 
-        DB::transaction(function() use ($data){
-            User::create([
+        DB::transaction(function() use ($data, $periodoActual){
+            $user = User::create([
                 'nombres' => $data['nombres'],
                 'apellidos' => $data['apellidos'],
                 'email' => $data['email'],
@@ -260,9 +308,15 @@ class UsuariosController extends Controller
                 'estado' => ($data['estado']),
             ])->assignRole('docente');
 
+            $user->JefesPorPeriodo()->Create([
+                    'identificacion_jefe' => $data['identificacion'],
+                    'año' => $periodoActual->año,
+                    'periodo' => $periodoActual->periodo
+                ]);
+
         });
 
-        return redirect()->route('docentes.index')->with('message','Docente creado con éxito!!');
+        return redirect()->route('usuarios.index')->with('message','Jefe creado con éxito!!');
     }
 
     public function editJefes($id)
@@ -287,6 +341,199 @@ class UsuariosController extends Controller
 
 
         return view('users.editJefes', compact('user','jefesProvisionales','jefeProvisionalActual'));
+    }
+
+    public function updateJefes(Request $request,  $id)
+    {
+
+        if ($request['password'] != null && $request['password_confirmation'] != null) {
+            //$request['password'] = $request['password'];
+            //$request['password_confirmation'] = $request['password'];
+        }else{
+            $user=User::findOrFail($id);
+            $request['password'] = $user->password;
+            $request['password_confirmation'] = $user->password;
+
+            //$request['password_confirmation'] = $user->password;
+        }
+
+        $data = Request()->validate([
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:25', 'unique:users,email,'.$id],
+            'identificacion' => ['required', 'string', 'max:25', 'unique:users,identificacion,'.$id],
+            'password' => ['string', 'min:8', 'confirmed'],
+            'jefe' => ['numeric'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+        ],[
+            'nombres.required' => 'El nombre es requerido.',
+            'apellidos.required' => 'El apellido es requerido.',
+            'email.required' => 'El email es requerido.',
+            'identificacion.required' => 'La identificacion es requerido.',
+            'estado.required'=>'El estado es requerido.',
+            'password.confirmed' => 'Las contraseñas no coinciden'
+        ]);
+
+        $data['password'] = Hash::make($request['password']);
+
+
+
+
+        $user = User::findOrFail($id);
+        DB::transaction(function() use ($data,$user){
+            $user->update([
+                'nombres' => $data['nombres'],
+                'apellidos' => $data['apellidos'],
+                'email' => $data['email'],
+                'identificacion' => $data['identificacion'],
+                'password' => $data['password'],
+                'estado' => ($data['estado']),
+            ]);
+
+        });
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
+    }
+
+
+    /**
+     * Jefes Provisionales
+     */
+    public function createJefesProvisionales()
+    {
+
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+
+        $jefes_provisionales = DB::table('users')
+            ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
+            ->select('users.*')
+            ->where('jefes_provisionales.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_provisionales.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        return view('users.createJefesProvisionales', compact('jefes_provisionales'));
+    }
+
+    public function storeJefesProvisionales(Request $request)
+    {
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
+
+        $data = Request()->validate([
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:25', 'unique:users'],
+            'identificacion' => ['required', 'string', 'max:25', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+        ],[
+            'nombres.required' => 'El nombre es requerido.',
+            'apellidos.required' => 'El apellido es requerido.',
+            'email.required' => 'El email es requerido.',
+            'identificacion.required' => 'La identificacion es requerido.',
+            'password.required' => 'La password es requerido.',
+            'estado.required'=>'El estado es requerido.'
+        ]);
+
+        DB::transaction(function() use ($data, $periodoActual){
+            $user = User::create([
+                'nombres' => $data['nombres'],
+                'apellidos' => $data['apellidos'],
+                'email' => $data['email'],
+                'identificacion' => $data['identificacion'],
+                'password' => Hash::make($data['password']),
+                'estado' => ($data['estado']),
+            ])->assignRole('docente');
+
+            $user->Jefes_por_periodo()->Create([
+                    'identificacion_jefe' => $data['identificacion'],
+                    'año' => $periodoActual->año,
+                    'periodo' => $periodoActual->periodo
+                ]);
+
+        });
+
+        return redirect()->route('usuarios.index')->with('message','Docente creado con éxito!!');
+    }
+
+    public function editJefesProvisionales($id)
+    {
+        $periodoActual = Periodo::where('estado','=','ACTIVO')->first();
+        $periodos = Periodo::all();
+        $user = User::findOrFail($id);
+
+        $jefesProvisionales = DB::table('users')
+            ->leftjoin('jefes_provisionales', 'users.identificacion', '=', 'jefes_provisionales.identificacion')
+            ->select('users.*','jefes_provisionales.*')
+            ->where('jefes_provisionales.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('jefes_provisionales.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->get();
+
+        $jefeProvisionalActual = DB::table('asignaciones')
+            ->select('asignaciones.*','identificacion_jefe')
+            ->where('identificacion_docente','=',$user->identificacion)
+            ->where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+            ->where('asignaciones.periodo','=', isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+            ->first();
+
+
+        return view('users.editJefes', compact('user','jefesProvisionales','jefeProvisionalActual'));
+    }
+
+    public function updateJefesProvisionales(Request $request,  $id)
+    {
+
+        if ($request['password'] != null && $request['password_confirmation'] != null) {
+            //$request['password'] = $request['password'];
+            //$request['password_confirmation'] = $request['password'];
+        }else{
+            $user=User::findOrFail($id);
+            $request['password'] = $user->password;
+            $request['password_confirmation'] = $user->password;
+
+            //$request['password_confirmation'] = $user->password;
+        }
+
+        $data = Request()->validate([
+            'nombres' => ['required', 'string', 'max:255'],
+            'apellidos' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:25', 'unique:users,email,'.$id],
+            'identificacion' => ['required', 'string', 'max:25', 'unique:users,identificacion,'.$id],
+            'password' => ['string', 'min:8', 'confirmed'],
+            'jefe' => ['numeric'],
+            'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
+        ],[
+            'nombres.required' => 'El nombre es requerido.',
+            'apellidos.required' => 'El apellido es requerido.',
+            'email.required' => 'El email es requerido.',
+            'identificacion.required' => 'La identificacion es requerido.',
+            'estado.required'=>'El estado es requerido.',
+            'password.confirmed' => 'Las contraseñas no coinciden'
+        ]);
+
+        $data['password'] = Hash::make($request['password']);
+
+
+
+
+        $user = User::findOrFail($id);
+        DB::transaction(function() use ($data,$user){
+            $user->update([
+                'nombres' => $data['nombres'],
+                'apellidos' => $data['apellidos'],
+                'email' => $data['email'],
+                'identificacion' => $data['identificacion'],
+                'password' => $data['password'],
+                'estado' => ($data['estado']),
+            ]);
+
+        });
+        $model = 'docente';
+        $route ='docentes';
+        $title ='Docentes';
+        return redirect()->route('docentes.index')->with('message','Docente modificado con éxito!!');
     }
 
 
@@ -417,7 +664,6 @@ class UsuariosController extends Controller
         ]);
 
         $data['password'] = Hash::make($request['password']);
-
 
 
 

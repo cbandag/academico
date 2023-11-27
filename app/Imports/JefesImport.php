@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use App\Models\User;
 use App\Models\Periodo;
-use App\Models\Jefes_por_periodo;
+use App\Models\JefesPorPeriodo;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -36,7 +36,7 @@ class JefesImport implements ToCollection, WithHeadingRow
 
 
 
-            $user->Jefes_por_periodo()->updateOrCreate([
+            $user->JefesPorPeriodo()->updateOrCreate([
             //Jefes_por_periodo::updateOrCreate([
                 'identificacion_jefe' => $row['identificacion'],
                 'año' => $periodoActual->año,
