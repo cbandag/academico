@@ -182,7 +182,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @can('planes.index')
 
           <li class="nav-item">
-            <a href="{{url('/planes/{}')}}" class="nav-link">
+            <a href="{{url('/planes/')}}" class="nav-link">
 
               <i class="nav-icon fas fa-file" ></i>
               <p>

@@ -9,6 +9,7 @@ use App\Models\Periodo;
 use App\Models\AsignaturasPorDocente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Exports\AsignacionesExport;
 //use Maatwebsite\Excel\Facades\Excel;
 use Excel;
@@ -125,6 +126,14 @@ class AsignacionesController extends Controller
      */
     public function edit($id)
     {
+
+        //Storage::disk('public')->put('texto.txt','Hola');//guardar un archivo
+        /*
+        foreach(Storage::disk($this->disk)->files() as $file){
+            $name = str_replace("$this->disk/","","$file");
+        }
+*/
+
         $asignacion = Asignacion::findorFail($id);
         $funciones = Funcion::all();
 
@@ -142,13 +151,59 @@ class AsignacionesController extends Controller
 
 
 
-
-
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
+        $selecteds = $request->input('funcion.*');
+        //$inputs = $request->input('input');
+        $fileInputs = $request->file('input');
+        //$fileInputs = $request->Allfiles();
+
+        dump($selecteds['0']);
+        dump($request->file('input.1'));
+
+        $i=0;
+        for($i==0; $i<count($selecteds); $i++){
+            if(!empty($selecteds[$i]) /*&& !empty($inputs[$i])*/){
+                $nombreFuncion = Funcion::find($selecteds[$i])->funcion;
+                //dump($selecteds[$i]);//3
+                //dump($inputs[$i]);//3
+                //dump($nombreFuncion);//secret...
+
+                $file = $request->file('input.'. $i +1 .'');//'. $i .'
+                //$file = $fileInputs['input.1'];//'. $i .'
+                //$file->storeAs('', $nombreFuncion, $file->extesion(),'public');
+                $file->storeAs('', $nombreFuncion.'.'.$file->extension(),'public');
+
+            }
+        }
+
+        /*foreach ($request->all() as $nameSelect => $value) {
+
+                if(str_contains($nameSelect,'funcion_') && isset($value)) {
+                    $NombreFuncion = Funcion::find($idFuncion)->funcion;
+                }
+
+                if(str_contains($nameInput,'file-' && isset($file))) {
+                    $file = $request->file($nameInput);//'file' es el name del input de tipo file
+                    //$name = $request->input('nombre');//toma el mombre ingresado en el innput 'nombre'
+
+                }
+                $file->storeAs('',$name,$file->extesion(),'public');
+            }
+        */
+
+
+/*
+        if($request->isMethod('POST')){
+            $file = $request->file('file');//'file' es el name del input de tipo file
+            $name = $request->input('nombre');//toma el mombre ingresado en el innput 'nombre'
+            $file->storeAs('',$name,$file->extesion(),'public');
+        }*/
+
+
         $asignacion = Asignacion::findorFail($id);
         $funcion = Funcion::All();
 
@@ -160,15 +215,10 @@ class AsignacionesController extends Controller
             'descarga_investigacion'=>'numeric|integer|min:0',
             'descarga_extension'=>'numeric|integer|min:0',
             'total_descarga'=>'numeric|integer|min:0|max:'. ($horas_dedicacion)/2 .'',
-            'soporte'=>'string|nullable|max:255',
             'observaciones'=>'string|nullable|max:255',
             'estado'=>'required|string|in:APROBADO,PENDIENTE',
         ],[
             'total_descarga'=>'El total de horas de investigación + extension superan el límite: '.($horas_dedicacion)/2 .' horas' ,
-
-            /*'periodo.required'=>'El periodo es requerido.',
-            'periodo.unique'=>'Este periodo ya existe.',
-            'estado.required'=>'El estado es requerido.'*/
         ]);
 
         $descarga_investigacion = $data['descarga_investigacion'];
@@ -178,7 +228,7 @@ class AsignacionesController extends Controller
 
         $suma_funciones=0;
         foreach ($request->all() as $key => $idFuncion) {
-            if (str_contains($key,'funcion_')) {
+            if(str_contains($key,'funcion_')) {
                 if(isset($idFuncion)){
                     $suma_funciones += Funcion::find($idFuncion)->descarga;
                 }
@@ -202,7 +252,6 @@ class AsignacionesController extends Controller
                 'porcentaje_extension'=>$porcentaje_extension,
                 'total_descargas'=>$total_descargas,
                 'horas_restantes'=>$horas_restantes,
-                'soporte'=>$data['soporte'],
                 'horas_clases'=>$horas_clases,
                 'horas_preparacion'=>$horas_preparacion,
                 'horas_estudiantes'=>$horas_estudiantes,

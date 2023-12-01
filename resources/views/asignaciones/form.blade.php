@@ -11,12 +11,12 @@
             @endif
 
             @if($mode=='Mostrar')
-                <form  method="POST">
+                <form  method="POST" enctype="multipart/form-data">
                 @method('HEAD')
             @endif
 
             @if($mode=='Editar')
-                <form action="{{ route('asignaciones.update', [$asignacion->id]) }}"  method="POST">
+                <form action="{{ route('asignaciones.update', [$asignacion->id]) }}"  method="POST" enctype="multipart/form-data">
                 @method('PUT')
             @endif
                 @csrf
@@ -34,9 +34,9 @@
 
                                 <div class="form-group col-10 " id="funciones">
                                     @foreach($funcionesSeleccionadas as $key => $fs)
-                                    <div class="" id="r-f{{$key+1}}">
-                                        <div class="form-group ">
-                                            <select class="form-control " name="funcion_{{$key+1}}" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
+                                    <div class="" id="r-f{{$key+1}}" >
+                                        <div class="form-group row" >
+                                            <select class="form-control col-6" name="funcion[{{$key+1}}][id]" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
                                                 <option type="text" class="form-control" value="">Seleccione...</option>
                                                 @foreach($funciones as $funcion)
                                                 <option type="text" class="form-control" value="{{$funcion->id}}"
@@ -46,6 +46,10 @@
                                                         {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
                                                 @endforeach
                                             </select>
+                                            <div class="custom-file col-6">
+                                                <input type="file" class="custom-file-input" name='funcion[{{$key+1}}][input]' onchange="cargarfile(this)">
+                                                <label class="custom-file-label" for="exampleInputFile" id="funcion[{{$key+1}}][label]">Cargar</label>
+                                            </div>
                                         </div>
                                     </div>
                                     @endforeach
@@ -102,10 +106,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="soporte" class="col-form-label">Soporte</label>
-                                <input type="text" class="form-control" id="soporte" name="soporte" value="{{isset($asignacion->soporte)?$asignacion->soporte:''}}" {{$mode == 'Mostrar'?'disabled':''}}>
-                            </div>
                             <div class="form-group">
                                 <label for="observaciones" class="col-form-label">Observaciones</label>
                                 <textarea  type="text" class="form-control" id="observaciones" name="observaciones" value="{{isset($asignacion->observaciones)?$asignacion->observaciones:''}}" {{$mode == 'Mostrar'?'disabled':''}}></textarea >
@@ -181,8 +181,8 @@
         console.log('Add - Contador= '+contador);
         $('#funciones').append(`
                 <div id="r-f${contador}">
-                    <div class="form-group">
-                        <select class="form-control" name="funcion_${contador}" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
+                    <div class="form-group row">
+                        <select class="form-control col-6" name="funcion[${contador}]" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
                             <option type="text" class="form-control" value="">Seleccione...</option>
                             @foreach($funciones as $funcion)
                             <option type="text" class="form-control" value="{{$funcion->id}}">
@@ -190,11 +190,37 @@
                             </option>
                             @endforeach
                         </select>
+                        <div class="custom-file col-6">
+                            <input type="file" class="custom-file-input" name='input[${contador}]' onchange="cargarfile(this)">
+                            <label class="custom-file-label" for="exampleInputFile" id="label[${contador}]">Cargar</label>
+                        </div>
                     </div>
+
                 </div>
+
+
+
 
         `);
     });
+
+
+
+    function cargarfile(elementoFile){
+
+        let archivo = elementoFile.files;
+        console.log("Nombre de elemento: " + elementoFile.name);
+        console.log("Nombre de archivo: " + archivo[0].name);
+
+        let nuevoNombre = elementoFile.name.replace('input', 'label')
+        console.log("Nombre de elemento reemplazado: " + nuevoNombre);
+        document.getElementById(nuevoNombre).innerHTML = archivo[0].name;
+        /*for (var i = 0; i < files.length; i++) {
+            alert("Filename " + files[i].name);
+        }*/
+    };
+
+
 
 </script>
 

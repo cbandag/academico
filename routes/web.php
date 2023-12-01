@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\JefesController;
 use App\Http\Controllers\DecanosController;
-use App\Http\Controllers\DocentesController;
 use App\Http\Controllers\PeriodosController;
 use App\Http\Controllers\FacultadesController;
 use App\Http\Controllers\ProgramasController;
@@ -64,9 +63,9 @@ Route::group(['middleware' =>  'auth'],function () {
 
     /* asignaciones */
     Route::get('/asignaciones/', [App\Http\Controllers\AsignacionesController::class, 'index'])->name('asignaciones.index');
-    Route::get('/asignaciones/{id}', [DocentesController::class, 'show'])->name('asignaciones.show');
-    Route::get('/asignaciones/{id}/edit', [DocentesController::class, 'edit'])->name('asignaciones.edit');
-    Route::put('/asignaciones/{id}', [DocentesController::class, 'update'])->name('asignaciones.update');
+    Route::get('/asignaciones/{id}', [AsignacionesController::class, 'show'])->name('asignaciones.show');
+    Route::get('/asignaciones/{id}/edit', [AsignacionesController::class, 'edit'])->name('asignaciones.edit');
+    Route::put('/asignaciones/{id}', [AsignacionesController::class, 'update'])->name('asignaciones.update');
     Route::post('/asignaciones/año/', [App\Http\Controllers\AsignacionesController::class, 'año'])->name('asignaciones.año');
     Route::get('/asignaciones/jefe/{id}',[App\Http\Controllers\AsignacionesController::class, 'jefe'])->name('asignaciones.jefe');
     Route::get('/asignaciones/{id}/importasignaturas/',[App\Http\Controllers\AsignacionesController::class, 'importAsignaturas'])->name('asignaciones.importAsignaturas');

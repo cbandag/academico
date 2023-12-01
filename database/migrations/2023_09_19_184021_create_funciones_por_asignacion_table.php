@@ -15,7 +15,7 @@ return new class extends Migration
             //$table->bigIncrements('id');
             $table->unsignedBigInteger('asignacion_id');
             $table->unsignedBigInteger('funcion_id');
-
+            $table->string('soporte');
 
             //$table->timestamps();
 
