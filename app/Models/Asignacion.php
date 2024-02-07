@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Asignacion extends Model
 {
@@ -52,6 +53,6 @@ class Asignacion extends Model
 
         public function funcion()
         {
-            return $this->belongsToMany(Funcion::class,'funciones_por_asignacion');
+            return $this->belongsToMany(Funcion::class,'funciones_por_asignacion','asignacion_id','funcion_id')->withPivot('soporte');
         }
 }

@@ -157,25 +157,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
 
 
-          @can('asignaciones.index')
+          @can('asignaciones.index_asignador')
+            <li class="nav-item">
+                <a href="{{url('/asignaciones/asignador/')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
+                <p>
+                    Asignaciones
+                </p>
+                </a>
+            </li>
+            @endcan
 
-          @role('jefe')
-                <li class="nav-item">
-                    <a href="{{url('/asignaciones/jefe/'.Auth::User()->id.'/')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
-                    <p>
-                        Mis docentes
-                    </p>
-                    </a>
-                </li>
-            @else
-                <li class="nav-item">
-                    <a href="{{url('/asignaciones')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
-                    <p>
-                        Asignaciones
-                    </p>
-                    </a>
-                </li>
-            @endrole
+            @can('asignaciones.index_jefe')
+            <li class="nav-item">
+                <a href="{{url('/asignaciones/jefe/')}}" class="nav-link"> <i class="nav-icon fas fa-user" ></i>
+                <p>
+                    Asignaciones
+                </p>
+                </a>
+            </li>
+
 
           @endcan
 

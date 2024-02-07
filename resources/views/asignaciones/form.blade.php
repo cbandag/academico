@@ -25,56 +25,49 @@
 
                         <div class="form-group">
 
-
                             <div class="form-group">
                                 <label  class="col-form-label">Funciones administrativas:</label>
                             </div>
 
-                            <div class="row">
-
-                                <div class="form-group col-10 " id="funciones">
+                            <div class="row" id="container-funciones">
+                                <div class="form-group col-11" id="funciones">
                                     @foreach($funcionesSeleccionadas as $key => $fs)
-                                    <div class="" id="r-f{{$key+1}}" >
+                                    <div id="row-funcioncargada{{$key+1}}" >
                                         <div class="form-group row" >
-                                            <select class="form-control col-6" name="funcion[{{$key+1}}][id]" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}}>
-                                                <option type="text" class="form-control" value="">Seleccione...</option>
+                                            <label  class="col-form-label col-1"> {{$key+1}}.</label>
+                                            <select class="form-control col-5" name="funcioncargada[{{$key+1}}]" id="funcion_{{$key+1}}" {{$mode == 'Mostrar'?'disabled':''}} >
+                                                <!--<option type="text" class="form-control" value="">Seleccione...</option> -->
                                                 @foreach($funciones as $funcion)
-                                                <option type="text" class="form-control" value="{{$funcion->id}}"
-                                                    @if(isset($funcionesSeleccionadas[$key]))
-                                                        {{($funcion->id==$funcionesSeleccionadas[$key] ? 'selected':'')}}
-                                                    @endif>
-                                                        {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
+                                                    @isset($funcionesSeleccionadas[$key])
+                                                        @if($funcion->id==$funcionesSeleccionadas[$key])
+                                                            <option type="text" class="form-control" value="{{$funcion->id}}" selected> {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</option>
+                                                        @endif
+                                                    @endisset
+
                                                 @endforeach
                                             </select>
-                                            <div class="custom-file col-6">
-                                                <input type="file" class="custom-file-input" name='funcion[{{$key+1}}][input]' onchange="cargarfile(this)">
-                                                <label class="custom-file-label" for="exampleInputFile" id="funcion[{{$key+1}}][label]">Cargar</label>
+                                            <div class=" col-5">
+                                                <label type="text" class="form-control"   disabled>Soporte cargado</label>
+                                            </div>
+                                            <div class="col-1">
+                                                <a  class="btn btn-danger" name="remove_[{{$key+1}}]" onclick="quitarFila(this)">
+                                                    <i class="fas fa-minus-square fa-lg" style='color: white'></i>
+                                                    <!-- <input type="submit" name='edit' value="edit"> -->
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                     @endforeach
                                 </div>
 
-                                <div class=" col-2 row" id="botones">
-                                        <div class="col-6">
-                                            <a  class="btn btn-primary" id="add_funcion">
-                                                <i class="fas fa-plus-square fa-rotate-270 fa-lg" style='color: white'></i>
-                                                <!-- <input type="submit" name='edit' value="edit"> -->
-                                            </a>
-                                        </div>
-                                        <div class="col-6">
-                                            <a  class="btn btn-danger" id="remove_funcion">
-                                                <i class="fas fa-minus-square fa-lg" style='color: white'></i>
-                                                <!-- <input type="submit" name='edit' value="edit"> -->
-                                            </a>
-                                        </div>
-
+                                <div class="col-1">
+                                        <a  class="btn btn-primary" id="add_funcion" onclick="agregarFila(this)">
+                                            <i class="fas fa-plus-square fa-rotate-270 fa-lg" style='color: white'></i>
+                                            <!-- <input type="submit" name='edit' value="edit"> -->
+                                        </a>
                                 </div>
 
                             </div>
-
-
-
 
                             <div class="row">
                                 <div class="form-group col-3">
@@ -99,16 +92,16 @@
                                     <label for="descarga_extension" class="form-control" id="sumaIE">{{$asignacion->horas_dedicacion/2}}hrs max </label>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-12">
                                     <label class="col-form-label">La suma de horas de investigación + extensión no deben superar el 50% de las horas dedicadas</label>
-
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="observaciones" class="col-form-label">Observaciones</label>
-                                <textarea  type="text" class="form-control" id="observaciones" name="observaciones" value="{{isset($asignacion->observaciones)?$asignacion->observaciones:''}}" {{$mode == 'Mostrar'?'disabled':''}}></textarea >
+                                <label for="observaciones" class="col-form-label">Observaciones:</label>
+                                <textarea  type="text" class="form-control" id="observaciones" name="observaciones" >{{isset($asignacion->observaciones)?$asignacion->observaciones:''}} {{$mode == 'Mostrar'?'disabled':''}}</textarea >
                             </div>
 
 
@@ -119,12 +112,11 @@
                                     <option type="text" class="form-control" value="APROBADO" {{$asignacion->estado=='APROBADO' ? 'selected':''}}>APROBADO</option>
                                 </select>
                             </div>
-
                         </div>
                     </div>
 
                     <div class="card-footer  text-right">
-                        <a type='button' class="btn btn-danger " href="{{url('/asignaciones/')}}">Cancelar</a>
+                        <a type='button' class="btn btn-danger " href="{{url('/asignaciones/jefe')}}">Cancelar</a>
                         @if($mode=='Crear' || $mode=='Editar')
                         <button type="submit" class="btn btn-primary">Guardar</button>
                         @endif
@@ -140,6 +132,7 @@
     var i = Number(document.getElementById('descarga_investigacion').value);
     var e = Number(document.getElementById('descarga_extension').value);
     var total=0;
+
     function sumaIE(element){
         let valor = Number(element.value);
         let id = element.id;
@@ -149,8 +142,8 @@
         }else if(id=='descarga_extension'){
             e=valor;
         }
-        total = i+e;
 
+        total = i + e;
 
         console.log("Nombre del elemento " + element.id + ' = ' + valor);
         console.log("Suma = " + total);
@@ -159,50 +152,69 @@
 
 
     $( document ).ready(function() {
-        @isset($key)
-            contador= '{{$key + 1}}';
-        @endisset
+        //contador= contador + 1;
+
+        //@isset($key)
+            //contador= '{{$key + 1}}';
+        //@endisset
         /*contador= $('#funciones').childElementCount;*/
-        console.log( "ready! contador= " + contador);
+        //console.log( "ready! contador= " + contador);
     });
 
+/*
     $('#remove_funcion').on('click', function(){
-        if(contador>0){
-            $("#r-f"+ contador +"").remove();
-            contador --;
-            console.log('Remove - Contador= ' + contador);
-        }
-
     });
-
     $('#add_funcion').on('click', function(){
-        //$("#add_funcion").remove();
+    });
+*/
+
+    function agregarFila(element){
+
+        console.log("Fila agregada" );
+        //*/$("#add_funcion").remove();*/
+        //element.remove()
         contador++;
         console.log('Add - Contador= '+contador);
         $('#funciones').append(`
-                <div id="r-f${contador}">
-                    <div class="form-group row">
-                        <select class="form-control col-6" name="funcion[${contador}]" id="funcion_${contador}" {{$mode == 'Mostrar'?'disabled':''}}>
-                            <option type="text" class="form-control" value="">Seleccione...</option>
-                            @foreach($funciones as $funcion)
-                            <option type="text" class="form-control" value="{{$funcion->id}}">
-                                {{$funcion->funcion}} - {{$funcion->descarga *100 }}%
-                            </option>
-                            @endforeach
-                        </select>
-                        <div class="custom-file col-6">
-                            <input type="file" class="custom-file-input" name='input[${contador}]' onchange="cargarfile(this)">
-                            <label class="custom-file-label" for="exampleInputFile" id="label[${contador}]">Cargar</label>
-                        </div>
+            <div id="row-funcion-${contador}">
+                <div class="form-group row ">
+                    <label  class="col-form-label col-1 "> ${contador}. </label>
+                    <select class="form-control col-5" name="funcion[${contador}]"  {{$mode == 'Mostrar'?'disabled':''}}>
+                        <option type="text" class="form-control" value="">Seleccione...</option>
+                        @foreach($funciones as $funcion)
+                        <option type="text" class="form-control" value="{{$funcion->id}}">
+                            {{$funcion->funcion}} - {{$funcion->descarga *100 }}%
+                        </option>
+                        @endforeach
+                    </select>
+                    <div class="custom-file col-5">
+                        <input type="file" class="custom-file-input" name='input[${contador}]' onchange="cargarfile(this)">
+                        <label class="custom-file-label" for="exampleInputFile" id="label[${contador}]">Cargar</label>
                     </div>
-
+                    <div class="col-1">
+                        <a  class="btn btn-danger" name="remove_[${contador}]" onclick="quitarFila(this)">
+                            <i class="fas fa-minus-square fa-lg" style='color: white'></i>
+                            <!-- <input type="submit" name='edit' value="edit"> -->
+                        </a>
+                    </div>
                 </div>
-
-
-
-
+            </div>
         `);
-    });
+
+
+    };
+
+    function quitarFila(element){
+        console.log("Fila quitada" );
+        element.parentNode.parentNode.remove();
+
+        /*
+        if(contador>0){
+            $("#row-funcion-"+ contador +"").remove();
+            contador --;
+            console.log('Remove - Contador= ' + contador);
+        }*/
+    };
 
 
 

@@ -28,6 +28,8 @@
 
 
     <!-- Content Header (Page header) -->
+
+
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -36,9 +38,7 @@
             @can('asignaciones.index')
                 <h1 class="m-0">Asignaciones {{isset($año) && isset($periodo)? $año .' - 0'. $periodo : ''}}</h1>
             @endcan
-            @can('planes.index')
-                <h1 class="m-0">Planes de trabajo {{isset($año) && isset($periodo)? $año .' - 0'. $periodo : ''}}</h1>
-            @endcan
+
 
 
 
@@ -55,11 +55,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row justify-content-between">
-                    <div class="box-title col-6 ">
-                        @if($siPeriodoActivo == true)
-                        <a class="btn btn-success" href="{{ url('/'.'asignaciones'.'/create/') }}">Añadir docente</a>
-                        @endif
-                    </div>
+
 
                     <div class="form-group col-6 ">
                         @if($siPeriodoActivo == true)
@@ -146,17 +142,17 @@
                                 </small></td>
                             <td class="text-center"> {{$asignacion->horas_dedicacion}}h</td>
                             <td>
-                                @foreach($asignacion->funcion as $funcion)
-                                 <small>{{$funcion->funcion}} - {{$funcion->descarga *100 }}%</br></small>
+                                @foreach($asignacion->funcion as $key => $funcion)
+                                 <small><a href="{{ route('asignaciones.downloadFuncion',['asignacion_id' => $asignacion->id ,'funcion_id' => $funcion->id]) }}">{{$key+1}}. {{$funcion->funcion}} - {{$funcion->descarga *100 }}%</a></br></small>
                                 @endforeach
 
-                            </td>   
+                            </td>
                             <td class="text-center"> <b>{{$asignacion->descarga_investigacion}}</b></td>
                             <td class="text-center"> {{$asignacion->porcentaje_investigacion*100}}%</td>
                             <td class="text-center"> <b>{{$asignacion->descarga_extension}}</b> </td>
                             <td class="text-center"> {{$asignacion->porcentaje_extension*100}}%</td>
                             <td class="text-center"> {{$asignacion->total_descargas*100}}%</td>
-                            <td class="text-center"> {{$asignacion->horas_restantes!==null ?$asignacion->horas_restantes.'h':''}} </td>
+                            <td class="text-center"> {{$asignacion->horas_restantes!==null ? $asignacion->horas_restantes.'h':''}} </td>
 
                             <td class="text-center"> <b>{{$asignacion->horas_clases}}</b> </td>
                             <td class="text-center"> {{$asignacion->horas_preparacion}} </td>

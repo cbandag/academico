@@ -47,8 +47,7 @@ class UserSeeder extends Seeder
             'email' => 'asignacion@gmail.com',
             'password'=> '11111111'
 
-        ])->assignRole('asignacion');
-
+        ])->assignRole('asignador');
 
         User::Create([
             'nombres' => 'planeación',
@@ -58,7 +57,7 @@ class UserSeeder extends Seeder
             'email' => 'planeacion@gmail.com',
             'password'=> '22222222'
 
-        ])->assignRole('planeación');
+        ])->assignRole('planedor');
 
         User::Create([
             'nombres' => 'jefe',

@@ -16,6 +16,14 @@ use App\Models\User;
 
 class PeriodosController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('can:periodos.index');
+        $this->middleware('can:periodos.edit');
+        $this->middleware('can:periodos.update');
+        $this->middleware('can:periodos.show');
+    }
+    
     /**
      * Display a listing of the resource.
      */

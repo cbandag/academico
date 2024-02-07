@@ -20,7 +20,7 @@ class AsignacionesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index_asignador()
     {
         $periodos = Periodo::all();
         $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
@@ -41,10 +41,27 @@ class AsignacionesController extends Controller
         return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
     }
 
+    public function index_jefe()
+    {
+        $periodos = Periodo::all();
+        $periodoActual=Periodo::where('estado','=','ACTIVO')->first();
 
+        if ($periodoActual->first() !== null) {
+            $siPeriodoActivo = true;
+        }else{
+            $siPeriodoActivo = false;
+        }
 
+        $asignaciones = Asignacion::where('asignaciones.año','=', isset( $periodoActual->año)? $periodoActual->año : '0000')
+        ->where('asignaciones.periodo','=',  isset( $periodoActual->periodo)? $periodoActual->periodo : '00')
+        ->where('asignaciones.identificacion_jefe','=', Auth::User()->identificacion)
+        ->orderBy('identificacion_jefe')->get();
 
-
+        $users = User::all();
+        $asignaturas = AsignaturasPorDocente::all();
+        $funciones = Funcion::all();
+        return view('asignaciones.index', compact('periodoActual','periodos','siPeriodoActivo','asignaciones','users','asignaturas','funciones'));
+    }
 
 
 
@@ -96,31 +113,6 @@ class AsignacionesController extends Controller
 
 
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(asignaciones $asignaciones)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -142,10 +134,8 @@ class AsignacionesController extends Controller
         foreach ($asignacion->funcion as $key => $id_funcion) {
             array_push($funcionesSeleccionadas, $id_funcion->id);
         }
-    return view('asignaciones.edit', compact('asignacion','funciones','funcionesSeleccionadas'));
+        return view('asignaciones.edit', compact('asignacion','funciones','funcionesSeleccionadas'));
     }
-
-
 
 
 
@@ -156,56 +146,12 @@ class AsignacionesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $selecteds = $request->input('funcion.*');
-        //$inputs = $request->input('input');
-        $fileInputs = $request->file('input');
-        //$fileInputs = $request->Allfiles();
 
-        dump($selecteds['0']);
-        dump($request->file('input.1'));
-
-        $i=0;
-        for($i==0; $i<count($selecteds); $i++){
-            if(!empty($selecteds[$i]) /*&& !empty($inputs[$i])*/){
-                $nombreFuncion = Funcion::find($selecteds[$i])->funcion;
-                //dump($selecteds[$i]);//3
-                //dump($inputs[$i]);//3
-                //dump($nombreFuncion);//secret...
-
-                $file = $request->file('input.'. $i +1 .'');//'. $i .'
-                //$file = $fileInputs['input.1'];//'. $i .'
-                //$file->storeAs('', $nombreFuncion, $file->extesion(),'public');
-                $file->storeAs('', $nombreFuncion.'.'.$file->extension(),'public');
-
-            }
-        }
-
-        /*foreach ($request->all() as $nameSelect => $value) {
-
-                if(str_contains($nameSelect,'funcion_') && isset($value)) {
-                    $NombreFuncion = Funcion::find($idFuncion)->funcion;
-                }
-
-                if(str_contains($nameInput,'file-' && isset($file))) {
-                    $file = $request->file($nameInput);//'file' es el name del input de tipo file
-                    //$name = $request->input('nombre');//toma el mombre ingresado en el innput 'nombre'
-
-                }
-                $file->storeAs('',$name,$file->extesion(),'public');
-            }
-        */
-
-
-/*
-        if($request->isMethod('POST')){
-            $file = $request->file('file');//'file' es el name del input de tipo file
-            $name = $request->input('nombre');//toma el mombre ingresado en el innput 'nombre'
-            $file->storeAs('',$name,$file->extesion(),'public');
-        }*/
 
 
         $asignacion = Asignacion::findorFail($id);
         $funcion = Funcion::All();
+
 
         $horas_dedicacion = $asignacion->horas_dedicacion;
         //$request->push('total_descarga', $request['descarga_investigacion'] + $request['descarga_extension']) ;
@@ -227,13 +173,46 @@ class AsignacionesController extends Controller
         $porcentaje_extension = $descarga_extension>($horas_dedicacion*0.5) ? 0.5:($descarga_extension/$horas_dedicacion);
 
         $suma_funciones=0;
+        $sumaFuncionesCargadas=0;
+        $sumaFuncionesSeleccionadas=0;
+
+        /*
         foreach ($request->all() as $key => $idFuncion) {
-            if(str_contains($key,'funcion_')) {
+            if(str_contains($key,'funcion')) {
                 if(isset($idFuncion)){
                     $suma_funciones += Funcion::find($idFuncion)->descarga;
                 }
             }
+        }*/
+        $funcionesCargadas = $request->input('funcioncargada.*');
+        $funcionesSeleccionadas = $request->input('funcion.*');
+
+        //dump($funcionesCargadas);
+        //dump($funcionesSeleccionadas);
+
+        //Obtener la suma de descargas a partir de las funciones cargadas y seleccionadas
+        if(isset($funcionesCargadas)){
+            foreach($funcionesCargadas as $key => $idFuncionCargada){
+                if(isset($idFuncionCargada[$key])){
+                    $sumaFuncionesCargadas += Funcion::find($idFuncionCargada)->descarga;
+                    //dump($key);
+                    //dump($idFuncionCargada[$key]);
+                }
+            }
         }
+
+        if(isset($funcionesSeleccionadas)){
+            foreach($funcionesSeleccionadas as $key => $idFuncionSeleccionada){
+                if(isset($idFuncionSeleccionada[$key])){
+                    $sumaFuncionesSeleccionadas += Funcion::find($idFuncionSeleccionada)->descarga;
+                }
+            }
+        }
+
+        $sumaFunciones = $sumaFuncionesCargadas + $sumaFuncionesSeleccionadas;
+
+
+
         $total_descargas = $suma_funciones + $porcentaje_investigacion + $porcentaje_extension;
         $total_descargas>1?$total_descargas=1:$total_descargas=$total_descargas;
         $horas_restantes = (1 - $total_descargas)*$horas_dedicacion;
@@ -243,6 +222,9 @@ class AsignacionesController extends Controller
 
         $horas_preparacion= round($horas_restantes * 0.3 , 0) ;
         $horas_estudiantes= $horas_restantes * 0.25;
+
+
+
 
         DB::transaction(function() use ($data, $request, $asignacion, $porcentaje_investigacion,$porcentaje_extension,$total_descargas,$horas_restantes,$horas_clases,$horas_preparacion,$horas_estudiantes){
             $asignacion->update([
@@ -262,32 +244,149 @@ class AsignacionesController extends Controller
                 'estado'=>$data['estado']
             ]);
 
-            $asignacion->funcion()->detach();//elimina todos las funciones de asignacion
-            $id=array();
-            foreach ($request->all() as $key => $idFuncion) {
-                if (str_contains($key,'funcion_')) {
-                    if(isset($idFuncion)){
-                        //$asignacion->funcion()->attach($idFuncion);
-                        array_push($id, $idFuncion);
+            //$asignacion->funcion()->detach();//elimina todos las funciones de asignacion
+            $funcionesCargadas = $request->input('funcioncargada.*');
+            $asig = $asignacion->funcion();
+            //dump($asig);
 
+            $asignacion_funcion = array();
+            $funcionesSeleccionadas = $request->input('funcion.*');
+            //dump($funcionesSeleccionadas[0]);
+
+            //$asig=DB::table('funciones_por_asignacion')->select('funcion_id')/*->where('asignacion_id','=','1')*/->get();
+            /**/
+            dump($asignacion->funcion);
+            $funcionesGuardadas= array();
+            //$funcionesABorrar = array();
+            foreach($asignacion->funcion as $key => $idFuncion){
+                array_push($funcionesGuardadas,(string)$idFuncion['id']);
+            }
+
+            dump($funcionesGuardadas);
+            dump($funcionesCargadas);
+            //dump($funcionesSeleccionadas);
+
+
+            $funcionesABorrar = array_diff($funcionesGuardadas,$funcionesCargadas);
+
+
+            dump($funcionesABorrar);
+            //die();
+
+            if(isset($funcionesABorrar)){
+                foreach($funcionesABorrar as $key => $idFuncion){
+                    if(isset($idFuncion)){
+                        dump($idFuncion);
+                        $asignacion->funcion()->detach($idFuncion);
                     }
                 }
             }
-            $asignacion->funcion()->sync($id);
+
+            $fileInputs = $request->file('input');
+            //Recorrer y guardar  funciones seleccionadas con sus archivos
+            if(isset($funcionesSeleccionadas)){
+                foreach($funcionesSeleccionadas as $key => $idFuncion){
+                    dump($key);//0
+                    dump($idFuncion);//2
+                    //die();
+                    if(isset($idFuncion)){
+                        //Guardar archivos
+                        $nombreFuncion = Funcion::find($funcionesSeleccionadas[$key])->funcion;
+                        //dump($nombreFuncion);
+                        $file = $request->file('input.'. $key + 1  .'');
+                        //dump($file);
+
+                        $archivo = $file->storeAs('/'.$asignacion->año.'_'.$asignacion->periodo, $asignacion->identificacion_docente.'_'. str_replace(' ','_',$nombreFuncion).'.'.$file->extension(),'public');
+                        $url = Storage::url($archivo);
+                        $path = Storage::path($archivo);
+                        //dump($url);
+                        //dump($path);
+                        //die();
+
+                        if (Storage::disk('public')->exists(str_replace('/storage/','',$url))) {
+                            dump(str_replace('/storage/','',$url));
+
+                            //dump(Storage::disk('public')->download($path));
+                        }else {
+                            dump('No existe');
+                        }
+
+                        //Guardar idFuncion en Funcion_asignacion y url de doporte en bd
+                        $asignacion->funcion()->attach($idFuncion, ['soporte' => $url]);
+                        array_push($asignacion_funcion, $idFuncion);
+                    }
+                }
+            }
+
+
+            //$asignacion->funcion()->sync($asignacion_funcion);
+
+            //Guardar archivos
+/*
+            if($funcionesSeleccionadas){
+                $i=0;
+                for($i==0; $i<count($funcionesSeleccionadas); $i++){
+                    if(!empty($funcionesSeleccionadas[$i])){
+                        $nombreFuncion = Funcion::find($funcionesSeleccionadas[$i])->funcion;
+                        dump($nombreFuncion);
+
+                        $file = $request->file('input.'. $i + 1 .'');
+                        dump($file);
+                        $file->storeAs('',$asignacion->año.'_'.$asignacion->periodo .'_'. str_replace(' ','_',$nombreFuncion).'.'.$file->extension(),'public');
+                    }
+                }
+            }*/
 
         });
 
-
-        return redirect()->route('asignaciones.jefe', ['id' => Auth::user()->id])->with('message','Asignacion guardada con éxito!!');
+        return redirect()->route('asignaciones.index_jefe', ['id' => Auth::user()->id])->with('message','Asignacion guardada con éxito!!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(asignaciones $asignaciones)
-    {
-        //
+    public function downloadFuncion( $asignacion_id, $funcion_id){
+        /*$asignacion = Asignacion::findOrFail($asignacion_id);
+        //dump($funcion_id);
+        //dump($asignacion_id);
+        dump($asignacion->funcion($funcion_id)->soporte);
+        echo $asignacion->funcion($funcion_id)->pivot->soporte;
+
+        $url = $asignacion->funcion($funcion_id)->soporte;
+*/
+        $url = DB::table('funciones_por_asignacion')
+            ->select('soporte')
+            ->where('asignacion_id', $asignacion_id)
+            ->where('funcion_id', $funcion_id)
+            ->first();
+
+        //dump($url->soporte);
+
+        //dump(str_replace('/storage/','',$url->soporte));
+        //dump(str_replace('/storage/','',$url->soporte));
+        //dump(str_replace('/storage/','app/public/',$url->soporte));
+        //dump(Storage::path('55555555_Rector.jpg'));
+        //dump(Storage::download($url->soporte));
+        //die();
+
+        $path = storage_path(str_replace('/storage/','app/public/',$url->soporte));
+        //dump($path);
+        //return Storage::download(str_replace('/storage/','app/public/',$url->soporte));
+        return response()->download($path);
+
+        //die();
+
+/*
+        if (file_exists($filePath)) {
+            return Storage::download($filePath, $fileName);
+        }
+*/
+        //Storage::url()
+        //return Storage::download(str_replace('/storage/','',$url->soporte));
+        //return Storage::download('c:xammp/htdocs/academico/storage/app/'. str_replace('/storage/','',$url->soporte));
     }
+
+
+
+
+
 
     public function importar(Request $request){
         if($request->hasFile('documento')){
@@ -301,7 +400,6 @@ class AsignacionesController extends Controller
                     $datosImportar[] = $datos[$i];
                 }
 
-
             }
             Asignaciones::insert();
         }
@@ -314,7 +412,6 @@ class AsignacionesController extends Controller
         return Excel::download(new AsignacionesExport,'asignaciones.xlsx');
 
         //return Excel::download(new InvoicesExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
-
 
     }
 
