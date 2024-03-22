@@ -151,7 +151,7 @@ class JefesController extends Controller
             'apellidos' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:25', 'unique:users,email,'.$id],
             'identificacion' => ['required', 'string', 'max:25', 'unique:users,identificacion,'.$id],
-            'password' => ['string', 'min:8', 'confirmed'],
+            'password' => ['nullable','string', 'min:8', 'confirmed'],
             'jefe' => ['numeric'],
             'estado'=>'required|string|in:ACTIVO,INACTIVO|max:8',
         ],[
@@ -163,7 +163,13 @@ class JefesController extends Controller
             'password.confirmed' => 'Las contraseñas no coinciden'
         ]);
 
-        $data['password'] = Hash::make($request['password']);
+
+        if ($request['password'] == null && $request['password_confirmation'] == null) {
+            $user=User::findOrFail($id);
+            $data['password'] = $user->password;
+        }else{
+            $data['password'] = Hash::make($request['password']);
+        }
 
 
 
